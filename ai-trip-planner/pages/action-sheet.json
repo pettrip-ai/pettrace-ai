@@ -1,0 +1,31 @@
+{
+  "status": "completed",
+  "output_file": "g:\\0_2026_Innovative_Project\\pettrace-ai\\ai-trip-planner\\pages\\action-sheet.html",
+  "sections": [
+    {
+      "label": "ActionSheet — 发布验证",
+      "type": "standard-action-sheet",
+      "features": ["dimmed backdrop", "glassmorphic bottom sheet", "drag handle", "title + description", "3 action rows with icon circles and subtitles", "cancel button"]
+    },
+    {
+      "label": "ActionSheet — 快捷操作",
+      "type": "compact-action-sheet",
+      "features": ["dimmed backdrop", "glassmorphic bottom sheet", "drag handle", "4 compact action rows (icon + label only)", "cancel button"]
+    },
+    {
+      "label": "Alert — 确认对话框",
+      "type": "alert-modal",
+      "features": ["dimmed backdrop", "centered glassmorphic card", "dog icon in coral circle", "title + message", "cancel + confirm buttons (rounded-full)"]
+    }
+  ],
+  "constraints_met": {
+    "all_inline_styles": true,
+    "zero_custom_css_classes": true,
+    "tailwind_layout_only": true,
+    "token_variables_only": true,
+    "no_hardcoded_colors": true,
+    "no_components_css_link": true,
+    "exact_theme_tokens": true
+  },
+  "lucide_icons_used": ["dog", "camera", "image", "map-pin", "share-2", "coffee", "tree-pine", "shopping-bag", "check-circle", "signal", "wifi", "battery-full"]
+}

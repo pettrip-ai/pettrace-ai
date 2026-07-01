@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <style>
+    body { margin: 0; padding: var(--space-3); background: var(--color-background); font-family: var(--font-body); color: var(--color-on-surface); }
+    .row { display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2); flex-wrap: wrap; }
+    .label { font-size: var(--font-size-caption); font-weight: var(--font-weight-caption); color: var(--color-muted-foreground); min-width: 92px; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+    .divider { border: none; border-top: 1px solid var(--color-outline); margin: var(--space-3) 0; }
+    /* @component-css-start */
+    .input-col { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+    .input-wrap { display: inline-flex; align-items: center; gap: var(--space-1); background: rgba(255,255,255,0.8); border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); padding: var(--space-1) var(--space-3); min-width: 200px; flex-shrink: 0; transition: border-color .15s, box-shadow .15s; }
+    .input-wrap:hover { border-color: rgba(0,0,0,0.2); }
+    .input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(32,169,118,0.15); }
+    .input-wrap.is-error { border-color: var(--color-error); }
+    .input-wrap.is-error:focus-within { box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+    .input-wrap.is-disabled { opacity: 0.5; pointer-events: none; }
+    .input-field { border: none; background: transparent; outline: none; font-family: var(--font-body); font-size: 14px; color: var(--color-on-surface); width: 100%; min-width: 0; }
+    .input-field::placeholder { color: var(--color-muted-foreground); }
+    .input-icon { width: var(--size-icon-md); height: var(--size-icon-md); flex-shrink: 0; opacity: 0.5; }
+    .input-hint { font-size: var(--font-size-caption); color: var(--color-muted-foreground); padding-left: var(--space-1); white-space: nowrap; }
+    .input-hint.is-error { color: var(--color-error); }
+    .chat-wrap { display: flex; align-items: flex-end; gap: var(--space-2); background: #ffffff; border: 1px solid rgba(0,0,0,0.1); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); min-width: 280px; width: 100%; max-width: 360px; flex-shrink: 0; transition: border-color .15s, box-shadow .15s; }
+    .chat-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(32,169,118,0.15); }
+    .chat-area { border: none; background: transparent; outline: none; font-family: var(--font-body); font-size: 14px; color: var(--color-on-surface); width: 100%; min-width: 0; min-height: 40px; max-height: 120px; resize: none; overflow-wrap: break-word; word-break: break-all; white-space: normal; }
+    .chat-area::placeholder { color: var(--color-muted-foreground); }
+    .chat-send { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; min-width: 32px; border: none; border-radius: var(--radius-sm); background: var(--accent); color: var(--accent-foreground); cursor: pointer; flex-shrink: 0; transition: filter .15s; }
+    .chat-send:hover { filter: brightness(1.08); }
+    .chat-send img { width: 16px; height: 16px; }
+    /* @component-css-end */
+  </style>
+</head>
+<body>
+  <div class="row"><span class="label">默认</span>
+    <div class="input-wrap" data-evidence-sample="Text Input Default">
+      <img class="input-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@1.8.0/icons/search.svg" alt="搜索">
+      <input class="input-field" type="text" placeholder="地点名 / 备注 / 地址">
+    </div>
+  </div>
+  <div class="row"><span class="label">错误</span>
+    <div class="input-col" data-evidence-sample="error">
+      <div class="input-wrap is-error">
+        <img class="input-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@1.8.0/icons/search.svg" alt="搜索">
+        <input class="input-field" type="text" placeholder="地点名 / 备注 / 地址">
+      </div>
+      <span class="input-hint is-error">请输入有效的地点信息</span>
+    </div>
+  </div>
+  <div class="row"><span class="label">禁用</span>
+    <div class="input-wrap is-disabled" data-evidence-sample="disabled">
+      <img class="input-icon" src="https://cdn.jsdelivr.net/npm/lucide-static@1.8.0/icons/search.svg" alt="搜索">
+      <input class="input-field" type="text" placeholder="地点名 / 备注 / 地址" disabled>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="row"><span class="label">聊天输入</span>
+    <div class="chat-wrap" data-evidence-sample="Textarea Chat Input">
+      <textarea class="chat-area" placeholder="告诉我你的目的地" rows="1"></textarea>
+      <button class="chat-send" type="button" aria-label="发送">
+        <img src="https://cdn.jsdelivr.net/npm/lucide-static@1.8.0/icons/send.svg" alt="发送">
+      </button>
+    </div>
+  </div>
+</body>
+</html>

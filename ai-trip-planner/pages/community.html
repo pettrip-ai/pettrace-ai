@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="zh" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宠物社区 — 宠迹AI</title>
+    <style id="theme-vars">
+/* @group-priority: primary, accent, success, warning, info */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --pettrace-coral-50: #fff1f2; --pettrace-coral-100: #ffe0e3; --pettrace-coral-200: #ffc7cd; --pettrace-coral-300: #ffa0ab; --pettrace-coral-400: #fd6b7e; --pettrace-coral-500: #f76b7a; --pettrace-coral-600: #ef4460; --pettrace-coral-700: #d9294b; --pettrace-coral-800: #b91d3f; --pettrace-coral-900: #9c1637;
+  --pettrace-mint-50: #eefbf4; --pettrace-mint-100: #d5f5e3; --pettrace-mint-200: #aeeacc; --pettrace-mint-300: #76d9af; --pettrace-mint-400: #3dc28d; --pettrace-mint-500: #20a976; --pettrace-mint-600: #16895f; --pettrace-mint-700: #136e50; --pettrace-mint-800: #125841; --pettrace-mint-900: #104a37;
+  --pettrace-honey-50: #fffbeb; --pettrace-honey-100: #fef3c7; --pettrace-honey-200: #fde68a; --pettrace-honey-300: #fcd34d; --pettrace-honey-400: #fbbf24; --pettrace-honey-500: #f59e0b; --pettrace-honey-600: #d97706; --pettrace-honey-700: #b45309; --pettrace-honey-800: #92400e; --pettrace-honey-900: #78350f;
+  --pettrace-success-50: #ecfdf5; --pettrace-success-100: #d1fae5; --pettrace-success-200: #a7f3d0; --pettrace-success-300: #6ee7b7; --pettrace-success-400: #34d399; --pettrace-success-500: #10b981; --pettrace-success-600: #059669; --pettrace-success-700: #047857; --pettrace-success-800: #065f46; --pettrace-success-900: #064e3b;
+  --pettrace-error-50: #fef2f2; --pettrace-error-100: #fee2e2; --pettrace-error-200: #fecaca; --pettrace-error-300: #fca5a5; --pettrace-error-400: #f87171; --pettrace-error-500: #ef4444; --pettrace-error-600: #dc2626; --pettrace-error-700: #b91c1c; --pettrace-error-800: #991b1b; --pettrace-error-900: #7f1d1d;
+  --pettrace-info-50: #eff6ff; --pettrace-info-100: #dbeafe; --pettrace-info-200: #bfdbfe; --pettrace-info-300: #93c5fd; --pettrace-info-400: #60a5fa; --pettrace-info-500: #3b82f6; --pettrace-info-600: #2563eb; --pettrace-info-700: #1d4ed8; --pettrace-info-800: #1e40af; --pettrace-info-900: #1e3a8a;
+  --pettrace-neutral-50: #fff7f0; --pettrace-neutral-100: #ffe8d6; --pettrace-neutral-200: #fdd5b5; --pettrace-neutral-300: #f5b78a; --pettrace-neutral-400: #e8945e; --pettrace-neutral-500: #c97840; --pettrace-neutral-600: #a65f34; --pettrace-neutral-700: #8a4d2d; --pettrace-neutral-800: #6e3d26; --pettrace-neutral-900: #54311f;
+  --background: #fff7f0; --surface: #ffffff; --surface-dim: #fff1eb; --surface-container-low: #fff1f2; --surface-container: #ffe0e3; --surface-container-high: #ffc7cd; --surface-container-highest: #fdd5b5; --card: #ffffff; --popover: #ffffff;
+  --foreground: #54311f; --muted: #a65f34; --muted-foreground: #8a4d2d; --border: #fdd5b5;
+  --primary: #f76b7a; --primary-foreground: #ffffff; --secondary: #fff1f2; --secondary-foreground: #54311f; --accent: #20a976; --accent-foreground: #ffffff; --ring: #f76b7a; --link: #ef4460;
+  --error: #ef4444; --error-container: #fef2f2; --on-error: #ffffff; --on-error-container: #7f1d1d; --success: #10b981; --warning: #f59e0b;
+  --color-background: var(--background); --color-foreground: var(--foreground); --color-surface: var(--surface); --color-card: var(--card); --color-primary: var(--primary); --color-on-primary: var(--primary-foreground); --color-on-surface: var(--foreground); --color-on-surface-variant: var(--muted); --color-muted-foreground: var(--muted-foreground); --color-outline: var(--border); --color-outline-variant: #ffe8d6; --color-border: var(--border); --color-success: var(--success); --color-warning: var(--warning);
+  --font-display: 'Nunito', sans-serif; --font-heading: 'Nunito', sans-serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'DM Sans', monospace;
+  --font-size-display: 56px; --font-size-h1: 40px; --font-size-h2: 32px; --font-size-h3: 24px; --font-size-h4: 20px; --font-size-body: 16px; --font-size-lead: 18px; --font-size-caption: 12px; --font-size-mono: 14px;
+  --font-weight-display: 800; --font-weight-h1: 800; --font-weight-h2: 700; --font-weight-h3: 700; --font-weight-h4: 600; --font-weight-body: 400; --font-weight-lead: 500; --font-weight-caption: 500; --font-weight-mono: 400;
+  --line-height-display: 1.1; --line-height-h1: 1.2; --line-height-h2: 1.25; --line-height-h3: 1.3; --line-height-h4: 1.4; --line-height-body: 1.6; --line-height-lead: 1.7; --line-height-caption: 1.5; --line-height-mono: 1.6;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --size-button-sm: 32px; --size-button-md: 40px; --size-button-lg: 48px; --size-icon-sm: 16px; --size-icon-md: 20px; --size-icon-lg: 24px; --size-avatar-sm: 32px; --size-avatar-md: 40px; --size-avatar-lg: 56px;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px; --radius-full: 9999px;
+  --shadow-1: 0 1px 3px rgba(84,49,31,.06), 0 1px 2px rgba(84,49,31,.04); --shadow-2: 0 4px 8px -2px rgba(84,49,31,.08); --shadow-3: 0 8px 24px -4px rgba(84,49,31,.12); --shadow-4: 0 16px 40px -8px rgba(84,49,31,.18); --shadow-5: 0 24px 56px -12px rgba(84,49,31,.24);
+}
+.pettrace-h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: var(--font-weight-h2); line-height: var(--line-height-h2); }
+.pettrace-h4 { font-family: var(--font-heading); font-size: 1.25rem; font-weight: var(--font-weight-h4); line-height: var(--line-height-h4); }
+.pettrace-body { font-family: var(--font-body); font-size: 1rem; font-weight: var(--font-weight-body); line-height: var(--line-height-body); }
+.pettrace-caption { font-family: var(--font-body); font-size: 0.75rem; font-weight: var(--font-weight-caption); line-height: var(--line-height-caption); }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @layer base { body { background: var(--background); color: var(--foreground); } }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] { display: inline-flex; align-items: center; justify-content: center; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background-color: currentColor; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main style="max-width: 430px; margin: 0 auto; padding-bottom: 100px;">
+
+      <!-- Status Bar -->
+      <div class="flex items-center justify-between px-5" style="height: 44px; color: var(--foreground); font-size: 14px; font-weight: 600; font-family: var(--font-body);">
+        <span>9:41</span>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="signal" style="width:14px;height:14px;"></i>
+          <i data-lucide="wifi" style="width:14px;height:14px;"></i>
+          <i data-lucide="battery-full" style="width:16px;height:16px;"></i>
+        </div>
+      </div>
+
+      <!-- Page Title + Publish Button -->
+      <div class="flex items-center justify-between px-4 pt-1 pb-3">
+        <div style="min-width: 0; flex: 1;">
+          <h2 class="pettrace-h2 truncate" style="font-size: 22px; line-height: 1.2; color: var(--foreground); margin: 0;">社区</h2>
+          <p class="pettrace-caption truncate" style="color: var(--muted-foreground); margin: 2px 0 0;">发现宠物友好地点</p>
+        </div>
+        <button style="margin-left: 12px; display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; height: 32px; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); font-size: 13px; font-weight: 600; font-family: var(--font-heading); border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(247,107,122,0.2); transition: transform .15s;" class="shrink-0">发布验证</button>
+      </div>
+
+      <!-- City Tabs -->
+      <div class="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
+        <button style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(247,107,122,0.2); font-family: var(--font-heading); font-weight: 600;">全部</button>
+        <button style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; border-radius: var(--radius-full); background: rgba(255,255,255,0.7); color: var(--muted); border: 0.5px solid var(--border); cursor: pointer; font-family: var(--font-body); font-weight: 500;">上海</button>
+        <button style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; border-radius: var(--radius-full); background: rgba(255,255,255,0.7); color: var(--muted); border: 0.5px solid var(--border); cursor: pointer; font-family: var(--font-body); font-weight: 500;">北京</button>
+        <button style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; border-radius: var(--radius-full); background: rgba(255,255,255,0.7); color: var(--muted); border: 0.5px solid var(--border); cursor: pointer; font-family: var(--font-body); font-weight: 500;">广州</button>
+        <button style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; border-radius: var(--radius-full); background: rgba(255,255,255,0.7); color: var(--muted); border: 0.5px solid var(--border); cursor: pointer; font-family: var(--font-body); font-weight: 500;">深圳</button>
+      </div>
+
+      <!-- Feed List -->
+      <div class="flex flex-col gap-4 px-4">
+
+        <!-- Post 1 -->
+        <article style="background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 14px; border: 0.5px solid rgba(255,255,255,0.6); box-shadow: var(--shadow-1);">
+          <div class="flex items-center gap-3">
+            <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: linear-gradient(135deg, var(--pettrace-coral-100), var(--pettrace-coral-200)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 6px rgba(247,107,122,0.15); font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--primary);">豆</div>
+            <div style="min-width: 0; flex: 1;">
+              <div class="flex items-center gap-2">
+                <span style="font-size: 14px; font-weight: 600; color: var(--foreground); font-family: var(--font-body);">豆豆妈妈</span>
+                <span style="display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: var(--radius-full); background: rgba(16,185,129,0.1); color: var(--success); font-size: 10px; font-weight: 600; font-family: var(--font-body);"><i data-lucide="check-circle" style="width:11px;height:11px;"></i>已验证</span>
+              </div>
+              <span class="pettrace-caption" style="color: var(--muted-foreground);">2小时前</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px;">
+            <h4 class="pettrace-h4 truncate" style="font-size: 15px; color: var(--foreground); margin: 0;">朝阳公园宠物角</h4>
+            <div class="flex items-center gap-3" style="margin-top: 4px;">
+              <span class="pettrace-caption truncate" style="color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 3px;"><i data-lucide="map-pin" style="width:12px;height:12px;"></i>北京市朝阳区 · 3.2km</span>
+              <span class="pettrace-caption" style="color: var(--warning); display: inline-flex; align-items: center; gap: 2px; font-weight: 600;"><i data-lucide="star" style="width:12px;height:12px;"></i>4.7</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px; border-radius: var(--radius-md); height: 120px; background: linear-gradient(135deg, var(--pettrace-coral-50), var(--pettrace-mint-100)); overflow: hidden;"></div>
+          <p class="pettrace-body" style="font-size: 14px; color: var(--foreground); line-height: 1.6; margin: 10px 0 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">周末带豆豆去了朝阳公园的宠物角，草坪很大，还有专门的小狗围栏区域，非常推荐！空气很好，遇到了很多友好的宠物主人。</p>
+          <div class="flex items-center gap-4" style="margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border);">
+            <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 13px; color: var(--muted-foreground); line-height: 1;"><i data-lucide="heart" style="width:15px;height:15px;flex-shrink:0;"></i>42</span>
+            <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 13px; color: var(--muted-foreground); line-height: 1;"><i data-lucide="message-circle" style="width:15px;height:15px;flex-shrink:0;"></i>8</span>
+            <span style="display: inline-flex; align-items: center; margin-left: auto; color: var(--muted-foreground);"><i data-lucide="bookmark" style="width:15px;height:15px;"></i></span>
+          </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article style="background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 14px; border: 0.5px solid rgba(255,255,255,0.6); box-shadow: var(--shadow-1);">
+          <div class="flex items-center gap-3">
+            <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: rgba(32,169,118,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--accent);">奶</div>
+            <div style="min-width: 0; flex: 1;">
+              <div class="flex items-center gap-2">
+                <span style="font-size: 14px; font-weight: 600; color: var(--foreground); font-family: var(--font-body);">奶茶爸爸</span>
+                <span style="display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: var(--radius-full); background: rgba(16,185,129,0.1); color: var(--success); font-size: 10px; font-weight: 600; font-family: var(--font-body);"><i data-lucide="check-circle" style="width:11px;height:11px;"></i>已验证</span>
+              </div>
+              <span class="pettrace-caption" style="color: var(--muted-foreground);">5小时前</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px;">
+            <h4 class="pettrace-h4 truncate" style="font-size: 15px; color: var(--foreground); margin: 0;">望京 PAWPAW 咖啡</h4>
+            <div class="flex items-center gap-3" style="margin-top: 4px;">
+              <span class="pettrace-caption truncate" style="color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 3px;"><i data-lucide="map-pin" style="width:12px;height:12px;"></i>北京市朝阳区 · 1.8km</span>
+              <span class="pettrace-caption" style="color: var(--warning); display: inline-flex; align-items: center; gap: 2px; font-weight: 600;"><i data-lucide="star" style="width:12px;height:12px;"></i>4.9</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px; border-radius: var(--radius-md); height: 120px; background: linear-gradient(135deg, var(--pettrace-mint-50), var(--pettrace-coral-100)); overflow: hidden;"></div>
+          <p class="pettrace-body" style="font-size: 14px; color: var(--foreground); line-height: 1.6; margin: 10px 0 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">第一次带奶茶出门，在 PAWPAW 咖啡居然一点都不紧张，店员还会准备小零食。咖啡也很不错，推荐抹茶拿铁。</p>
+          <div class="flex items-center gap-4" style="margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border);">
+            <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 13px; color: var(--muted-foreground); line-height: 1;"><i data-lucide="heart" style="width:15px;height:15px;flex-shrink:0;"></i>67</span>
+            <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 13px; color: var(--muted-foreground); line-height: 1;"><i data-lucide="message-circle" style="width:15px;height:15px;flex-shrink:0;"></i>15</span>
+            <span style="display: inline-flex; align-items: center; margin-left: auto; color: var(--muted-foreground);"><i data-lucide="bookmark" style="width:15px;height:15px;"></i></span>
+          </div>
+        </article>
+
+        <!-- Post 3 -->
+        <article style="background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: var(--radius-lg); padding: 14px; border: 0.5px solid rgba(255,255,255,0.6); box-shadow: var(--shadow-1);">
+          <div class="flex items-center gap-3">
+            <div style="width: 36px; height: 36px; border-radius: var(--radius-full); border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: var(--font-heading); font-weight: 700; font-size: 14px; color: var(--foreground);">L</div>
+            <div style="min-width: 0; flex: 1;">
+              <div class="flex items-center gap-2">
+                <span style="font-size: 14px; font-weight: 600; color: var(--foreground); font-family: var(--font-body);">Luna的日常</span>
+                <span style="display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: var(--radius-full); background: rgba(16,185,129,0.1); color: var(--success); font-size: 10px; font-weight: 600; font-family: var(--font-body);"><i data-lucide="check-circle" style="width:11px;height:11px;"></i>已验证</span>
+              </div>
+              <span class="pettrace-caption" style="color: var(--muted-foreground);">昨天</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px;">
+            <h4 class="pettrace-h4 truncate" style="font-size: 15px; color: var(--foreground); margin: 0;">长乐路 Pet Friendly 花园</h4>
+            <div class="flex items-center gap-3" style="margin-top: 4px;">
+              <span class="pettrace-caption truncate" style="color: var(--muted-foreground); display: inline-flex; align-items: center; gap: 3px;"><i data-lucide="map-pin" style="width:12px;height:12px;"></i>上海市徐汇区 · 0.6km</span>
+              <span class="pettrace-caption" style="color: var(--warning); display: inline-flex; align-items: center; gap: 2px; font-weight: 600;"><i data-lucide="star" style="width:12px;height:12px;"></i>4.5</span>
+            </div>
+          </div>
+          <div style="margin-top: 10px; border-radius: var(--radius-md); height: 120px; background: linear-gradient(135deg, var(--pettrace-coral-100), var(--pettrace-honey-50)); overflow: hidden;"></div>
+          <p class="pettrace-body" style="font-size: 14px; color: var(--foreground); line-height: 1.6; margin: 10px 0 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">长乐路上新开的小花园宠物友好区，Luna 在里面跑来跑去玩得很开心。周围有很多梧桐树，夏天很凉快。</p>
+          <div class="flex items-center gap-4" style="margin-top: 10px; padding-top: 10px; border-top: 0.5px solid var(--border);">
+            <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 13px; color: var(--muted-foreground); line-height: 1;"><i data-lucide="heart" style="width:15px;height:15px;flex-shrink:0;"></i>31</span>
+            <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 13px; color: var(--muted-foreground); line-height: 1;"><i data-lucide="message-circle" style="width:15px;height:15px;flex-shrink:0;"></i>5</span>
+            <span style="display: inline-flex; align-items: center; margin-left: auto; color: var(--muted-foreground);"><i data-lucide="bookmark" style="width:15px;height:15px;"></i></span>
+          </div>
+        </article>
+
+      </div>
+
+    </main>
+
+    <!-- Floating Pill Tab Bar -->
+    <div class="fixed left-3 right-3 z-30" style="bottom:calc(env(safe-area-inset-bottom, 8px) + 8px);">
+      <nav style="display:flex;align-items:center;justify-content:space-around;height:60px;background:rgba(255,255,255,0.72);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-radius:var(--radius-xl);border:1px solid rgba(255,255,255,0.5);box-shadow:0 8px 32px rgba(84,49,31,0.12), 0 2px 8px rgba(84,49,31,0.06);" aria-label="主导航">
+        <a style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;color:var(--muted);text-decoration:none;font-size:10px;font-weight:500;font-family:var(--font-body);" href="#"><i data-lucide="map-pin" style="width:22px;height:22px;"></i><span>地图</span></a>
+        <a style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;color:var(--primary);font-size:10px;font-weight:600;font-family:var(--font-heading);text-decoration:none;" href="#"><i data-lucide="users" style="width:22px;height:22px;"></i><span>社区</span></a>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;">
+          <button style="width:46px;height:46px;min-width:46px;border-radius:var(--radius-full);background:var(--primary);color:var(--primary-foreground);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(247,107,122,0.35);border:none;margin-top:-22px;transition:transform .15s;" aria-label="AI规划"><i data-lucide="dog" style="width:22px;height:22px;"></i></button>
+          <span style="font-size:10px;font-weight:500;color:var(--muted);font-family:var(--font-body);">AI规划</span>
+        </div>
+        <a style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;color:var(--muted);text-decoration:none;font-size:10px;font-weight:500;font-family:var(--font-body);" href="#"><i data-lucide="folder" style="width:22px;height:22px;"></i><span>档案</span></a>
+        <a style="display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;color:var(--muted);text-decoration:none;font-size:10px;font-weight:500;font-family:var(--font-body);" href="#"><i data-lucide="settings" style="width:22px;height:22px;"></i><span>设置</span></a>
+      </nav>
+    </div>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

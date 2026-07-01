@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>状态组件 — 宠迹AI</title>
+    <style id="theme-vars">
+/* @group-priority: primary, accent, success, warning, info */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --pettrace-coral-50: #fff1f2; --pettrace-coral-100: #ffe0e3; --pettrace-coral-200: #ffc7cd; --pettrace-coral-300: #ffa0ab; --pettrace-coral-400: #fd6b7e; --pettrace-coral-500: #f76b7a; --pettrace-coral-600: #ef4460; --pettrace-coral-700: #d9294b; --pettrace-coral-800: #b91d3f; --pettrace-coral-900: #9c1637;
+  --pettrace-mint-50: #eefbf4; --pettrace-mint-100: #d5f5e3; --pettrace-mint-200: #aeeacc; --pettrace-mint-300: #76d9af; --pettrace-mint-400: #3dc28d; --pettrace-mint-500: #20a976; --pettrace-mint-600: #16895f; --pettrace-mint-700: #136e50; --pettrace-mint-800: #125841; --pettrace-mint-900: #104a37;
+  --pettrace-honey-50: #fffbeb; --pettrace-honey-100: #fef3c7; --pettrace-honey-200: #fde68a; --pettrace-honey-300: #fcd34d; --pettrace-honey-400: #fbbf24; --pettrace-honey-500: #f59e0b; --pettrace-honey-600: #d97706; --pettrace-honey-700: #b45309; --pettrace-honey-800: #92400e; --pettrace-honey-900: #78350f;
+  --pettrace-success-50: #ecfdf5; --pettrace-success-100: #d1fae5; --pettrace-success-200: #a7f3d0; --pettrace-success-300: #6ee7b7; --pettrace-success-400: #34d399; --pettrace-success-500: #10b981; --pettrace-success-600: #059669; --pettrace-success-700: #047857; --pettrace-success-800: #065f46; --pettrace-success-900: #064e3b;
+  --pettrace-error-50: #fef2f2; --pettrace-error-100: #fee2e2; --pettrace-error-200: #fecaca; --pettrace-error-300: #fca5a5; --pettrace-error-400: #f87171; --pettrace-error-500: #ef4444; --pettrace-error-600: #dc2626; --pettrace-error-700: #b91c1c; --pettrace-error-800: #991b1b; --pettrace-error-900: #7f1d1d;
+  --pettrace-info-50: #eff6ff; --pettrace-info-100: #dbeafe; --pettrace-info-200: #bfdbfe; --pettrace-info-300: #93c5fd; --pettrace-info-400: #60a5fa; --pettrace-info-500: #3b82f6; --pettrace-info-600: #2563eb; --pettrace-info-700: #1d4ed8; --pettrace-info-800: #1e40af; --pettrace-info-900: #1e3a8a;
+  --pettrace-neutral-50: #fff7f0; --pettrace-neutral-100: #ffe8d6; --pettrace-neutral-200: #fdd5b5; --pettrace-neutral-300: #f5b78a; --pettrace-neutral-400: #e8945e; --pettrace-neutral-500: #c97840; --pettrace-neutral-600: #a65f34; --pettrace-neutral-700: #8a4d2d; --pettrace-neutral-800: #6e3d26; --pettrace-neutral-900: #54311f;
+  --background: #fff7f0; --surface: #ffffff; --surface-dim: #fff1eb; --surface-container-low: #fff1f2; --surface-container: #ffe0e3; --surface-container-high: #ffc7cd; --surface-container-highest: #fdd5b5; --card: #ffffff; --popover: #ffffff;
+  --foreground: #54311f; --muted: #a65f34; --muted-foreground: #8a4d2d; --border: #fdd5b5;
+  --primary: #f76b7a; --primary-foreground: #ffffff; --secondary: #fff1f2; --secondary-foreground: #54311f; --accent: #20a976; --accent-foreground: #ffffff; --ring: #f76b7a; --link: #ef4460;
+  --error: #ef4444; --error-container: #fef2f2; --on-error: #ffffff; --on-error-container: #7f1d1d; --success: #10b981; --warning: #f59e0b;
+  --color-background: var(--background); --color-foreground: var(--foreground); --color-surface: var(--surface); --color-card: var(--card); --color-primary: var(--primary); --color-on-primary: var(--primary-foreground); --color-on-surface: var(--foreground); --color-on-surface-variant: var(--muted); --color-muted-foreground: var(--muted-foreground); --color-outline: var(--border); --color-outline-variant: #ffe8d6; --color-border: var(--border); --color-success: var(--success); --color-warning: var(--warning);
+  --font-display: 'Nunito', sans-serif; --font-heading: 'Nunito', sans-serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'DM Sans', monospace;
+  --font-size-display: 56px; --font-size-h1: 40px; --font-size-h2: 32px; --font-size-h3: 24px; --font-size-h4: 20px; --font-size-body: 16px; --font-size-lead: 18px; --font-size-caption: 12px; --font-size-mono: 14px;
+  --font-weight-display: 800; --font-weight-h1: 800; --font-weight-h2: 700; --font-weight-h3: 700; --font-weight-h4: 600; --font-weight-body: 400; --font-weight-lead: 500; --font-weight-caption: 500; --font-weight-mono: 400;
+  --line-height-display: 1.1; --line-height-h1: 1.2; --line-height-h2: 1.25; --line-height-h3: 1.3; --line-height-h4: 1.4; --line-height-body: 1.6; --line-height-lead: 1.7; --line-height-caption: 1.5; --line-height-mono: 1.6;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --size-button-sm: 32px; --size-button-md: 40px; --size-button-lg: 48px; --size-icon-sm: 16px; --size-icon-md: 20px; --size-icon-lg: 24px; --size-avatar-sm: 32px; --size-avatar-md: 40px; --size-avatar-lg: 56px;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px; --radius-full: 9999px;
+  --shadow-1: 0 1px 3px rgba(84,49,31,.06), 0 1px 2px rgba(84,49,31,.04); --shadow-2: 0 4px 8px -2px rgba(84,49,31,.08); --shadow-3: 0 8px 24px -4px rgba(84,49,31,.12); --shadow-4: 0 16px 40px -8px rgba(84,49,31,.18); --shadow-5: 0 24px 56px -12px rgba(84,49,31,.24);
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @layer base { body { background: var(--background); color: var(--foreground); } }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; min-height: 100vh; font-family: var(--font-body); background: var(--background); color: var(--foreground);">
+
+    <!-- Status Bar -->
+    <div style="position: sticky; top: 0; z-index: 10; background: var(--background); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border);">
+        <span style="font-family: var(--font-heading); font-size: var(--font-size-h4); font-weight: var(--font-weight-h4); color: var(--foreground);">状态组件</span>
+        <span style="font-size: 13px; color: var(--muted-foreground); font-weight: var(--font-weight-body);">空状态 / 骨架屏</span>
+    </div>
+
+    <!-- Main Content -->
+    <main style="max-width: 430px; margin: 0 auto; padding: 20px 16px 40px 16px;">
+
+        <!-- ==================== Section 1: Empty States ==================== -->
+        <div style="margin-bottom: 40px;">
+            <!-- Section Label -->
+            <div style="font-size: 11px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: var(--font-weight-caption);">空状态</div>
+
+            <!-- Empty State A — 社区无帖子 -->
+            <div style="display: flex; flex-direction: column; align-items: center; padding: 48px 20px 32px 20px; border-bottom: 1px solid var(--border);">
+                <!-- Circle placeholder -->
+                <div style="width: 96px; height: 96px; border-radius: var(--radius-full); background: var(--pettrace-coral-50); display: flex; align-items: center; justify-content: center;">
+                    <i data-icon="message-square" style="width: 40px; height: 40px; color: var(--pettrace-coral-500);"></i>
+                </div>
+                <!-- Title -->
+                <h4 style="font-family: var(--font-heading); font-size: var(--font-size-h4); font-weight: var(--font-weight-h4); color: var(--foreground); margin: 16px 0 0 0; text-align: center;">暂无帖子</h4>
+                <!-- Description -->
+                <p style="font-size: 13px; color: var(--muted-foreground); text-align: center; max-width: 240px; margin: 6px 0 0 0; line-height: 1.5;">你的关注地区还没有帖子，试试发布一条验证吧</p>
+                <!-- CTA Button -->
+                <button style="margin-top: 20px; background: var(--primary); color: var(--primary-foreground); border: none; border-radius: var(--radius-full); height: 40px; padding: 0 24px; font-family: var(--font-body); font-size: 14px; font-weight: var(--font-weight-lead); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">发布验证</button>
+            </div>
+
+            <!-- Empty State B — 搜索无结果 -->
+            <div style="display: flex; flex-direction: column; align-items: center; padding: 48px 20px 32px 20px; border-bottom: 1px solid var(--border);">
+                <!-- Circle placeholder -->
+                <div style="width: 96px; height: 96px; border-radius: var(--radius-full); background: var(--pettrace-coral-50); display: flex; align-items: center; justify-content: center;">
+                    <i data-icon="search" style="width: 40px; height: 40px; color: var(--pettrace-coral-500);"></i>
+                </div>
+                <!-- Title -->
+                <h4 style="font-family: var(--font-heading); font-size: var(--font-size-h4); font-weight: var(--font-weight-h4); color: var(--foreground); margin: 16px 0 0 0; text-align: center;">未找到地点</h4>
+                <!-- Description -->
+                <p style="font-size: 13px; color: var(--muted-foreground); text-align: center; max-width: 240px; margin: 6px 0 0 0; line-height: 1.5;">换个关键词试试，或扩大搜索范围</p>
+                <!-- CTA Button -->
+                <button style="margin-top: 20px; background: var(--primary); color: var(--primary-foreground); border: none; border-radius: var(--radius-full); height: 40px; padding: 0 24px; font-family: var(--font-body); font-size: 14px; font-weight: var(--font-weight-lead); cursor: pointer;">清除筛选</button>
+            </div>
+
+            <!-- Empty State C — 宠物档案无宠物 -->
+            <div style="display: flex; flex-direction: column; align-items: center; padding: 48px 20px 32px 20px;">
+                <!-- Circle placeholder -->
+                <div style="width: 96px; height: 96px; border-radius: var(--radius-full); background: var(--pettrace-mint-50); display: flex; align-items: center; justify-content: center;">
+                    <i data-icon="paw-print" style="width: 40px; height: 40px; color: var(--accent);"></i>
+                </div>
+                <!-- Title -->
+                <h4 style="font-family: var(--font-heading); font-size: var(--font-size-h4); font-weight: var(--font-weight-h4); color: var(--foreground); margin: 16px 0 0 0; text-align: center;">还没有添加宠物</h4>
+                <!-- Description -->
+                <p style="font-size: 13px; color: var(--muted-foreground); text-align: center; max-width: 240px; margin: 6px 0 0 0; line-height: 1.5;">添加你的第一只宠物，开始记录出行日记吧</p>
+                <!-- CTA Button -->
+                <button style="margin-top: 20px; background: var(--primary); color: var(--primary-foreground); border: none; border-radius: var(--radius-full); height: 40px; padding: 0 24px; font-family: var(--font-body); font-size: 14px; font-weight: var(--font-weight-lead); cursor: pointer;">添加宠物</button>
+            </div>
+        </div>
+
+        <!-- ==================== Section 2: Skeleton Loading ==================== -->
+        <div>
+            <!-- Section Label -->
+            <div style="font-size: 11px; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: var(--font-weight-caption);">骨架屏</div>
+
+            <!-- Skeleton A — 帖子列表加载 -->
+            <div style="background: var(--surface); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 16px; box-shadow: var(--shadow-1);">
+                <!-- Top row: avatar + lines -->
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite; flex-shrink: 0;"></div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                        <div style="width: 80px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                        <div style="width: 40px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    </div>
+                </div>
+                <!-- Image placeholder -->
+                <div style="width: 100%; height: 96px; border-radius: var(--radius-md); margin-top: 12px; background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                <!-- Text lines -->
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: 12px;">
+                    <div style="width: 100%; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    <div style="width: 75%; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    <div style="width: 50%; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                </div>
+                <!-- Bottom row: 3 circles + 3 short lines -->
+                <div style="display: flex; align-items: center; gap: 16px; margin-top: 12px;">
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <div style="width: 16px; height: 16px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                        <div style="width: 28px; height: 10px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <div style="width: 16px; height: 16px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                        <div style="width: 28px; height: 10px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 4px;">
+                        <div style="width: 16px; height: 16px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                        <div style="width: 28px; height: 10px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skeleton B — 地点卡片加载 -->
+            <div style="background: var(--surface); border-radius: var(--radius-lg); padding: 14px; margin-bottom: 16px; box-shadow: var(--shadow-1);">
+                <!-- Top bar: avatar + lines -->
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite; flex-shrink: 0;"></div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                        <div style="width: 96px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                        <div style="width: 64px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    </div>
+                </div>
+                <!-- Rating -->
+                <div style="display: flex; align-items: center; gap: 6px; margin-top: 14px;">
+                    <div style="width: 12px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    <div style="width: 32px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                </div>
+                <!-- Button placeholder -->
+                <div style="width: 100%; height: 40px; border-radius: var(--radius-full); margin-top: 16px; background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+            </div>
+
+            <!-- Skeleton C — 宠物档案加载 -->
+            <div style="background: var(--surface); border-radius: var(--radius-lg); padding: 14px; box-shadow: var(--shadow-1);">
+                <!-- Avatar + lines row -->
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 48px; height: 48px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite; flex-shrink: 0;"></div>
+                    <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+                        <div style="width: 64px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                        <div style="width: 96px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                        <div style="width: 48px; height: 12px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                    </div>
+                </div>
+                <!-- Bottom pill -->
+                <div style="margin-top: 14px;">
+                    <div style="width: 64px; height: 20px; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--border) 25%, var(--surface-container-low) 50%, var(--border) 75%); background-size: 200px 100%; animation: shimmer 1.5s infinite;"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] { display: inline-flex; align-items: center; justify-content: center; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background-color: currentColor; }
+      @keyframes shimmer {
+        0% { background-position: -200px 0; }
+        100% { background-position: 200px 0; }
+      }
+    </style>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

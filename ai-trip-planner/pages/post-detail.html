@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>帖子详情 — 宠迹AI</title>
+    <style id="theme-vars">
+/* @group-priority: primary, accent, success, warning, info */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --pettrace-coral-50: #fff1f2; --pettrace-coral-100: #ffe0e3; --pettrace-coral-200: #ffc7cd; --pettrace-coral-300: #ffa0ab; --pettrace-coral-400: #fd6b7e; --pettrace-coral-500: #f76b7a; --pettrace-coral-600: #ef4460; --pettrace-coral-700: #d9294b; --pettrace-coral-800: #b91d3f; --pettrace-coral-900: #9c1637;
+  --pettrace-mint-50: #eefbf4; --pettrace-mint-100: #d5f5e3; --pettrace-mint-200: #aeeacc; --pettrace-mint-300: #76d9af; --pettrace-mint-400: #3dc28d; --pettrace-mint-500: #20a976; --pettrace-mint-600: #16895f; --pettrace-mint-700: #136e50; --pettrace-mint-800: #125841; --pettrace-mint-900: #104a37;
+  --pettrace-honey-50: #fffbeb; --pettrace-honey-100: #fef3c7; --pettrace-honey-200: #fde68a; --pettrace-honey-300: #fcd34d; --pettrace-honey-400: #fbbf24; --pettrace-honey-500: #f59e0b; --pettrace-honey-600: #d97706; --pettrace-honey-700: #b45309; --pettrace-honey-800: #92400e; --pettrace-honey-900: #78350f;
+  --pettrace-success-50: #ecfdf5; --pettrace-success-100: #d1fae5; --pettrace-success-200: #a7f3d0; --pettrace-success-300: #6ee7b7; --pettrace-success-400: #34d399; --pettrace-success-500: #10b981; --pettrace-success-600: #059669; --pettrace-success-700: #047857; --pettrace-success-800: #065f46; --pettrace-success-900: #064e3b;
+  --pettrace-error-50: #fef2f2; --pettrace-error-100: #fee2e2; --pettrace-error-200: #fecaca; --pettrace-error-300: #fca5a5; --pettrace-error-400: #f87171; --pettrace-error-500: #ef4444; --pettrace-error-600: #dc2626; --pettrace-error-700: #b91c1c; --pettrace-error-800: #991b1b; --pettrace-error-900: #7f1d1d;
+  --pettrace-info-50: #eff6ff; --pettrace-info-100: #dbeafe; --pettrace-info-200: #bfdbfe; --pettrace-info-300: #93c5fd; --pettrace-info-400: #60a5fa; --pettrace-info-500: #3b82f6; --pettrace-info-600: #2563eb; --pettrace-info-700: #1d4ed8; --pettrace-info-800: #1e40af; --pettrace-info-900: #1e3a8a;
+  --pettrace-neutral-50: #fff7f0; --pettrace-neutral-100: #ffe8d6; --pettrace-neutral-200: #fdd5b5; --pettrace-neutral-300: #f5b78a; --pettrace-neutral-400: #e8945e; --pettrace-neutral-500: #c97840; --pettrace-neutral-600: #a65f34; --pettrace-neutral-700: #8a4d2d; --pettrace-neutral-800: #6e3d26; --pettrace-neutral-900: #54311f;
+  --background: #fff7f0; --surface: #ffffff; --surface-dim: #fff1eb; --surface-container-low: #fff1f2; --surface-container: #ffe0e3; --surface-container-high: #ffc7cd; --surface-container-highest: #fdd5b5; --card: #ffffff; --popover: #ffffff;
+  --foreground: #54311f; --muted: #a65f34; --muted-foreground: #8a4d2d; --border: #fdd5b5;
+  --primary: #f76b7a; --primary-foreground: #ffffff; --secondary: #fff1f2; --secondary-foreground: #54311f; --accent: #20a976; --accent-foreground: #ffffff; --ring: #f76b7a; --link: #ef4460;
+  --error: #ef4444; --error-container: #fef2f2; --on-error: #ffffff; --on-error-container: #7f1d1d; --success: #10b981; --warning: #f59e0b;
+  --color-background: var(--background); --color-foreground: var(--foreground); --color-surface: var(--surface); --color-card: var(--card); --color-primary: var(--primary); --color-on-primary: var(--primary-foreground); --color-on-surface: var(--foreground); --color-on-surface-variant: var(--muted); --color-muted-foreground: var(--muted-foreground); --color-outline: var(--border); --color-outline-variant: #ffe8d6; --color-border: var(--border); --color-success: var(--success); --color-warning: var(--warning);
+  --font-display: 'Nunito', sans-serif; --font-heading: 'Nunito', sans-serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'DM Sans', monospace;
+  --font-size-display: 56px; --font-size-h1: 40px; --font-size-h2: 32px; --font-size-h3: 24px; --font-size-h4: 20px; --font-size-body: 16px; --font-size-lead: 18px; --font-size-caption: 12px; --font-size-mono: 14px;
+  --font-weight-display: 800; --font-weight-h1: 800; --font-weight-h2: 700; --font-weight-h3: 700; --font-weight-h4: 600; --font-weight-body: 400; --font-weight-lead: 500; --font-weight-caption: 500; --font-weight-mono: 400;
+  --line-height-display: 1.1; --line-height-h1: 1.2; --line-height-h2: 1.25; --line-height-h3: 1.3; --line-height-h4: 1.4; --line-height-body: 1.6; --line-height-lead: 1.7; --line-height-caption: 1.5; --line-height-mono: 1.6;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --size-button-sm: 32px; --size-button-md: 40px; --size-button-lg: 48px; --size-icon-sm: 16px; --size-icon-md: 20px; --size-icon-lg: 24px; --size-avatar-sm: 32px; --size-avatar-md: 40px; --size-avatar-lg: 56px;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px; --radius-full: 9999px;
+  --shadow-1: 0 1px 3px rgba(84,49,31,.06), 0 1px 2px rgba(84,49,31,.04); --shadow-2: 0 4px 8px -2px rgba(84,49,31,.08); --shadow-3: 0 8px 24px -4px rgba(84,49,31,.12); --shadow-4: 0 16px 40px -8px rgba(84,49,31,.18); --shadow-5: 0 24px 56px -12px rgba(84,49,31,.24);
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @layer base { body { background: var(--background); color: var(--foreground); } }
+    </style>
+    <style>
+      [data-icon] { display: inline-flex; align-items: center; justify-content: center; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background-color: currentColor; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased" style="margin:0;">
+    <main style="max-width: 430px; margin: 0 auto; position: relative;">
+
+      <!-- iOS Status Bar -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 44px; color: var(--foreground); font-size: 14px; font-weight: 600; font-family: var(--font-body); background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: relative; z-index: 10;">
+        <span>9:41</span>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <i data-lucide="signal" style="width:14px;height:14px;"></i>
+          <i data-lucide="wifi" style="width:14px;height:14px;"></i>
+          <i data-lucide="battery-full" style="width:16px;height:16px;"></i>
+        </div>
+      </div>
+
+      <!-- Navigation Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 16px 10px; background: rgba(255,255,255,0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 10;">
+        <button data-dom-id="nav-back-post-detail" style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: var(--radius-full); background: rgba(255,255,255,0.7); border: 0.5px solid rgba(84,49,31,0.1); cursor: pointer; color: var(--foreground);">
+          <i data-lucide="chevron-left" style="width:20px;height:20px;"></i>
+        </button>
+        <span style="font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--foreground); position: absolute; left: 50%; transform: translateX(-50%);">帖子详情</span>
+        <button style="display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: var(--radius-full); background: rgba(255,255,255,0.7); border: 0.5px solid rgba(84,49,31,0.1); cursor: pointer; color: var(--foreground);">
+          <i data-lucide="share-2" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+
+      <!-- Image Hero -->
+      <div style="width: 100%; aspect-ratio: 2/1; background: linear-gradient(135deg, var(--pettrace-coral-50), var(--pettrace-mint-100)); border-radius: 0 0 16px 16px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+        <div style="text-align: center; color: var(--muted-foreground); opacity: 0.5;">
+          <i data-lucide="image" style="width:40px;height:40px;margin:0 auto 8px;display:block;"></i>
+          <span style="font-size: 12px; font-family: var(--font-body);">帖子图片</span>
+        </div>
+      </div>
+
+      <!-- Author Info Section -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 36px; border-radius: var(--radius-full); background: linear-gradient(135deg, var(--pettrace-coral-400), var(--pettrace-coral-500)); display: flex; align-items: center; justify-content: center; color: var(--primary-foreground); font-family: var(--font-heading); font-size: 14px; font-weight: 700;">豆</div>
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-family: var(--font-heading); font-size: 15px; font-weight: 700; color: var(--foreground);">豆豆妈妈</span>
+            <span style="display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; border-radius: var(--radius-full); background: var(--pettrace-success-50); color: var(--success); font-size: 10px; font-weight: 600; font-family: var(--font-body);">
+              <i data-lucide="badge-check" style="width:10px;height:10px;"></i>
+              已验证
+            </span>
+          </div>
+        </div>
+        <span style="font-family: var(--font-body); font-size: 12px; font-weight: 500; color: var(--muted);">2小时前</span>
+      </div>
+
+      <!-- Place Info Card (Glassmorphic) -->
+      <div style="margin: 0 16px 12px; padding: 14px 16px; border-radius: var(--radius-lg); background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 0.5px solid rgba(84,49,31,0.08); box-shadow: var(--shadow-1);">
+
+        <!-- Place Name -->
+        <h4 style="font-family: var(--font-heading); font-size: 18px; font-weight: 700; color: var(--foreground); margin: 0 0 6px 0; line-height: 1.3;">朝阳公园宠物角</h4>
+
+        <!-- Address -->
+        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 10px;">
+          <i data-lucide="map-pin" style="width:14px;height:14px;color:var(--muted);flex-shrink:0;"></i>
+          <span style="font-family: var(--font-body); font-size: 13px; color: var(--muted-foreground); line-height: 1.4;">北京市朝阳区朝阳公园南路1号</span>
+        </div>
+
+        <!-- Tags Row -->
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;">
+          <span style="display: inline-flex; align-items: center; padding: 3px 10px; border-radius: var(--radius-full); background: var(--pettrace-coral-50); color: var(--pettrace-coral-600); font-size: 12px; font-weight: 600; font-family: var(--font-heading);">宠物公园</span>
+          <span style="display: inline-flex; align-items: center; padding: 3px 10px; border-radius: var(--radius-full); background: var(--pettrace-mint-50); color: var(--accent); font-size: 12px; font-weight: 600; font-family: var(--font-heading);">有围栏</span>
+          <span style="display: inline-flex; align-items: center; padding: 3px 10px; border-radius: var(--radius-full); background: var(--pettrace-honey-50); color: var(--warning); font-size: 12px; font-weight: 600; font-family: var(--font-heading);">免费</span>
+        </div>
+
+        <!-- Rating Row -->
+        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+          <i data-lucide="star" style="width:16px;height:16px;color:var(--warning);fill:var(--warning);"></i>
+          <span style="font-family: var(--font-heading); font-size: 16px; font-weight: 700; color: var(--warning);">4.7</span>
+          <span style="font-family: var(--font-body); font-size: 13px; color: var(--muted);">(128条评价)</span>
+        </div>
+
+        <!-- Distance -->
+        <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 12px;">
+          <i data-lucide="map-pin" style="width:14px;height:14px;color:var(--muted);flex-shrink:0;"></i>
+          <span style="font-family: var(--font-body); font-size: 13px; color: var(--muted-foreground);">距你 3.2km</span>
+        </div>
+
+        <!-- Route Button -->
+        <button style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; height: 40px; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); font-family: var(--font-heading); font-size: 14px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(247,107,122,0.2);">
+          <i data-lucide="route" style="width:16px;height:16px;"></i>
+          查看路线
+        </button>
+      </div>
+
+      <!-- Post Body Text -->
+      <div style="padding: 0 16px 120px;">
+        <p style="font-family: var(--font-body); font-size: 15px; font-weight: 400; line-height: 1.7; color: var(--foreground); margin: 0;">
+          周末带豆豆去了朝阳公园的宠物角，草坪很大，还有专门的小狗围栏区域，非常推荐！空气很好，遇到了很多友好的宠物主人。建议大家早上9点前去，人少很多，停车场也不拥挤。
+        </p>
+      </div>
+
+      <!-- Interaction Bar (Fixed Bottom) -->
+      <div style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 430px; display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 20px)); background: rgba(255,255,255,0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid rgba(84,49,31,0.08); z-index: 20;">
+        <!-- Left Group -->
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <button style="display: inline-flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; color: var(--muted); padding: 0;">
+            <i data-lucide="heart" style="width:22px;height:22px;"></i>
+            <span style="font-family: var(--font-body); font-size: 13px; font-weight: 500;">42</span>
+          </button>
+          <button style="display: inline-flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer; color: var(--muted); padding: 0;">
+            <i data-lucide="message-circle" style="width:22px;height:22px;"></i>
+            <span style="font-family: var(--font-body); font-size: 13px; font-weight: 500;">8</span>
+          </button>
+          <button style="display: inline-flex; align-items: center; background: none; border: none; cursor: pointer; color: var(--muted); padding: 0;">
+            <i data-lucide="bookmark" style="width:22px;height:22px;"></i>
+          </button>
+        </div>
+        <!-- Right: Go Here Button -->
+        <button style="display: inline-flex; align-items: center; justify-content: center; padding: 0 20px; height: 40px; border-radius: var(--radius-full); background: var(--primary); color: var(--primary-foreground); font-family: var(--font-heading); font-size: 14px; font-weight: 700; border: none; cursor: pointer; box-shadow: 0 2px 8px rgba(247,107,122,0.2); gap: 6px;">
+          <i data-lucide="map-pin" style="width:16px;height:16px;"></i>
+          去这里
+        </button>
+      </div>
+
+    </main>
+
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>

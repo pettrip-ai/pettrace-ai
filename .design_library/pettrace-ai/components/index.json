@@ -1,0 +1,64 @@
+{
+  "components": [
+    {
+      "slug": "button",
+      "name": "Button",
+      "category": "action",
+      "sourceKind": "from-scratch",
+      "confidence": "medium",
+      "variantCount": 4,
+      "priorityHint": "high",
+      "keyInsightSeed": "Coral-pink gradient primary with pill-lg radius, warm glow shadow on press"
+    },
+    {
+      "slug": "card",
+      "name": "Card",
+      "category": "container",
+      "sourceKind": "from-scratch",
+      "confidence": "medium",
+      "variantCount": 3,
+      "priorityHint": "high",
+      "keyInsightSeed": "Glassmorphic white cards with soft blur backdrop on cream canvas"
+    },
+    {
+      "slug": "bottom-nav",
+      "name": "BottomNav",
+      "category": "navigation",
+      "sourceKind": "from-scratch",
+      "confidence": "medium",
+      "variantCount": 2,
+      "priorityHint": "high",
+      "keyInsightSeed": "Floating pill-shaped bottom tab bar with elevated AI center button"
+    },
+    {
+      "slug": "input",
+      "name": "Input",
+      "category": "form",
+      "sourceKind": "from-scratch",
+      "confidence": "medium",
+      "variantCount": 3,
+      "priorityHint": "high",
+      "keyInsightSeed": "Rounded warm-white input with coral focus ring, 14px mobile-safe font"
+    },
+    {
+      "slug": "avatar",
+      "name": "Avatar",
+      "category": "display",
+      "sourceKind": "from-scratch",
+      "confidence": "medium",
+      "variantCount": 3,
+      "priorityHint": "medium",
+      "keyInsightSeed": "Gradient coral initial avatar for pets, mint-tinted for categories"
+    },
+    {
+      "slug": "chip",
+      "name": "Chip",
+      "category": "filter",
+      "sourceKind": "from-scratch",
+      "confidence": "medium",
+      "variantCount": 2,
+      "priorityHint": "medium",
+      "keyInsightSeed": "Pill-shaped filter chips with coral active state and warm glow shadow"
+    }
+  ]
+}

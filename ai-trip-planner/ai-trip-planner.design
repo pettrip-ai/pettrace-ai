@@ -1,0 +1,168 @@
+{
+  "data": [
+    {
+      "id": "page-ai-planner",
+      "title": "AI 行程规划",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782444400000,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/ai-planner.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-ai-chat",
+      "title": "AI 对话模式",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782444400000,
+      "canvasData": {
+        "x": 420,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/ai-chat.html",
+        "interactions": [
+          {
+            "domId": "nav-back-chat",
+            "targetPageId": "page-ai-planner",
+            "hideEdge": true,
+            "transitionLabel": "返回规划"
+          }
+        ]
+      }
+    },
+    {
+      "id": "page-map",
+      "title": "宠物友好地图",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782458400000,
+      "canvasData": {
+        "x": 840,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/map.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-pet-profile",
+      "title": "宠物档案",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782458400000,
+      "canvasData": {
+        "x": 1260,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/pet-profile.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-community",
+      "title": "宠物社区",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782458400000,
+      "canvasData": {
+        "x": 1680,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/community.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-settings",
+      "title": "设置",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782458400000,
+      "canvasData": {
+        "x": 2100,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/settings.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-post-detail",
+      "title": "帖子详情",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782465700000,
+      "canvasData": {
+        "x": 2520,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/post-detail.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-action-sheet",
+      "title": "交互组件",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782465700000,
+      "canvasData": {
+        "x": 2940,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/action-sheet.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-states",
+      "title": "状态组件",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1782465700000,
+      "canvasData": {
+        "x": 3360,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/states.html",
+        "interactions": []
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "mobile",
+    "projectName": "PetTrace AI 宠迹",
+    "designLibrary": {
+      "name": "pettrace-ai",
+      "id": "ON9LKOKR9L557Q",
+      "version": null,
+      "scope": "workspace",
+      "path": "g:\\0_2026_Innovative_Project\\pettrace-ai\\.design_library\\pettrace-ai",
+      "versionSource": null
+    }
+  }
+}

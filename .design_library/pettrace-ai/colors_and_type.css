@@ -1,0 +1,284 @@
+/* @group-priority: primary, accent, success, warning, info */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+
+  /* primary */
+  --pettrace-coral-50: #fff1f2; /* AI-generated */
+  --pettrace-coral-100: #ffe0e3; /* AI-generated */
+  --pettrace-coral-200: #ffc7cd; /* AI-generated */
+  --pettrace-coral-300: #ffa0ab; /* AI-generated */
+  --pettrace-coral-400: #fd6b7e; /* AI-generated */
+  --pettrace-coral-500: #f76b7a; /* AI-generated */
+  --pettrace-coral-600: #ef4460; /* @primary */ /* AI-generated */
+  --pettrace-coral-700: #d9294b; /* AI-generated */
+  --pettrace-coral-800: #b91d3f; /* AI-generated */
+  --pettrace-coral-900: #9c1637; /* AI-generated */
+
+  /* accent */
+  --pettrace-mint-50: #eefbf4; /* AI-generated */
+  --pettrace-mint-100: #d5f5e3; /* AI-generated */
+  --pettrace-mint-200: #aeeacc; /* AI-generated */
+  --pettrace-mint-300: #76d9af; /* AI-generated */
+  --pettrace-mint-400: #3dc28d; /* AI-generated */
+  --pettrace-mint-500: #20a976; /* AI-generated */
+  --pettrace-mint-600: #16895f; /* @primary */ /* AI-generated */
+  --pettrace-mint-700: #136e50; /* AI-generated */
+  --pettrace-mint-800: #125841; /* AI-generated */
+  --pettrace-mint-900: #104a37; /* AI-generated */
+
+  /* warning */
+  --pettrace-honey-50: #fffbeb; /* AI-generated */
+  --pettrace-honey-100: #fef3c7; /* AI-generated */
+  --pettrace-honey-200: #fde68a; /* AI-generated */
+  --pettrace-honey-300: #fcd34d; /* AI-generated */
+  --pettrace-honey-400: #fbbf24; /* AI-generated */
+  --pettrace-honey-500: #f59e0b; /* AI-generated */
+  --pettrace-honey-600: #d97706; /* @primary */ /* AI-generated */
+  --pettrace-honey-700: #b45309; /* AI-generated */
+  --pettrace-honey-800: #92400e; /* AI-generated */
+  --pettrace-honey-900: #78350f; /* AI-generated */
+
+  /* success */
+  --pettrace-success-50: #ecfdf5; /* AI-generated */
+  --pettrace-success-100: #d1fae5; /* AI-generated */
+  --pettrace-success-200: #a7f3d0; /* AI-generated */
+  --pettrace-success-300: #6ee7b7; /* AI-generated */
+  --pettrace-success-400: #34d399; /* AI-generated */
+  --pettrace-success-500: #10b981; /* AI-generated */
+  --pettrace-success-600: #059669; /* @primary */ /* AI-generated */
+  --pettrace-success-700: #047857; /* AI-generated */
+  --pettrace-success-800: #065f46; /* AI-generated */
+  --pettrace-success-900: #064e3b; /* AI-generated */
+
+  /* error */
+  --pettrace-error-50: #fef2f2; /* AI-generated */
+  --pettrace-error-100: #fee2e2; /* AI-generated */
+  --pettrace-error-200: #fecaca; /* AI-generated */
+  --pettrace-error-300: #fca5a5; /* AI-generated */
+  --pettrace-error-400: #f87171; /* AI-generated */
+  --pettrace-error-500: #ef4444; /* AI-generated */
+  --pettrace-error-600: #dc2626; /* @primary */ /* AI-generated */
+  --pettrace-error-700: #b91c1c; /* AI-generated */
+  --pettrace-error-800: #991b1b; /* AI-generated */
+  --pettrace-error-900: #7f1d1d; /* AI-generated */
+
+  /* info */
+  --pettrace-info-50: #eff6ff; /* AI-generated */
+  --pettrace-info-100: #dbeafe; /* AI-generated */
+  --pettrace-info-200: #bfdbfe; /* AI-generated */
+  --pettrace-info-300: #93c5fd; /* AI-generated */
+  --pettrace-info-400: #60a5fa; /* AI-generated */
+  --pettrace-info-500: #3b82f6; /* AI-generated */
+  --pettrace-info-600: #2563eb; /* @primary */ /* AI-generated */
+  --pettrace-info-700: #1d4ed8; /* AI-generated */
+  --pettrace-info-800: #1e40af; /* AI-generated */
+  --pettrace-info-900: #1e3a8a; /* AI-generated */
+
+  /* neutral */
+  --pettrace-neutral-50: #fff7f0; /* AI-generated */
+  --pettrace-neutral-100: #ffe8d6; /* AI-generated */
+  --pettrace-neutral-200: #fdd5b5; /* AI-generated */
+  --pettrace-neutral-300: #f5b78a; /* AI-generated */
+  --pettrace-neutral-400: #e8945e; /* AI-generated */
+  --pettrace-neutral-500: #c97840; /* AI-generated */
+  --pettrace-neutral-600: #a65f34; /* AI-generated */
+  --pettrace-neutral-700: #8a4d2d; /* AI-generated */
+  --pettrace-neutral-800: #6e3d26; /* AI-generated */
+  --pettrace-neutral-900: #54311f; /* AI-generated */
+
+  /* surface */
+  --background: #fff7f0; /* AI-generated */
+  --surface: #ffffff; /* AI-generated */
+  --surface-dim: #fff1eb; /* AI-generated */
+  --surface-container-low: #fff1f2; /* AI-generated */
+  --surface-container: #ffe0e3; /* AI-generated */
+  --surface-container-high: #ffc7cd; /* AI-generated */
+  --surface-container-highest: #fdd5b5; /* AI-generated */
+  --card: #ffffff; /* AI-generated */
+  --popover: #ffffff; /* AI-generated */
+
+  /* text */
+  --foreground: #54311f; /* AI-generated */
+  --muted: #a65f34; /* AI-generated */
+  --muted-foreground: #8a4d2d; /* AI-generated */
+  --border: #fdd5b5; /* AI-generated */
+
+  /* aliases */
+  --primary: #f76b7a; /* AI-generated */
+  --primary-foreground: #ffffff; /* AI-generated */
+  --secondary: #fff1f2; /* AI-generated */
+  --secondary-foreground: #54311f; /* AI-generated */
+  --accent: #20a976; /* AI-generated */
+  --accent-foreground: #ffffff; /* AI-generated */
+  --ring: #f76b7a; /* AI-generated */
+  --link: #ef4460; /* AI-generated */
+
+  /* status */
+  --error: #ef4444; /* AI-generated */
+  --error-container: #fef2f2; /* AI-generated */
+  --on-error: #ffffff; /* AI-generated */
+  --on-error-container: #7f1d1d; /* AI-generated */
+  --success: #10b981; /* AI-generated */
+  --warning: #f59e0b; /* AI-generated */
+
+  /* Portable Aliases */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-variant: var(--surface-container-high);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--link);
+  --color-on-primary: var(--primary-foreground);
+  --color-primary-container: var(--surface-container-low);
+  --color-on-primary-container: #9c1637; /* AI-generated */
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary);
+  --color-on-secondary-container: var(--secondary-foreground);
+  --color-on-surface: var(--foreground);
+  --color-on-surface-variant: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-error: var(--error);
+  --color-error-container: var(--error-container);
+  --color-on-error: var(--on-error);
+  --color-on-error-container: var(--on-error-container);
+  --color-outline: var(--border);
+  --color-outline-variant: #ffe8d6; /* AI-generated */
+  --color-border: var(--border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  /* Typography */
+  --font-display: 'Nunito', sans-serif;
+  --font-heading: 'Nunito', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Sans', monospace;
+  --font-family-base: var(--font-body);
+  --font-size-display: 56px;
+  --font-size-h1: 40px;
+  --font-size-h2: 32px;
+  --font-size-h3: 24px;
+  --font-size-h4: 20px;
+  --font-size-body: 16px;
+  --font-size-lead: 18px;
+  --font-size-caption: 12px;
+  --font-size-mono: 14px;
+  --font-weight-display: 800;
+  --font-weight-h1: 800;
+  --font-weight-h2: 700;
+  --font-weight-h3: 700;
+  --font-weight-h4: 600;
+  --font-weight-body: 400;
+  --font-weight-lead: 500;
+  --font-weight-caption: 500;
+  --font-weight-mono: 400;
+  --line-height-display: 1.1;
+  --line-height-h1: 1.2;
+  --line-height-h2: 1.25;
+  --line-height-h3: 1.3;
+  --line-height-h4: 1.4;
+  --line-height-body: 1.6;
+  --line-height-lead: 1.7;
+  --line-height-caption: 1.5;
+  --line-height-mono: 1.6;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Sizing */
+  --size-icon-sm: 16px;
+  --size-icon-md: 20px;
+  --size-icon-lg: 24px;
+  --size-input-height: 36px;
+  --size-button-sm: 32px;
+  --size-button-md: 40px;
+  --size-button-lg: 48px;
+  --size-avatar-sm: 32px;
+  --size-avatar-md: 40px;
+  --size-avatar-lg: 56px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --radius-xs: var(--radius-sm);
+  --radius-rounded: var(--radius-md);
+  --radius-pill: var(--radius-full);
+
+  /* Shadows */
+  --shadow-1: 0 1px 3px rgba(84,49,31,.06), 0 1px 2px rgba(84,49,31,.04); /* Card */
+  --shadow-2: 0 4px 8px -2px rgba(84,49,31,.08); /* Card Hover */
+  --shadow-3: 0 8px 24px -4px rgba(84,49,31,.12); /* Float */
+  --shadow-4: 0 16px 40px -8px rgba(84,49,31,.18); /* Modal */
+  --shadow-5: 0 24px 56px -12px rgba(84,49,31,.24); /* Overlay */
+}
+
+.dark {
+  --background: #1a100c; /* AI-generated */
+  --foreground: #ffe8d6; /* AI-generated */
+  --surface: #2a1d16; /* AI-generated */
+  --surface-dim: #231812; /* AI-generated */
+  --surface-container-low: #332219; /* AI-generated */
+  --surface-container: #3d2a1f; /* AI-generated */
+  --surface-container-high: #4a3529; /* AI-generated */
+  --surface-container-highest: #54311f; /* AI-generated */
+  --card: #2a1d16; /* AI-generated */
+  --popover: #2a1d16; /* AI-generated */
+  --muted: #8a7060; /* AI-generated */
+  --muted-foreground: #b09080; /* AI-generated */
+  --border: #4a3529; /* AI-generated */
+  --secondary: #332219; /* AI-generated */
+  --secondary-foreground: #ffe0e3; /* AI-generated */
+  --error-container: #7f1d1d; /* AI-generated */
+  --on-error-container: #fecaca; /* AI-generated */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-variant: var(--surface-container-high);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-card: var(--card);
+  --color-on-surface: var(--foreground);
+  --color-on-surface-variant: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-outline: var(--border);
+  --color-outline-variant: #332219; /* AI-generated */
+  --color-border: var(--border);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --shadow-1: 0 1px 3px rgba(0,0,0,.20), 0 1px 2px rgba(0,0,0,.16);
+  --shadow-2: 0 4px 8px -2px rgba(0,0,0,.28);
+  --shadow-3: 0 8px 24px -4px rgba(0,0,0,.36);
+  --shadow-4: 0 16px 40px -8px rgba(0,0,0,.44);
+  --shadow-5: 0 24px 56px -12px rgba(0,0,0,.52);
+}
+
+/* Typography Classes */
+.pettrace-display { font-family: var(--font-display); font-size: 3.5rem; font-weight: var(--font-weight-display); line-height: var(--line-height-display); letter-spacing: -0.01em; }
+.pettrace-h1 { font-family: var(--font-heading); font-size: 2.5rem; font-weight: var(--font-weight-h1); line-height: var(--line-height-h1); letter-spacing: -0.01em; }
+.pettrace-h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: var(--font-weight-h2); line-height: var(--line-height-h2); }
+.pettrace-h3 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: var(--font-weight-h3); line-height: var(--line-height-h3); }
+.pettrace-h4 { font-family: var(--font-heading); font-size: 1.25rem; font-weight: var(--font-weight-h4); line-height: var(--line-height-h4); }
+.pettrace-body { font-family: var(--font-body); font-size: 1rem; font-weight: var(--font-weight-body); line-height: var(--line-height-body); }
+.pettrace-lead { font-family: var(--font-body); font-size: 1.125rem; font-weight: var(--font-weight-lead); line-height: var(--line-height-lead); }
+.pettrace-caption { font-family: var(--font-body); font-size: 0.75rem; font-weight: var(--font-weight-caption); line-height: var(--line-height-caption); }
+.pettrace-mono { font-family: var(--font-mono); font-size: 0.875rem; font-weight: var(--font-weight-mono); line-height: var(--line-height-mono); }

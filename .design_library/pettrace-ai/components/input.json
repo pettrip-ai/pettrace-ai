@@ -1,0 +1,38 @@
+{
+  "slug": "input",
+  "schemaVersion": 2,
+  "name": "Input",
+  "category": "form",
+  "sourceKind": "from-scratch",
+  "confidence": "medium",
+  "semanticTypeCandidates": [
+    { "type": "text-input", "evidence": "Search fields, text entries in settings and forms" },
+    { "type": "textarea", "evidence": "AI chat input area with auto-grow" }
+  ],
+  "variantDimensions": [
+    { "axis": "type", "values": ["text", "textarea"] },
+    { "axis": "state", "values": ["default", "error", "disabled"] }
+  ],
+  "representativeVariants": [
+    {
+      "name": "Text Input Default",
+      "traits": { "type": "text", "height": "auto", "radius": "12px", "bg": "white/80", "border": "black/10", "focus-ring": "accent", "font-size": "14px" },
+      "whySelected": "Standard text input for forms",
+      "childrenDigest": "Optional leading icon + text field + optional trailing icon",
+      "visualSpecs": { "placeholder": "地点名 / 备注 / 地址", "icon": "Search" }
+    },
+    {
+      "name": "Textarea Chat Input",
+      "traits": { "type": "textarea", "min-height": "40px", "max-height": "120px", "radius": "12px", "bg": "white", "border": "rule", "auto-grow": true },
+      "whySelected": "AI chat input with auto-growing textarea",
+      "childrenDigest": "Textarea + Send button",
+      "visualSpecs": { "placeholder": "告诉我你的目的地" }
+    }
+  ],
+  "anatomy": ["leading-icon", "field", "trailing-icon", "hint-text"],
+  "structurePatterns": ["rounded-xl", "px-3", "py-2", "bg-white/80", "border-black/10", "focus:ring-accent"],
+  "usageHints": { "priorityHint": "high", "density": "normal", "mobileSafeFont": "16px min for inputs" },
+  "doNotInvent": ["floating-label-input", "password-toggle-input"],
+  "unknowns": [],
+  "keyInsightSeed": "Rounded warm-white input with coral focus ring, 14px mobile-safe font"
+}

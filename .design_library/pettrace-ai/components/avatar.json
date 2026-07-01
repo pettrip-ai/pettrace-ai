@@ -1,0 +1,38 @@
+{
+  "slug": "avatar",
+  "schemaVersion": 2,
+  "name": "Avatar",
+  "category": "display",
+  "sourceKind": "from-scratch",
+  "confidence": "medium",
+  "semanticTypeCandidates": [
+    { "type": "user-avatar", "evidence": "Pet initial avatars, user profile button" },
+    { "type": "icon-avatar", "evidence": "Category icons in map markers, brand logo" }
+  ],
+  "variantDimensions": [
+    { "axis": "variant", "values": ["gradient", "solid", "outlined"] },
+    { "axis": "size", "values": ["sm", "md", "lg"] }
+  ],
+  "representativeVariants": [
+    {
+      "name": "Gradient Avatar Medium",
+      "traits": { "variant": "gradient", "size": "md", "width": "48px", "radius": "full", "bg": "coral-pink to deep-coral gradient", "text": "white bold" },
+      "whySelected": "Primary pet avatar with initial letter",
+      "childrenDigest": "Single initial character",
+      "visualSpecs": { "letter": "豆", "gradient": "from-accent to-accent-deep" }
+    },
+    {
+      "name": "Solid Avatar Small",
+      "traits": { "variant": "solid", "size": "sm", "width": "32px", "radius": "full", "bg": "mint/15", "text": "mint" },
+      "whySelected": "Category/pet type avatars",
+      "childrenDigest": "Icon",
+      "visualSpecs": { "icon": "PawPrint" }
+    }
+  ],
+  "anatomy": ["container", "initial-or-icon"],
+  "structurePatterns": ["rounded-full", "flex items-center justify-center", "shrink-0"],
+  "usageHints": { "priorityHint": "medium", "density": "compact" },
+  "doNotInvent": ["image-avatar", "stacked-avatar"],
+  "unknowns": [],
+  "keyInsightSeed": "Gradient coral initial avatar for pets, mint-tinted for categories"
+}

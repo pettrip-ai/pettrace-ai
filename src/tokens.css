@@ -1,0 +1,199 @@
+/* ============================================================
+   PetTrace AI Design Tokens — Single Source of Truth
+   Values from Design Library: colors_and_type.css
+   DO NOT change these values without updating the design library.
+   ============================================================ */
+
+:root {
+
+  /* ── Surface ── */
+  --background: #fff7f0;
+  --surface: #ffffff;
+  --surface-dim: #fff1eb;
+  --surface-container-low: #fff1f2;
+  --surface-container: #ffe0e3;
+  --surface-container-high: #ffc7cd;
+  --surface-container-highest: #fdd5b5;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --input: #fff1f2;
+
+  /* ── Text ── */
+  --foreground: #54311f;
+  --muted: #a65f34;
+  --muted-foreground: #8a4d2d;
+  --border: #fdd5b5;
+
+  /* ── Primary (Coral) ── */
+  --primary: #f76b7a;
+  --primary-foreground: #ffffff;
+
+  /* ── Secondary ── */
+  --secondary: #fff1f2;
+  --secondary-foreground: #54311f;
+
+  /* ── Accent (Mint) ── */
+  --accent: #20a976;
+  --accent-foreground: #ffffff;
+
+  /* ── Status ── */
+  --error: #ef4444;
+  --error-container: #fef2f2;
+  --on-error: #ffffff;
+  --on-error-container: #7f1d1d;
+  --success: #10b981;
+  --warning: #f59e0b;
+
+  /* ── Misc ── */
+  --ring: #f76b7a;
+  --link: #ef4460;
+
+  /* ── Coral Scale ── */
+  --pettrace-coral-50: #fff1f2;
+  --pettrace-coral-100: #ffe0e3;
+  --pettrace-coral-200: #ffc7cd;
+  --pettrace-coral-300: #ffa0ab;
+  --pettrace-coral-400: #fd6b7e;
+  --pettrace-coral-500: #f76b7a;
+  --pettrace-coral-600: #ef4460;
+  --pettrace-coral-700: #d9294b;
+  --pettrace-coral-800: #b91d3f;
+  --pettrace-coral-900: #9c1637;
+
+  /* ── Mint Scale ── */
+  --pettrace-mint-50: #eefbf4;
+  --pettrace-mint-100: #d5f5e3;
+  --pettrace-mint-200: #aeeacc;
+  --pettrace-mint-300: #76d9af;
+  --pettrace-mint-400: #3dc28d;
+  --pettrace-mint-500: #20a976;
+  --pettrace-mint-600: #16895f;
+  --pettrace-mint-700: #136e50;
+  --pettrace-mint-800: #125841;
+  --pettrace-mint-900: #104a37;
+
+  /* ── Honey Scale ── */
+  --pettrace-honey-50: #fffbeb;
+  --pettrace-honey-100: #fef3c7;
+  --pettrace-honey-200: #fde68a;
+  --pettrace-honey-300: #fcd34d;
+  --pettrace-honey-400: #fbbf24;
+  --pettrace-honey-500: #f59e0b;
+  --pettrace-honey-600: #d97706;
+  --pettrace-honey-700: #b45309;
+  --pettrace-honey-800: #92400e;
+  --pettrace-honey-900: #78350f;
+
+  /* ── Success Scale ── */
+  --pettrace-success-50: #ecfdf5;
+  --pettrace-success-100: #d1fae5;
+  --pettrace-success-200: #a7f3d0;
+  --pettrace-success-300: #6ee7b7;
+  --pettrace-success-400: #34d399;
+  --pettrace-success-500: #10b981;
+  --pettrace-success-600: #059669;
+  --pettrace-success-700: #047857;
+  --pettrace-success-800: #065f46;
+  --pettrace-success-900: #064e3b;
+
+  /* ── Error Scale ── */
+  --pettrace-error-50: #fef2f2;
+  --pettrace-error-100: #fee2e2;
+  --pettrace-error-200: #fecaca;
+  --pettrace-error-300: #fca5a5;
+  --pettrace-error-400: #f87171;
+  --pettrace-error-500: #ef4444;
+  --pettrace-error-600: #dc2626;
+  --pettrace-error-700: #b91c1c;
+  --pettrace-error-800: #991b1b;
+  --pettrace-error-900: #7f1d1d;
+
+  /* ── Info Scale ── */
+  --pettrace-info-50: #eff6ff;
+  --pettrace-info-100: #dbeafe;
+  --pettrace-info-200: #bfdbfe;
+  --pettrace-info-300: #93c5fd;
+  --pettrace-info-400: #60a5fa;
+  --pettrace-info-500: #3b82f6;
+  --pettrace-info-600: #2563eb;
+  --pettrace-info-700: #1d4ed8;
+  --pettrace-info-800: #1e40af;
+  --pettrace-info-900: #1e3a8a;
+
+  /* ── Neutral Scale ── */
+  --pettrace-neutral-50: #fff7f0;
+  --pettrace-neutral-100: #ffe8d6;
+  --pettrace-neutral-200: #fdd5b5;
+  --pettrace-neutral-300: #f5b78a;
+  --pettrace-neutral-400: #e8945e;
+  --pettrace-neutral-500: #c97840;
+  --pettrace-neutral-600: #a65f34;
+  --pettrace-neutral-700: #8a4d2d;
+  --pettrace-neutral-800: #6e3d26;
+  --pettrace-neutral-900: #54311f;
+
+  /* ── Typography ── */
+  --font-display: 'Nunito', 'PingFang SC', system-ui, sans-serif;
+  --font-heading: 'Nunito', 'PingFang SC', system-ui, sans-serif;
+  --font-body: 'DM Sans', 'PingFang SC', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+
+  --font-size-h1: 40px;
+  --font-size-h2: 32px;
+  --font-size-h3: 24px;
+  --font-size-h4: 20px;
+
+  /* ── Radius ── */
+  --radius-xs: 8px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-1: 0 1px 3px rgba(84, 49, 31, 0.06), 0 1px 2px rgba(84, 49, 31, 0.04);
+  --shadow-2: 0 4px 8px -2px rgba(84, 49, 31, 0.08);
+  --shadow-3: 0 8px 24px -4px rgba(84, 49, 31, 0.12);
+  --shadow-4: 0 16px 40px -8px rgba(84, 49, 31, 0.18);
+  --shadow-5: 0 24px 56px -12px rgba(84, 49, 31, 0.24);
+  --shadow-primary-glow: 0 4px 16px rgba(247, 107, 122, 0.35);
+
+  /* ── Gradients ── */
+  --grad-primary: linear-gradient(135deg, var(--primary) 0%, #fca0ac 100%);
+  --grad-ai-hero: linear-gradient(135deg, var(--pettrace-coral-50) 0%, var(--pettrace-coral-100) 50%, var(--pettrace-neutral-100) 100%);
+  --grad-glow: radial-gradient(ellipse at top, rgba(247, 107, 122, 0.18) 0%, transparent 60%);
+
+  /* ── iOS Safe Area ── */
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+}
+
+/* ── Dark Mode ── */
+.dark {
+  --background: #1a100c;
+  --foreground: #ffe8d6;
+  --surface: #2a1d16;
+  --surface-dim: #231812;
+  --surface-container-low: #332219;
+  --surface-container: #3d2a1f;
+  --surface-container-high: #4a3529;
+  --surface-container-highest: #54311f;
+  --card: #2a1d16;
+  --popover: #2a1d16;
+  --muted: #8a7060;
+  --muted-foreground: #b09080;
+  --border: #4a3529;
+  --secondary: #332219;
+  --secondary-foreground: #ffe0e3;
+  --error-container: #7f1d1d;
+  --on-error-container: #fecaca;
+  --input: #3d2a1f;
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.20), 0 1px 2px rgba(0, 0, 0, 0.16);
+  --shadow-2: 0 4px 8px -2px rgba(0, 0, 0, 0.28);
+  --shadow-3: 0 8px 24px -4px rgba(0, 0, 0, 0.36);
+  --shadow-4: 0 16px 40px -8px rgba(0, 0, 0, 0.44);
+  --shadow-5: 0 24px 56px -12px rgba(0, 0, 0, 0.52);
+}

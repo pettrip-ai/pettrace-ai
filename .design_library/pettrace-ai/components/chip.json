@@ -1,0 +1,37 @@
+{
+  "slug": "chip",
+  "schemaVersion": 2,
+  "name": "Chip",
+  "category": "filter",
+  "sourceKind": "from-scratch",
+  "confidence": "medium",
+  "semanticTypeCandidates": [
+    { "type": "filter-chip", "evidence": "Map category filters, city tabs, feed type filters" },
+    { "type": "status-chip", "evidence": "Tag badges in feed cards, size labels" }
+  ],
+  "variantDimensions": [
+    { "axis": "state", "values": ["active", "inactive"] }
+  ],
+  "representativeVariants": [
+    {
+      "name": "Active Chip",
+      "traits": { "state": "active", "bg": "accent solid", "text": "white", "radius": "full", "shadow": "coral glow", "font-size": "12px" },
+      "whySelected": "Selected filter state with brand color fill",
+      "childrenDigest": "Label text or Icon + Label",
+      "visualSpecs": { "text": "咖啡厅" }
+    },
+    {
+      "name": "Inactive Chip",
+      "traits": { "state": "inactive", "bg": "white/70", "text": "muted", "border": "black/10", "radius": "full", "font-size": "12px" },
+      "whySelected": "Unselected filter with warm glass style",
+      "childrenDigest": "Label text or Icon + Label",
+      "visualSpecs": { "text": "宠物公园" }
+    }
+  ],
+  "anatomy": ["icon-leading", "label"],
+  "structurePatterns": ["inline-flex", "items-center", "gap-1.5", "px-3", "py-1", "rounded-full", "text-xs", "active:scale-0.97"],
+  "usageHints": { "priorityHint": "medium", "density": "compact" },
+  "doNotInvent": ["removable-chip", "input-chip"],
+  "unknowns": [],
+  "keyInsightSeed": "Pill-shaped filter chips with coral active state and warm glow shadow"
+}

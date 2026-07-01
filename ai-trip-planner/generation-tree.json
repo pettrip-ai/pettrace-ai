@@ -1,0 +1,18 @@
+{
+  "nodes": [
+    {
+      "id": "page-ai-planner",
+      "type": "leaf",
+      "status": "generated",
+      "output": "pages/ai-planner.html",
+      "role": "primary"
+    },
+    {
+      "id": "page-ai-chat",
+      "type": "leaf",
+      "status": "generated",
+      "output": "pages/ai-chat.html",
+      "role": "primary"
+    }
+  ]
+}

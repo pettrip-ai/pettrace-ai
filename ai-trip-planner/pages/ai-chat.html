@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 对话模式</title>
+    <style id="theme-vars">
+/* @group-priority: primary, accent, success, warning, info */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+
+  /* primary */
+  --pettrace-coral-50: #fff1f2;
+  --pettrace-coral-100: #ffe0e3;
+  --pettrace-coral-200: #ffc7cd;
+  --pettrace-coral-300: #ffa0ab;
+  --pettrace-coral-400: #fd6b7e;
+  --pettrace-coral-500: #f76b7a;
+  --pettrace-coral-600: #ef4460; /* @primary */
+  --pettrace-coral-700: #d9294b;
+  --pettrace-coral-800: #b91d3f;
+  --pettrace-coral-900: #9c1637;
+
+  /* accent */
+  --pettrace-mint-50: #eefbf4;
+  --pettrace-mint-100: #d5f5e3;
+  --pettrace-mint-200: #aeeacc;
+  --pettrace-mint-300: #76d9af;
+  --pettrace-mint-400: #3dc28d;
+  --pettrace-mint-500: #20a976;
+  --pettrace-mint-600: #16895f; /* @primary */
+  --pettrace-mint-700: #136e50;
+  --pettrace-mint-800: #125841;
+  --pettrace-mint-900: #104a37;
+
+  /* warning */
+  --pettrace-honey-50: #fffbeb;
+  --pettrace-honey-100: #fef3c7;
+  --pettrace-honey-200: #fde68a;
+  --pettrace-honey-300: #fcd34d;
+  --pettrace-honey-400: #fbbf24;
+  --pettrace-honey-500: #f59e0b;
+  --pettrace-honey-600: #d97706; /* @primary */
+  --pettrace-honey-700: #b45309;
+  --pettrace-honey-800: #92400e;
+  --pettrace-honey-900: #78350f;
+
+  /* success */
+  --pettrace-success-50: #ecfdf5;
+  --pettrace-success-100: #d1fae5;
+  --pettrace-success-200: #a7f3d0;
+  --pettrace-success-300: #6ee7b7;
+  --pettrace-success-400: #34d399;
+  --pettrace-success-500: #10b981;
+  --pettrace-success-600: #059669; /* @primary */
+  --pettrace-success-700: #047857;
+  --pettrace-success-800: #065f46;
+  --pettrace-success-900: #064e3b;
+
+  /* error */
+  --pettrace-error-50: #fef2f2;
+  --pettrace-error-100: #fee2e2;
+  --pettrace-error-200: #fecaca;
+  --pettrace-error-300: #fca5a5;
+  --pettrace-error-400: #f87171;
+  --pettrace-error-500: #ef4444;
+  --pettrace-error-600: #dc2626; /* @primary */
+  --pettrace-error-700: #b91c1c;
+  --pettrace-error-800: #991b1b;
+  --pettrace-error-900: #7f1d1d;
+
+  /* info */
+  --pettrace-info-50: #eff6ff;
+  --pettrace-info-100: #dbeafe;
+  --pettrace-info-200: #bfdbfe;
+  --pettrace-info-300: #93c5fd;
+  --pettrace-info-400: #60a5fa;
+  --pettrace-info-500: #3b82f6;
+  --pettrace-info-600: #2563eb; /* @primary */
+  --pettrace-info-700: #1d4ed8;
+  --pettrace-info-800: #1e40af;
+  --pettrace-info-900: #1e3a8a;
+
+  /* neutral */
+  --pettrace-neutral-50: #fff7f0;
+  --pettrace-neutral-100: #ffe8d6;
+  --pettrace-neutral-200: #fdd5b5;
+  --pettrace-neutral-300: #f5b78a;
+  --pettrace-neutral-400: #e8945e;
+  --pettrace-neutral-500: #c97840;
+  --pettrace-neutral-600: #a65f34;
+  --pettrace-neutral-700: #8a4d2d;
+  --pettrace-neutral-800: #6e3d26;
+  --pettrace-neutral-900: #54311f;
+
+  /* surface */
+  --background: #fff7f0;
+  --surface: #ffffff;
+  --surface-dim: #fff1eb;
+  --surface-container-low: #fff1f2;
+  --surface-container: #ffe0e3;
+  --surface-container-high: #ffc7cd;
+  --surface-container-highest: #fdd5b5;
+  --card: #ffffff;
+  --popover: #ffffff;
+
+  /* text */
+  --foreground: #54311f;
+  --muted: #a65f34;
+  --muted-foreground: #8a4d2d;
+  --border: #fdd5b5;
+
+  /* aliases */
+  --primary: #f76b7a;
+  --primary-foreground: #ffffff;
+  --secondary: #fff1f2;
+  --secondary-foreground: #54311f;
+  --accent: #20a976;
+  --accent-foreground: #ffffff;
+  --ring: #f76b7a;
+  --link: #ef4460;
+
+  /* status */
+  --error: #ef4444;
+  --error-container: #fef2f2;
+  --on-error: #ffffff;
+  --on-error-container: #7f1d1d;
+  --success: #10b981;
+  --warning: #f59e0b;
+
+  /* Portable Aliases */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-variant: var(--surface-container-high);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--link);
+  --color-on-primary: var(--primary-foreground);
+  --color-primary-container: var(--surface-container-low);
+  --color-on-primary-container: #9c1637;
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary);
+  --color-on-secondary-container: var(--secondary-foreground);
+  --color-on-surface: var(--foreground);
+  --color-on-surface-variant: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-error: var(--error);
+  --color-error-container: var(--error-container);
+  --color-on-error: var(--on-error);
+  --color-on-error-container: var(--on-error-container);
+  --color-outline: var(--border);
+  --color-outline-variant: #ffe8d6;
+  --color-border: var(--border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+
+  /* Typography */
+  --font-display: 'Nunito', sans-serif;
+  --font-heading: 'Nunito', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Sans', monospace;
+  --font-family-base: var(--font-body);
+  --font-size-display: 56px;
+  --font-size-h1: 40px;
+  --font-size-h2: 32px;
+  --font-size-h3: 24px;
+  --font-size-h4: 20px;
+  --font-size-body: 16px;
+  --font-size-lead: 18px;
+  --font-size-caption: 12px;
+  --font-size-mono: 14px;
+  --font-weight-display: 800;
+  --font-weight-h1: 800;
+  --font-weight-h2: 700;
+  --font-weight-h3: 700;
+  --font-weight-h4: 600;
+  --font-weight-body: 400;
+  --font-weight-lead: 500;
+  --font-weight-caption: 500;
+  --font-weight-mono: 400;
+  --line-height-display: 1.1;
+  --line-height-h1: 1.2;
+  --line-height-h2: 1.25;
+  --line-height-h3: 1.3;
+  --line-height-h4: 1.4;
+  --line-height-body: 1.6;
+  --line-height-lead: 1.7;
+  --line-height-caption: 1.5;
+  --line-height-mono: 1.6;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* Sizing */
+  --size-icon-sm: 16px;
+  --size-icon-md: 20px;
+  --size-icon-lg: 24px;
+  --size-input-height: 36px;
+  --size-button-sm: 32px;
+  --size-button-md: 40px;
+  --size-button-lg: 48px;
+  --size-avatar-sm: 32px;
+  --size-avatar-md: 40px;
+  --size-avatar-lg: 56px;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+  --radius-xs: var(--radius-sm);
+  --radius-rounded: var(--radius-md);
+  --radius-pill: var(--radius-full);
+
+  /* Shadows */
+  --shadow-1: 0 1px 3px rgba(84,49,31,.06), 0 1px 2px rgba(84,49,31,.04);
+  --shadow-2: 0 4px 8px -2px rgba(84,49,31,.08);
+  --shadow-3: 0 8px 24px -4px rgba(84,49,31,.12);
+  --shadow-4: 0 16px 40px -8px rgba(84,49,31,.18);
+  --shadow-5: 0 24px 56px -12px rgba(84,49,31,.24);
+}
+
+.dark {
+  --background: #1a100c;
+  --foreground: #ffe8d6;
+  --surface: #2a1d16;
+  --surface-dim: #231812;
+  --surface-container-low: #332219;
+  --surface-container: #3d2a1f;
+  --surface-container-high: #4a3529;
+  --surface-container-highest: #54311f;
+  --card: #2a1d16;
+  --popover: #2a1d16;
+  --muted: #8a7060;
+  --muted-foreground: #b09080;
+  --border: #4a3529;
+  --secondary: #332219;
+  --secondary-foreground: #ffe0e3;
+  --error-container: #7f1d1d;
+  --on-error-container: #fecaca;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-variant: var(--surface-container-high);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-card: var(--card);
+  --color-on-surface: var(--foreground);
+  --color-on-surface-variant: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-outline: var(--border);
+  --color-outline-variant: #332219;
+  --color-border: var(--border);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --shadow-1: 0 1px 3px rgba(0,0,0,.20), 0 1px 2px rgba(0,0,0,.16);
+  --shadow-2: 0 4px 8px -2px rgba(0,0,0,.28);
+  --shadow-3: 0 8px 24px -4px rgba(0,0,0,.36);
+  --shadow-4: 0 16px 40px -8px rgba(0,0,0,.44);
+  --shadow-5: 0 24px 56px -12px rgba(0,0,0,.52);
+}
+
+.pettrace-display { font-family: var(--font-display); font-size: 3.5rem; font-weight: var(--font-weight-display); line-height: var(--line-height-display); letter-spacing: -0.01em; }
+.pettrace-h1 { font-family: var(--font-heading); font-size: 2.5rem; font-weight: var(--font-weight-h1); line-height: var(--line-height-h1); letter-spacing: -0.01em; }
+.pettrace-h2 { font-family: var(--font-heading); font-size: 2rem; font-weight: var(--font-weight-h2); line-height: var(--line-height-h2); }
+.pettrace-h3 { font-family: var(--font-heading); font-size: 1.5rem; font-weight: var(--font-weight-h3); line-height: var(--line-height-h3); }
+.pettrace-h4 { font-family: var(--font-heading); font-size: 1.25rem; font-weight: var(--font-weight-h4); line-height: var(--line-height-h4); }
+.pettrace-body { font-family: var(--font-body); font-size: 1rem; font-weight: var(--font-weight-body); line-height: var(--line-height-body); }
+.pettrace-lead { font-family: var(--font-body); font-size: 1.125rem; font-weight: var(--font-weight-lead); line-height: var(--line-height-lead); }
+.pettrace-caption { font-family: var(--font-body); font-size: 0.75rem; font-weight: var(--font-weight-caption); line-height: var(--line-height-caption); }
+.pettrace-mono { font-family: var(--font-mono); font-size: 0.875rem; font-weight: var(--font-weight-mono); line-height: var(--line-height-mono); }
+
+    </style>
+    <link rel="stylesheet" href="../components.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @layer base {
+    body { background: var(--background); color: var(--foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] { display: inline-flex; align-items: center; justify-content: center; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background-color: currentColor; }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main class="flex h-screen flex-col" style="max-width: 430px; margin: 0 auto;">
+
+      <!-- Status Bar -->
+      <div class="flex items-center justify-between px-5 h-11 shrink-0" style="color: var(--color-on-surface); font-family: var(--font-body); font-size: 14px; font-weight: 600;">
+        <span>9:41</span>
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="signal" style="width:14px;height:14px;"></i>
+          <i data-lucide="wifi" style="width:14px;height:14px;"></i>
+          <i data-lucide="battery-full" style="width:16px;height:16px;"></i>
+        </div>
+      </div>
+
+      <!-- Navigation Header (iOS glassmorphic) -->
+      <header class="shrink-0 flex items-center gap-3 px-4 py-2.5" style="background: rgba(255,247,240,0.82); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 0.5px solid rgba(84,49,31,0.08);">
+        <button data-dom-id="nav-back-chat" class="inline-flex items-center justify-center rounded-full shrink-0 transition-transform duration-150 active:scale-90" style="width: 34px; height: 34px; background: rgba(255,255,255,0.7); border: 0.5px solid rgba(0,0,0,0.06);" aria-label="返回">
+          <i data-lucide="chevron-left" style="width: 18px; height: 18px; color: var(--foreground);"></i>
+        </button>
+        <div class="flex items-center gap-2.5 flex-1 min-w-0 justify-center">
+          <div class="inline-flex items-center justify-center rounded-full shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--pettrace-coral-100), var(--pettrace-coral-200)); box-shadow: 0 2px 8px rgba(247,107,122,0.15);">
+            <i data-lucide="dog" style="width: 17px; height: 17px; color: var(--primary);"></i>
+          </div>
+          <div class="text-center min-w-0">
+            <h1 class="pettrace-h4 truncate" style="color: var(--foreground); font-size: 15px; margin: 0;">PetTrace AI</h1>
+            <p class="pettrace-caption" style="color: var(--accent); margin: 0; font-size: 10px;">在线</p>
+          </div>
+        </div>
+        <div style="width: 34px;" class="shrink-0"></div>
+      </header>
+
+      <!-- Chat Messages Area -->
+      <div class="flex-1 overflow-y-auto no-scrollbar" style="padding: 12px 12px 4px; display: flex; flex-direction: column; gap: 12px;">
+
+        <!-- Date Separator -->
+        <div class="flex items-center gap-3" style="padding: 0 16px;">
+          <div style="flex: 1; height: 0.5px; background: rgba(84,49,31,0.08);"></div>
+          <span style="font-size: 11px; color: var(--muted-foreground); white-space: nowrap; font-family: var(--font-body);">今天 9:38</span>
+          <div style="flex: 1; height: 0.5px; background: rgba(84,49,31,0.08);"></div>
+        </div>
+
+        <!-- AI Welcome Message -->
+        <div class="flex gap-2.5" style="align-self: flex-start; max-width: 82%;">
+          <div class="inline-flex items-center justify-center rounded-full shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--pettrace-coral-100), var(--pettrace-coral-200)); box-shadow: 0 2px 8px rgba(247,107,122,0.12);">
+            <i data-lucide="dog" style="width: 17px; height: 17px; color: var(--primary);"></i>
+          </div>
+          <div style="min-width: 0;">
+            <div style="background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 18px 18px 18px 4px; padding: 12px 14px; border: 0.5px solid rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(84,49,31,0.04); font-size: 15px; line-height: 1.6; color: var(--foreground); word-break: break-word; overflow-wrap: break-word;">
+              你好！我是 PetTrace AI 助手，可以帮你规划带宠物的出行路线。告诉我你想去哪里？
+            </div>
+          </div>
+        </div>
+
+        <!-- User Message 1 -->
+        <div class="flex flex-col gap-1" style="align-self: flex-end; max-width: 78%;">
+          <div style="background: linear-gradient(135deg, var(--primary), var(--pettrace-coral-600)); border-radius: 18px 18px 4px 18px; padding: 12px 14px; box-shadow: 0 4px 12px rgba(247,107,122,0.18); font-size: 15px; line-height: 1.6; color: var(--primary-foreground); word-break: break-word; overflow-wrap: break-word;">
+            想去一个能遛狗的咖啡厅，最好是朝阳附近的
+          </div>
+        </div>
+
+        <!-- AI Reply with Rich Itinerary Card -->
+        <div class="flex gap-2.5" style="align-self: flex-start; max-width: 82%;">
+          <div class="inline-flex items-center justify-center rounded-full shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--pettrace-coral-100), var(--pettrace-coral-200)); box-shadow: 0 2px 8px rgba(247,107,122,0.12);">
+            <i data-lucide="dog" style="width: 17px; height: 17px; color: var(--primary);"></i>
+          </div>
+          <div style="min-width: 0; display: flex; flex-direction: column; gap: 6px;">
+            <div style="background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 18px 18px 18px 4px; padding: 12px 14px; border: 0.5px solid rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(84,49,31,0.04); font-size: 15px; line-height: 1.6; color: var(--foreground); word-break: break-word; overflow-wrap: break-word;">
+              为你找到了 3 家朝阳区的宠物友好咖啡厅，推荐第一个，近期好评最多。
+            </div>
+            <!-- Rich Itinerary Card -->
+            <div class="card" style="border-radius: var(--radius-lg); overflow: hidden; padding: 0; cursor: pointer; box-shadow: var(--shadow-2);">
+              <div style="flex-shrink: 0; height: 6px; background: linear-gradient(90deg, var(--primary), var(--pettrace-coral-300));"></div>
+              <div style="padding: 14px 14px 12px;">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center gap-2 min-w-0">
+                    <div class="inline-flex items-center justify-center rounded-lg shrink-0" style="width: 36px; height: 36px; background: var(--color-primary-container);">
+                      <i data-lucide="coffee" style="width: 18px; height: 18px; color: var(--primary);"></i>
+                    </div>
+                    <div class="min-w-0">
+                      <p class="truncate" style="font-weight: 600; font-size: 14px; color: var(--foreground); margin: 0; font-family: var(--font-heading);">毛孩子咖啡工坊</p>
+                      <p class="pettrace-caption truncate" style="color: var(--muted-foreground); margin: 2px 0 0;">宠物友好咖啡厅</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1 rounded-full shrink-0" style="padding: 3px 8px; background: var(--pettrace-honey-50);">
+                    <i data-lucide="star" style="width: 11px; height: 11px; color: var(--warning);"></i>
+                    <span style="font-size: 12px; font-weight: 600; color: var(--warning); font-family: var(--font-heading);">4.8</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 mb-3">
+                  <i data-lucide="map-pin" style="width: 12px; height: 12px; color: var(--muted-foreground); flex-shrink: 0;"></i>
+                  <span style="font-size: 13px; color: var(--muted-foreground);">朝阳大悦城 B1</span>
+                  <span style="color: var(--border); margin: 0 2px;">·</span>
+                  <span style="font-size: 13px; color: var(--accent);">1.2km</span>
+                </div>
+                <div class="flex gap-2">
+                  <button class="inline-flex items-center justify-center gap-1.5 rounded-full shrink-0 transition-transform duration-150 active:scale-95" style="flex: 1; height: 36px; background: var(--primary); color: var(--primary-foreground); font-size: 13px; font-weight: 600; font-family: var(--font-heading); box-shadow: 0 2px 8px rgba(247,107,122,0.2);">
+                    <i data-lucide="route" style="width: 14px; height: 14px;"></i>
+                    查看路线
+                  </button>
+                  <button class="inline-flex items-center justify-center gap-1.5 rounded-full shrink-0 transition-transform duration-150 active:scale-95" style="flex: 1; height: 36px; background: rgba(255,255,255,0.8); color: var(--foreground); font-size: 13px; font-weight: 600; font-family: var(--font-heading); border: 0.5px solid var(--border);">
+                    <i data-lucide="bookmark" style="width: 14px; height: 14px;"></i>
+                    收藏
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Message 2 -->
+        <div class="flex flex-col gap-1" style="align-self: flex-end; max-width: 78%;">
+          <div style="background: linear-gradient(135deg, var(--primary), var(--pettrace-coral-600)); border-radius: 18px 18px 4px 18px; padding: 12px 14px; box-shadow: 0 4px 12px rgba(247,107,122,0.18); font-size: 15px; line-height: 1.6; color: var(--primary-foreground); word-break: break-word; overflow-wrap: break-word;">
+            帮我规划一个从家到这里的步行路线吧
+          </div>
+        </div>
+
+        <!-- AI Typing Indicator -->
+        <div class="flex gap-2.5" style="align-self: flex-start; max-width: 82%;">
+          <div class="inline-flex items-center justify-center rounded-full shrink-0" style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--pettrace-coral-100), var(--pettrace-coral-200)); box-shadow: 0 2px 8px rgba(247,107,122,0.12);">
+            <i data-lucide="dog" style="width: 17px; height: 17px; color: var(--primary);"></i>
+          </div>
+          <div style="background: rgba(255,255,255,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 18px 18px 18px 4px; padding: 14px 18px; border: 0.5px solid rgba(255,255,255,0.6); box-shadow: 0 2px 8px rgba(84,49,31,0.04);">
+            <div class="flex items-center gap-1.5" style="height: 18px;">
+              <span class="inline-block rounded-full" style="width: 7px; height: 7px; background: var(--primary); opacity: 0.5; animation: typing-bounce 1.4s ease-in-out infinite;"></span>
+              <span class="inline-block rounded-full" style="width: 7px; height: 7px; background: var(--primary); opacity: 0.5; animation: typing-bounce 1.4s ease-in-out 0.2s infinite;"></span>
+              <span class="inline-block rounded-full" style="width: 7px; height: 7px; background: var(--primary); opacity: 0.5; animation: typing-bounce 1.4s ease-in-out 0.4s infinite;"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Reply Suggestions -->
+      <div class="shrink-0 flex gap-2 overflow-x-auto no-scrollbar px-3 py-2" style="background: transparent;">
+        <button class="chip inactive" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; transition: transform .15s;">
+          <i data-lucide="footprints" style="width: 13px; height: 13px;"></i>
+          步行路线
+        </button>
+        <button class="chip inactive" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; transition: transform .15s;">
+          <i data-lucide="clock" style="width: 13px; height: 13px;"></i>
+          预计用时
+        </button>
+        <button class="chip inactive" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; transition: transform .15s;">
+          <i data-lucide="dog" style="width: 13px; height: 13px;"></i>
+          附近宠物店
+        </button>
+        <button class="chip inactive" style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; font-size: 13px; white-space: nowrap; flex-shrink: 0; transition: transform .15s;">
+          <i data-lucide="calendar" style="width: 13px; height: 13px;"></i>
+          周末行程
+        </button>
+      </div>
+
+      <!-- Bottom Input Bar (iOS glassmorphic) -->
+      <div class="shrink-0 flex flex-col" style="background: rgba(255,247,240,0.82); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-top: 0.5px solid rgba(84,49,31,0.06); padding: 8px 12px 0;">
+        <div class="flex items-center gap-2.5" style="padding-bottom: 8px;">
+          <div class="flex-1 min-w-0 flex items-center rounded-2xl" style="background: rgba(255,255,255,0.7); border: 0.5px solid rgba(0,0,0,0.06); padding: 10px 12px; min-height: 42px; max-height: 100px; transition: border-color .2s, box-shadow .2s;">
+            <textarea class="flex-1 min-w-0 resize-none bg-transparent outline-none" style="font-size: 15px; color: var(--foreground); line-height: 1.4; max-height: 80px; font-family: var(--font-body);" placeholder="告诉我你的目的地" rows="1" aria-label="输入消息"></textarea>
+            <div class="flex items-center gap-1.5 shrink-0 ml-2" style="padding-top: 2px;">
+              <button class="inline-flex items-center justify-center rounded-full transition-transform duration-150 active:scale-90" style="width: 28px; height: 28px; color: var(--muted-foreground);" aria-label="添加附件">
+                <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+          </div>
+          <button class="inline-flex items-center justify-center rounded-full shrink-0 transition-transform duration-150 active:scale-90" style="width: 42px; height: 42px; background: linear-gradient(135deg, var(--primary), var(--pettrace-coral-600)); color: var(--primary-foreground); box-shadow: 0 4px 14px rgba(247,107,122,0.3);" aria-label="发送">
+            <i data-lucide="send" style="width: 18px; height: 18px;"></i>
+          </button>
+        </div>
+        <p class="text-center" style="font-size: 10px; color: var(--muted-foreground); opacity: 0.6; padding: 0 0 calc(env(safe-area-inset-bottom, 4px) + 4px); margin: 0;">内容由AI生成，请注意甄别</p>
+      </div>
+
+      <!-- Home Indicator -->
+      <div style="width: 134px; height: 5px; border-radius: var(--radius-full); background: var(--foreground); opacity: 0.18; margin: 0 auto 6px; flex-shrink: 0;"></div>
+
+    </main>
+
+    <style>
+      @keyframes typing-bounce {
+        0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+        30% { transform: translateY(-5px); opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        @keyframes typing-bounce {
+          0%, 100% { transform: translateY(0); opacity: 0.7; }
+        }
+      }
+    </style>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

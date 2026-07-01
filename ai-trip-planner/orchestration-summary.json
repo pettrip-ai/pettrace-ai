@@ -1,0 +1,43 @@
+{
+  "designSource": {
+    "operatingMode": "library-bound",
+    "libraryIdentity": {
+      "name": "pettrace-ai",
+      "id": "ON9LKOKR9L557Q",
+      "version": null,
+      "scope": "workspace",
+      "path": "g:\\0_2026_Innovative_Project\\pettrace-ai\\.design_library\\pettrace-ai",
+      "versionSource": null
+    },
+    "tokenCssPath": "colors_and_type.css",
+    "tokenJsonPath": null,
+    "componentPlanPath": ".design_library/pettrace-ai/components/index.json"
+  },
+  "project": {
+    "name": "AI 行程规划",
+    "deviceType": "mobile",
+    "language": "zh",
+    "styleContinuityAnchors": []
+  },
+  "pages": [
+    {
+      "id": "page-ai-planner",
+      "title": "AI 行程规划",
+      "htmlSrc": "pages/ai-planner.html",
+      "description": "AI 行程规划主页：展示推荐行程卡片、目的地建议、快速操作入口",
+      "role": "primary"
+    },
+    {
+      "id": "page-ai-chat",
+      "title": "AI 对话模式",
+      "htmlSrc": "pages/ai-chat.html",
+      "description": "AI 对话交互页：用户与AI助手进行行程对话，支持自然语言输入",
+      "role": "derived"
+    }
+  ],
+  "images": [],
+  "visibleWiringPlan": [],
+  "hiddenInteractionPlan": [
+    { "from": "page-ai-chat", "domId": "nav-back-chat", "to": "page-ai-planner", "label": "返回规划" }
+  ]
+}

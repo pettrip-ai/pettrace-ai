@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avatar - PetTrace AI</title>
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <style>
+    /* Page scaffold — NOT extracted */
+    body { margin: 0; padding: var(--space-3); background: var(--color-background); font-family: var(--font-body); color: var(--color-on-surface); }
+    .row { display: flex; gap: var(--space-4); align-items: center; margin-bottom: var(--space-2); flex-wrap: wrap; }
+    .label { font-size: var(--font-size-caption); font-weight: var(--font-weight-caption); color: var(--color-muted-foreground); min-width: 92px; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    .divider { border: none; border-top: 1px solid var(--color-outline); margin: var(--space-3) 0; }
+
+    /* @component-css-start */
+    .avatar { display: inline-flex; align-items: center; justify-content: center; border-radius: var(--radius-full); flex-shrink: 0; font-family: var(--font-heading); font-weight: 700; overflow: hidden; white-space: nowrap; }
+    .avatar.sm { width: var(--size-avatar-sm); height: var(--size-avatar-sm); font-size: var(--font-size-caption); }
+    .avatar.md { width: var(--size-avatar-md); height: var(--size-avatar-md); font-size: var(--font-size-body); }
+    .avatar.lg { width: var(--size-avatar-lg); height: var(--size-avatar-lg); font-size: var(--font-size-h4); }
+    .avatar.gradient { background: linear-gradient(135deg, var(--pettrace-coral-400), var(--pettrace-coral-700)); color: var(--primary-foreground); }
+    .avatar.solid { background: var(--pettrace-mint-50); color: var(--pettrace-mint-700); }
+    .avatar.outlined { background: transparent; border: 2px solid var(--color-outline); color: var(--color-on-surface-variant); }
+    /* @component-css-end */
+  </style>
+</head>
+<body>
+  <div class="row">
+    <span class="label">渐变头像</span>
+    <div class="avatar gradient sm" data-evidence-sample="Gradient Avatar Medium">豆</div>
+    <div class="avatar gradient md" data-evidence-sample="Gradient Avatar Medium">豆</div>
+    <div class="avatar gradient lg" data-evidence-sample="Gradient Avatar Medium">豆</div>
+    <div class="avatar gradient md">旺</div>
+    <div class="avatar gradient md">喵</div>
+  </div>
+  <div class="row">
+    <span class="label">纯色头像</span>
+    <div class="avatar solid sm" data-evidence-sample="Solid Avatar Small">豆</div>
+    <div class="avatar solid md" data-evidence-sample="Solid Avatar Small">豆</div>
+    <div class="avatar solid lg" data-evidence-sample="Solid Avatar Small">豆</div>
+  </div>
+  <hr class="divider">
+  <div class="row">
+    <span class="label">描边头像</span>
+    <div class="avatar outlined sm">豆</div>
+    <div class="avatar outlined md">豆</div>
+    <div class="avatar outlined lg">豆</div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{
+  "slug": "button",
+  "schemaVersion": 2,
+  "name": "Button",
+  "category": "action",
+  "sourceKind": "from-scratch",
+  "confidence": "medium",
+  "semanticTypeCandidates": [
+    { "type": "action-button", "evidence": "Primary action in AI chat send, form submit" },
+    { "type": "icon-button", "evidence": "Circular icon buttons in map controls, settings" }
+  ],
+  "variantDimensions": [
+    { "axis": "variant", "values": ["primary", "secondary", "ghost", "danger"] },
+    { "axis": "size", "values": ["sm", "md", "lg", "icon"] }
+  ],
+  "representativeVariants": [
+    {
+      "name": "Primary Medium",
+      "traits": { "variant": "primary", "size": "md", "height": "40px", "radius": "12px", "bg": "coral-pink gradient", "shadow": "pop glow" },
+      "whySelected": "Default action button for primary CTAs",
+      "childrenDigest": "Icon + Label text",
+      "visualSpecs": { "text": "AI 行程规划", "icon": "Bot" }
+    },
+    {
+      "name": "Secondary Medium",
+      "traits": { "variant": "secondary", "size": "md", "height": "40px", "radius": "12px", "bg": "white/70 backdrop-blur", "border": "black/5" },
+      "whySelected": "Secondary actions with warm glass style",
+      "childrenDigest": "Label text or Icon",
+      "visualSpecs": { "text": "取消" }
+    },
+    {
+      "name": "Ghost Small",
+      "traits": { "variant": "ghost", "size": "sm", "height": "32px", "bg": "transparent", "text": "muted" },
+      "whySelected": "Tertiary inline actions",
+      "childrenDigest": "Label only",
+      "visualSpecs": { "text": "清空" }
+    }
+  ],
+  "anatomy": ["icon-leading", "label", "icon-trailing"],
+  "structurePatterns": ["inline-flex", "gap-2", "font-semibold", "rounded-xl", "active:scale-0.97"],
+  "usageHints": { "priorityHint": "high", "density": "normal", "touchTarget": "44px minimum" },
+  "doNotInvent": ["outline-primary variant", "text-link variant"],
+  "unknowns": [],
+  "keyInsightSeed": "Coral-pink gradient primary with pill-lg radius, warm glow shadow on press"
+}

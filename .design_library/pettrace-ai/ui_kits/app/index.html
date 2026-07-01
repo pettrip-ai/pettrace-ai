@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PetTrace AI - UI Kit</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<link rel="stylesheet" href="../../components.css">
+<style>
+.uikit-shell{width:100%;max-width:1184px;margin:0 auto;overflow:hidden;background:var(--background);font-family:var(--font-body)}
+[data-component]{min-width:0;max-width:100%;overflow:hidden}
+.uikit-truncate{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uikit-nowrap{white-space:nowrap;flex-shrink:0}
+.phone-stage{display:flex;flex-direction:column;align-items:center;padding:var(--space-6) var(--space-4);min-height:100vh}
+.phone-stage-title{font-family:var(--font-heading);font-size:var(--font-size-h2);font-weight:var(--font-weight-h2);color:var(--color-on-surface);margin-bottom:var(--space-2)}
+.phone-stage-sub{font-size:var(--font-size-body);color:var(--color-muted-foreground);margin-bottom:var(--space-6)}
+.phone-frame{width:390px;height:780px;border-radius:44px;border:8px solid var(--foreground);overflow:hidden;position:relative;box-shadow:var(--shadow-5);flex-shrink:0;background:var(--background)}
+.phone-inner{width:100%;height:100%;display:flex;flex-direction:column;background:var(--background);border-radius:inherit;overflow:hidden}
+.status-bar{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-4);font-size:var(--font-size-caption);font-weight:600;color:var(--color-on-surface);flex-shrink:0;font-family:var(--font-body)}
+.screen-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 var(--space-3) var(--space-4)}
+.screen-header{padding:var(--space-3) 0 var(--space-2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.screen-title{font-family:var(--font-heading);font-size:var(--font-size-h3);font-weight:var(--font-weight-h3);color:var(--color-on-surface)}
+.home-indicator{width:134px;height:5px;border-radius:var(--radius-full);background:var(--color-on-surface);opacity:.25;margin:8px auto 8px;flex-shrink:0}
+.section-gap{margin-bottom:var(--space-4)}
+.search-row{margin-bottom:var(--space-3)}
+.chip-row{display:flex;gap:var(--space-2);overflow-x:auto;padding-bottom:var(--space-1);-webkit-overflow-scrolling:touch}
+.chip-row::-webkit-scrollbar{display:none}
+.card-grid{display:grid;grid-template-columns:1fr;gap:var(--space-3)}
+.venue-card{display:flex;gap:var(--space-3);align-items:center}
+.venue-thumb{width:56px;height:56px;min-width:56px;border-radius:var(--radius-md);background:var(--color-surface-container);overflow:hidden}
+.venue-thumb img{width:100%;height:100%;object-fit:cover}
+.venue-info{flex:1;min-width:0}
+.venue-name{font-family:var(--font-heading);font-size:var(--font-size-body);font-weight:600;color:var(--color-on-surface);margin:0 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.venue-meta{font-size:var(--font-size-caption);color:var(--color-muted-foreground);margin:0}
+.venue-tag{flex-shrink:0}
+.pet-profile-header{display:flex;flex-direction:column;align-items:center;text-align:center;padding:var(--space-4) 0 var(--space-3)}
+.pet-profile-name{font-family:var(--font-heading);font-size:var(--font-size-h3);font-weight:var(--font-weight-h3);color:var(--color-on-surface);margin:var(--space-2) 0 var(--space-1)}
+.pet-profile-breed{font-size:var(--font-size-body);color:var(--color-muted-foreground);margin:0}
+.stat-row{display:flex;justify-content:space-around;padding:var(--space-3) 0;margin:var(--space-2) 0}
+.stat-item{text-align:center}
+.stat-value{font-family:var(--font-heading);font-size:var(--font-size-h4);font-weight:700;color:var(--color-on-surface);font-variant-numeric:tabular-nums}
+.stat-label{font-size:var(--font-size-caption);color:var(--color-muted-foreground);margin-top:2px}
+.info-row{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-2) 0;border-bottom:1px solid var(--color-outline)}
+.info-row:last-child{border-bottom:none}
+.info-label{font-size:var(--font-size-caption);color:var(--color-muted-foreground);width:64px;flex-shrink:0}
+.info-value{font-size:var(--font-size-body);color:var(--color-on-surface);flex:1;min-width:0}
+.chat-messages{flex:1;display:flex;flex-direction:column;gap:var(--space-3);padding-bottom:var(--space-3)}
+.msg{max-width:82%;display:flex;flex-direction:column;gap:4px}
+.msg.user{align-self:flex-end}
+.msg.ai{align-self:flex-start}
+.msg-bubble{padding:var(--space-2) var(--space-3);border-radius:var(--radius-md);font-size:var(--font-size-body);line-height:var(--line-height-body);word-break:break-all;overflow-wrap:break-word}
+.msg.user .msg-bubble{background:var(--color-primary);color:var(--color-on-primary);border-bottom-right-radius:4px}
+.msg.ai .msg-bubble{background:var(--surface);border:1px solid var(--color-outline);color:var(--color-on-surface);border-bottom-left-radius:4px}
+.msg-time{font-size:10px;color:var(--color-muted-foreground);padding:0 4px}
+.chat-input-area{flex-shrink:0;padding-top:var(--space-2)}
+.reminder-card{background:var(--color-primary-container);border-radius:var(--radius-md);padding:var(--space-3);margin-bottom:var(--space-3)}
+.reminder-title{font-family:var(--font-heading);font-size:var(--font-size-caption);font-weight:600;color:var(--color-on-primary-container);margin:0 0 4px}
+.reminder-date{font-size:var(--font-size-caption);color:var(--color-on-primary-container);margin:0;opacity:.8}
+.btn-row{display:flex;gap:var(--space-2);margin-top:var(--space-3)}
+.nav-labels{display:flex;justify-content:space-around;padding:var(--space-2) 0;flex-shrink:0}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;transition:filter .15s;color:var(--color-on-surface-variant);text-decoration:none}
+.nav-item:hover{filter:brightness(1.08)}
+.nav-item.active{color:var(--color-primary)}
+.nav-item img{width:22px;height:22px;pointer-events:none}
+.nav-text{font-size:10px;font-weight:500;white-space:nowrap;font-family:var(--font-body)}
+.disabled-row{opacity:.5;pointer-events:none}
+@media(max-width:640px){.phone-frame{width:100%;max-width:390px;height:auto;min-height:600px;border-radius:32px}.phone-stage{padding:var(--space-3)}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState, useEffect, useRef}=React;
+
+function PhoneScreen({screen, onNavChange}){
+  if(screen==='home') return <HomeScreen onNav={onNavChange}/>;
+  if(screen==='profile') return <ProfileScreen />;
+  if(screen==='chat') return <ChatScreen />;
+  return null;
+}
+
+function StatusBar(){
+  return <div className="status-bar"><span>9:41</span><div style={{display:'flex',gap:'6px',alignItems:'center'}}><i data-lucide="signal" style={{width:14,height:14}}></i><i data-lucide="wifi" style={{width:14,height:14}}></i><i data-lucide="battery-full" style={{width:16,height:16}}></i></div></div>;
+}
+
+function BottomNav({active,onNav}){
+  const tabs=[
+    {id:'home',label:'地图',icon:'map-pin'},
+    {id:'community',label:'社区',icon:'users'},
+    {id:'ai',label:'AI规划',icon:'bot',center:true},
+    {id:'profile',label:'档案',icon:'folder'},
+    {id:'settings',label:'设置',icon:'settings'}
+  ];
+  return(
+    <div data-component="bottom-nav" style={{flexShrink:0}}>
+      <div className="bottom-nav" style={{position:'relative',margin:'0 -1px',borderRadius:'30px 30px 0 0'}}>
+        {tabs.map(t=>t.center?(
+          <div className="bottom-nav-center" key={t.id} onClick={()=>onNav&&onNav('chat')}>
+            <button className="bottom-nav-center-btn" aria-label={t.label}><i data-lucide={t.icon} style={{width:24,height:24}}></i></button>
+            <span className="bottom-nav-label" style={{marginTop:'-2px'}}>{t.label}</span>
+          </div>
+        ):(
+          <div className={`bottom-nav-item ${active===t.id?'active':''}`} key={t.id} onClick={()=>onNav&&onNav(t.id)}>
+            <i data-lucide={t.icon} style={{width:22,height:22}}></i>
+            <span className="bottom-nav-label">{t.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HomeScreen({onNav}){
+  return(
+    <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
+      <StatusBar/>
+      <div className="screen-header">
+        <span className="screen-title">发现周边</span>
+        <span data-component="avatar" className="avatar gradient md" style={{width:32,height:32,fontSize:'var(--font-size-caption)'}}>豆</span>
+      </div>
+      <div className="screen-body">
+        <div className="search-row" data-component="input">
+          <div className="input-wrap" style={{width:'100%',minWidth:0}}>
+            <i data-lucide="search" className="input-icon" style={{width:20,height:20}}></i>
+            <input className="input-field" type="text" placeholder="地点名 / 备注 / 地址" readOnly/>
+          </div>
+        </div>
+        <div className="section-gap" data-component="chip">
+          <div className="chip-row">
+            <button className="chip active">咖啡厅</button>
+            <button className="chip inactive">宠物公园</button>
+            <button className="chip inactive">宠物医院</button>
+            <button className="chip inactive">宠物商店</button>
+            <button className="chip inactive">附近</button>
+          </div>
+        </div>
+        <div className="section-gap">
+          <div className="chip-row" style={{marginBottom:'var(--space-2)'}}>
+            <button className="chip inactive">全城</button>
+            <button className="chip inactive">我的收藏</button>
+          </div>
+        </div>
+        <div className="section-gap" data-component="card">
+          <div className="card-grid">
+            <div className="card">
+              <div className="venue-card">
+                <div className="venue-thumb"><img src="https://cdn.jsdelivr.net/npm/lucide-static@1.8.0/icons/coffee.svg" alt="咖啡厅" style={{width:28,height:28,padding:14}}/></div>
+                <div className="venue-info">
+                  <p className="venue-name">毛孩子咖啡工坊</p>
+                  <p className="venue-meta">朝阳大悦城 B1 · 1.2km</p>
+                </div>
+                <span className="venue-tag chip active" style={{minWidth:0,padding:'2px 10px'}}>推荐</span>
+              </div>
+            </div>
+            <div className="card">
+              <div className="venue-card">
+                <div className="venue-thumb"><img src="https://cdn.jsdelivr.net/npm/lucide-static@1.8.0/icons/tree-pine.svg" alt="宠物公园" style={{width:28,height:28,padding:14}}/></div>
+                <div className="venue-info">
+                  <p className="venue-name">朝阳宠物友好公园</p>
+                  <p className="venue-meta">朝阳公园东门 · 2.5km</p>
+                </div>
+                <span className="venue-tag chip inactive" style={{minWidth:0,padding:'2px 10px'}}>散步中</span>
+              </div>
+            </div>
+            <div className="card">
+              <div className="venue-card">
+                <div className="venue-thumb"><img src="https://cdn.jsdelivr.net/npm/lucide-static@1.8.0/icons/stethoscope.svg" alt="宠物医院" style={{width:28,height:28,padding:14}}/></div>
+                <div className="venue-info">
+                  <p className="venue-name">瑞派宠物医院</p>
+                  <p className="venue-meta">望京 SOHO · 3.1km</p>
+                </div>
+                <span className="venue-tag chip inactive" style={{minWidth:0,padding:'2px 10px'}}>新</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="section-gap" data-component="button">
+          <div className="btn-row" style={{justifyContent:'center'}}>
+            <button className="btn btn-primary btn-md"><i data-lucide="bot" style={{width:18,height:18}}></i>AI 行程规划</button>
+            <button className="btn btn-secondary btn-md">取消</button>
+          </div>
+        </div>
+      </div>
+      <BottomNav active="home" onNav={onNav}/>
+      <div className="home-indicator"/>
+    </div>
+  );
+}
+
+function ProfileScreen(){
+  return(
+    <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
+      <StatusBar/>
+      <div className="screen-header">
+        <span className="screen-title">宠物档案</span>
+        <button className="btn btn-ghost btn-sm"><i data-lucide="plus" style={{width:16,height:16}}></i>添加</button>
+      </div>
+      <div className="screen-body">
+        <div className="pet-profile-header">
+          <span data-component="avatar" className="avatar gradient lg">豆</span>
+          <p className="pet-profile-name">豆豆</p>
+          <p className="pet-profile-breed">金毛寻回犬 · 大型犬</p>
+        </div>
+        <div className="card">
+          <div className="stat-row">
+            <div className="stat-item"><p className="stat-value">3</p><p className="stat-label">岁</p></div>
+            <div className="stat-item"><p className="stat-value">28.5</p><p className="stat-label">kg</p></div>
+            <div className="stat-item"><p className="stat-value">15</p><p className="stat-label">次出行</p></div>
+          </div>
+        </div>
+        <div className="section-gap" data-component="card">
+          <div className="card soft">
+            <h3 className="card-title">基本信息</h3>
+            <div className="info-row"><span className="info-label">生日</span><span className="info-value">2023年3月12日</span></div>
+            <div className="info-row"><span className="info-label">性别</span><span className="info-value">公</span></div>
+            <div className="info-row"><span className="info-label">绝育</span><span className="info-value">已绝育</span></div>
+            <div className="info-row"><span className="info-label">芯片号</span><span className="info-value uikit-truncate">CN20230312001587</span></div>
+          </div>
+        </div>
+        <div className="section-gap" data-component="card">
+          <div className="reminder-card">
+            <p className="reminder-title">驱虫提醒</p>
+            <p className="reminder-date">下次驱虫日期：2026年7月15日</p>
+          </div>
+          <div className="card">
+            <h3 className="card-title">健康记录</h3>
+            <p className="card-body">品种 · 体型 · 生日</p>
+            <div className="card-actions">
+              <button className="card-btn primary">查看详情</button>
+              <button className="card-btn secondary">编辑资料</button>
+            </div>
+          </div>
+        </div>
+        <div className="section-gap" data-component="button">
+          <div className="disabled-row">
+            <button className="btn btn-danger btn-md" disabled>删除档案</button>
+          </div>
+        </div>
+      </div>
+      <BottomNav active="profile"/>
+      <div className="home-indicator"/>
+    </div>
+  );
+}
+
+function ChatScreen(){
+  const [msg, setMsg]=useState('');
+  const messages=[
+    {id:1,from:'ai',text:'你好！我是 PetTrace AI 助手，可以帮你规划带宠物的出行路线。告诉我你想去哪里？',time:'9:38'},
+    {id:2,from:'user',text:'想去一个能遛狗的咖啡厅，最好是朝阳附近的',time:'9:39'},
+    {id:3,from:'ai',text:'为你找到了 3 家朝阳区的宠物友好咖啡厅：\n\n1. 毛孩子咖啡工坊 — 朝阳大悦城 B1，1.2km，有宠物专属菜单\n2. PAWPAW CAFE — 三里屯太古里南区，2.8km，户外露台区\n3. 汪星人咖啡馆 — 望京 SOHO 一层，3.1km\n\n推荐第一个，近期好评最多。需要我帮你规划步行路线吗？',time:'9:39'},
+    {id:4,from:'user',text:'规划一个从家到毛孩子咖啡的步行路线吧',time:'9:40'}
+  ];
+  return(
+    <div style={{display:'flex',flexDirection:'column',height:'100%'}}>
+      <StatusBar/>
+      <div className="screen-header">
+        <span className="screen-title">AI 规划</span>
+        <span data-component="avatar" className="avatar solid md" style={{width:28,height:28,fontSize:'10px'}}><i data-lucide="bot" style={{width:16,height:16}}></i></span>
+      </div>
+      <div className="screen-body" style={{flex:1}}>
+        <div className="chat-messages">
+          {messages.map(m=>(
+            <div className={`msg ${m.from}`} key={m.id}>
+              <div className="msg-bubble" style={{whiteSpace:'pre-wrap'}}>{m.text}</div>
+              <span className="msg-time" style={{justifyContent:m.from==='user'?'flex-end':'flex-start',display:'flex'}}>{m.time}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="chat-input-area" style={{padding:'0 var(--space-3) var(--space-2)'}}>
+        <div data-component="input" className="chat-wrap" style={{maxWidth:'100%',minWidth:0}}>
+          <textarea className="chat-area" placeholder="告诉我你的目的地" value={msg} onChange={e=>setMsg(e.target.value)} rows={1}/>
+          <button className="chat-send" aria-label="发送"><i data-lucide="send" style={{width:16,height:16}}></i></button>
+        </div>
+      </div>
+      <BottomNav active="ai"/>
+      <div className="home-indicator"/>
+    </div>
+  );
+}
+
+function App(){
+  const [screen,setScreen]=useState('home');
+  useEffect(()=>{lucide.createIcons();});
+  return(
+    <div className="uikit-shell" data-layout-guard="uikit-v1">
+      <div className="phone-stage">
+        <h1 className="phone-stage-title">PetTrace AI</h1>
+        <p className="phone-stage-sub">AI 驱动的宠物出行伴侣 · 设计系统展示</p>
+        <div className="phone-frame">
+          <div className="phone-inner">
+            <PhoneScreen screen={screen} onNavChange={setScreen}/>
+          </div>
+        </div>
+        <div style={{display:'flex',gap:'var(--space-2)',marginTop:'var(--space-4)',flexWrap:'wrap',justifyContent:'center'}}>
+          <button className="btn btn-secondary btn-sm" onClick={()=>setScreen('home')}>首页</button>
+          <button className="btn btn-secondary btn-sm" onClick={()=>setScreen('profile')}>档案</button>
+          <button className="btn btn-secondary btn-sm" onClick={()=>setScreen('chat')}>AI 规划</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

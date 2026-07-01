@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Card — PetTrace AI</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { margin: 0; padding: 12px; background: var(--color-background); font-family: var(--font-body); color: var(--color-on-surface); }
+.row { display: flex; gap: var(--space-2); align-items: flex-start; margin-bottom: var(--space-2); flex-wrap: wrap; }
+.label { font-size: var(--font-size-caption); font-weight: 600; color: var(--color-muted-foreground); text-transform: uppercase; letter-spacing: 0.05em; min-width: 92px; flex-shrink: 0; padding-top: var(--space-3); }
+.divider { border: none; border-top: 1px solid var(--color-border); margin: var(--space-3) 0; }
+.card-row { width: calc(100% - 92px); }
+
+/* @component-css-start */
+.card { background: rgba(255,255,255,0.8); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(0,0,0,0.05); border-radius: 18px; box-shadow: var(--shadow-1); padding: var(--space-4); transition: box-shadow .15s; }
+.card:hover { box-shadow: var(--shadow-2); }
+.card.soft { background: rgba(255,255,255,0.55); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-color: rgba(0,0,0,0.04); }
+.card-title { font-family: var(--font-heading); font-size: var(--font-size-h4); font-weight: var(--font-weight-h4); color: var(--color-on-surface); margin: 0 0 var(--space-1) 0; line-height: var(--line-height-h4); }
+.card-body { font-size: var(--font-size-body); color: var(--color-muted-foreground); margin: 0 0 var(--space-4) 0; line-height: var(--line-height-body); }
+.card-actions { display: flex; gap: var(--space-2); }
+.card-btn { display: inline-flex; align-items: center; gap: var(--space-1); border: none; cursor: pointer; font-family: var(--font-body); font-size: var(--font-size-body); font-weight: 500; border-radius: var(--radius-md); padding: var(--space-2) var(--space-4); white-space: nowrap; transition: background .15s; }
+.card-btn.primary { background: var(--color-primary); color: var(--color-on-primary); }
+.card-btn.primary:hover { background: var(--color-primary-hover); }
+.card-btn.secondary { background: var(--color-primary-container); color: var(--color-on-primary-container); }
+.card-btn.secondary:hover { background: var(--color-surface-container-high); }
+.card-text { font-size: var(--font-size-body); color: var(--color-on-surface); line-height: var(--line-height-body); margin: 0; }
+/* @component-css-end */
+</style>
+</head>
+<body>
+<div class="row">
+  <span class="label">Default</span>
+  <div class="card-row">
+    <div class="card">
+      <h3 class="card-title">宠物档案</h3>
+      <p class="card-body">品种 · 体型 · 生日</p>
+      <div class="card-actions">
+        <button class="card-btn primary">查看详情</button>
+        <button class="card-btn secondary">编辑资料</button>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="divider">
+<div class="row">
+  <span class="label">Soft</span>
+  <div class="card-row">
+    <div class="card soft">
+      <p class="card-text">下次驱虫日期：2026年7月15日</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

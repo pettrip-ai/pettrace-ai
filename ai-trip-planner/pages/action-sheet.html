@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互组件</title>
+    <style id="theme-vars">
+/* @group-priority: primary, accent, success, warning, info */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
+:root {
+  --pettrace-coral-50: #fff1f2; --pettrace-coral-100: #ffe0e3; --pettrace-coral-200: #ffc7cd; --pettrace-coral-300: #ffa0ab; --pettrace-coral-400: #fd6b7e; --pettrace-coral-500: #f76b7a; --pettrace-coral-600: #ef4460; --pettrace-coral-700: #d9294b; --pettrace-coral-800: #b91d3f; --pettrace-coral-900: #9c1637;
+  --pettrace-mint-50: #eefbf4; --pettrace-mint-100: #d5f5e3; --pettrace-mint-200: #aeeacc; --pettrace-mint-300: #76d9af; --pettrace-mint-400: #3dc28d; --pettrace-mint-500: #20a976; --pettrace-mint-600: #16895f; --pettrace-mint-700: #136e50; --pettrace-mint-800: #125841; --pettrace-mint-900: #104a37;
+  --pettrace-honey-50: #fffbeb; --pettrace-honey-100: #fef3c7; --pettrace-honey-200: #fde68a; --pettrace-honey-300: #fcd34d; --pettrace-honey-400: #fbbf24; --pettrace-honey-500: #f59e0b; --pettrace-honey-600: #d97706; --pettrace-honey-700: #b45309; --pettrace-honey-800: #92400e; --pettrace-honey-900: #78350f;
+  --pettrace-success-50: #ecfdf5; --pettrace-success-100: #d1fae5; --pettrace-success-200: #a7f3d0; --pettrace-success-300: #6ee7b7; --pettrace-success-400: #34d399; --pettrace-success-500: #10b981; --pettrace-success-600: #059669; --pettrace-success-700: #047857; --pettrace-success-800: #065f46; --pettrace-success-900: #064e3b;
+  --pettrace-error-50: #fef2f2; --pettrace-error-100: #fee2e2; --pettrace-error-200: #fecaca; --pettrace-error-300: #fca5a5; --pettrace-error-400: #f87171; --pettrace-error-500: #ef4444; --pettrace-error-600: #dc2626; --pettrace-error-700: #b91c1c; --pettrace-error-800: #991b1b; --pettrace-error-900: #7f1d1d;
+  --pettrace-info-50: #eff6ff; --pettrace-info-100: #dbeafe; --pettrace-info-200: #bfdbfe; --pettrace-info-300: #93c5fd; --pettrace-info-400: #60a5fa; --pettrace-info-500: #3b82f6; --pettrace-info-600: #2563eb; --pettrace-info-700: #1d4ed8; --pettrace-info-800: #1e40af; --pettrace-info-900: #1e3a8a;
+  --pettrace-neutral-50: #fff7f0; --pettrace-neutral-100: #ffe8d6; --pettrace-neutral-200: #fdd5b5; --pettrace-neutral-300: #f5b78a; --pettrace-neutral-400: #e8945e; --pettrace-neutral-500: #c97840; --pettrace-neutral-600: #a65f34; --pettrace-neutral-700: #8a4d2d; --pettrace-neutral-800: #6e3d26; --pettrace-neutral-900: #54311f;
+  --background: #fff7f0; --surface: #ffffff; --surface-dim: #fff1eb; --surface-container-low: #fff1f2; --surface-container: #ffe0e3; --surface-container-high: #ffc7cd; --surface-container-highest: #fdd5b5; --card: #ffffff; --popover: #ffffff;
+  --foreground: #54311f; --muted: #a65f34; --muted-foreground: #8a4d2d; --border: #fdd5b5;
+  --primary: #f76b7a; --primary-foreground: #ffffff; --secondary: #fff1f2; --secondary-foreground: #54311f; --accent: #20a976; --accent-foreground: #ffffff; --ring: #f76b7a; --link: #ef4460;
+  --error: #ef4444; --error-container: #fef2f2; --on-error: #ffffff; --on-error-container: #7f1d1d; --success: #10b981; --warning: #f59e0b;
+  --color-background: var(--background); --color-foreground: var(--foreground); --color-surface: var(--surface); --color-card: var(--card); --color-primary: var(--primary); --color-on-primary: var(--primary-foreground); --color-on-surface: var(--foreground); --color-on-surface-variant: var(--muted); --color-muted-foreground: var(--muted-foreground); --color-outline: var(--border); --color-outline-variant: #ffe8d6; --color-border: var(--border); --color-success: var(--success); --color-warning: var(--warning);
+  --font-display: 'Nunito', sans-serif; --font-heading: 'Nunito', sans-serif; --font-body: 'DM Sans', sans-serif; --font-mono: 'DM Sans', monospace;
+  --font-size-display: 56px; --font-size-h1: 40px; --font-size-h2: 32px; --font-size-h3: 24px; --font-size-h4: 20px; --font-size-body: 16px; --font-size-lead: 18px; --font-size-caption: 12px; --font-size-mono: 14px;
+  --font-weight-display: 800; --font-weight-h1: 800; --font-weight-h2: 700; --font-weight-h3: 700; --font-weight-h4: 600; --font-weight-body: 400; --font-weight-lead: 500; --font-weight-caption: 500; --font-weight-mono: 400;
+  --line-height-display: 1.1; --line-height-h1: 1.2; --line-height-h2: 1.25; --line-height-h3: 1.3; --line-height-h4: 1.4; --line-height-body: 1.6; --line-height-lead: 1.7; --line-height-caption: 1.5; --line-height-mono: 1.6;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --size-button-sm: 32px; --size-button-md: 40px; --size-button-lg: 48px; --size-icon-sm: 16px; --size-icon-md: 20px; --size-icon-lg: 24px; --size-avatar-sm: 32px; --size-avatar-md: 40px; --size-avatar-lg: 56px;
+  --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px; --radius-xl: 24px; --radius-full: 9999px;
+  --shadow-1: 0 1px 3px rgba(84,49,31,.06), 0 1px 2px rgba(84,49,31,.04); --shadow-2: 0 4px 8px -2px rgba(84,49,31,.08); --shadow-3: 0 8px 24px -4px rgba(84,49,31,.12); --shadow-4: 0 16px 40px -8px rgba(84,49,31,.18); --shadow-5: 0 24px 56px -12px rgba(84,49,31,.24);
+}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @layer base { body { background: var(--background); color: var(--foreground); } }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] { display: inline-flex; align-items: center; justify-content: center; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; background-color: currentColor; }
+    </style>
+</head>
+<body style="margin: 0; padding: 0; max-width: 393px; margin-left: auto; margin-right: auto; position: relative; overflow-x: hidden; font-family: var(--font-body);">
+
+  <!-- iOS Status Bar -->
+  <div class="flex items-center justify-between px-5" style="height: 44px; color: var(--foreground); font-size: 14px; font-weight: 600; font-family: var(--font-body);">
+    <span>9:41</span>
+    <div class="flex items-center gap-1.5">
+      <i data-lucide="signal" style="width:14px;height:14px;"></i>
+      <i data-lucide="wifi" style="width:14px;height:14px;"></i>
+      <i data-lucide="battery-full" style="width:16px;height:16px;"></i>
+    </div>
+  </div>
+
+  <!-- Page Title -->
+  <div class="px-5" style="padding-top: 8px; padding-bottom: 20px;">
+    <h1 style="font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--foreground); margin: 0;">交互组件</h1>
+    <p style="font-family: var(--font-body); font-size: 13px; color: var(--muted); margin-top: 4px;">ActionSheet / Alert</p>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="px-5" style="padding-bottom: 60px;">
+
+    <!-- Section 1: ActionSheet (Standard) -->
+    <div style="margin-bottom: 32px;">
+      <div style="font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">ActionSheet — 发布验证</div>
+
+      <!-- ActionSheet Standard Preview -->
+      <div style="position: relative; width: 100%; height: 480px; border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-2);">
+        <!-- Dimmed Backdrop -->
+        <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3);"></div>
+
+        <!-- Fake page content behind -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; padding: 20px 16px; opacity: 0.4;">
+          <div style="width: 60%; height: 12px; border-radius: 6px; background: var(--foreground); opacity: 0.2;"></div>
+          <div style="width: 40%; height: 12px; border-radius: 6px; background: var(--foreground); opacity: 0.15; margin-top: 8px;"></div>
+          <div style="width: 100%; height: 80px; border-radius: var(--radius-md); background: var(--foreground); opacity: 0.08; margin-top: 16px;"></div>
+          <div style="width: 100%; height: 80px; border-radius: var(--radius-md); background: var(--foreground); opacity: 0.08; margin-top: 8px;"></div>
+        </div>
+
+        <!-- Bottom Sheet -->
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 16px 16px 0 0;">
+          <!-- Drag Handle -->
+          <div class="flex justify-center" style="padding-top: 10px; padding-bottom: 4px;">
+            <div style="width: 144px; height: 4px; border-radius: 9999px; background: rgba(0,0,0,0.12);"></div>
+          </div>
+
+          <!-- Title -->
+          <div style="font-size: 15px; font-weight: 600; text-align: center; padding: 16px 16px 8px; color: var(--foreground);">选择发布类型</div>
+
+          <!-- Description -->
+          <div style="font-size: 13px; color: var(--muted); text-align: center; padding-bottom: 16px;">选择你要验证的地点类型</div>
+
+          <!-- Action Row 1: 咖啡厅 -->
+          <div class="flex items-center" style="gap: 12px; padding: 14px 16px; border-bottom: 0.5px solid var(--border);">
+            <div class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: 9999px; background: var(--pettrace-coral-50); flex-shrink: 0;">
+              <i data-lucide="coffee" style="width: 18px; height: 18px; color: var(--primary);"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 15px; font-weight: 500; color: var(--foreground);">咖啡厅</div>
+              <div style="font-size: 12px; color: var(--muted-foreground); margin-top: 1px;">有室外座位</div>
+            </div>
+            <i data-lucide="check-circle" style="width: 18px; height: 18px; color: var(--accent); display: none;"></i>
+          </div>
+
+          <!-- Action Row 2: 宠物公园 -->
+          <div class="flex items-center" style="gap: 12px; padding: 14px 16px; border-bottom: 0.5px solid var(--border);">
+            <div class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: 9999px; background: var(--pettrace-mint-50); flex-shrink: 0;">
+              <i data-lucide="tree-pine" style="width: 18px; height: 18px; color: var(--accent);"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 15px; font-weight: 500; color: var(--foreground);">宠物公园</div>
+              <div style="font-size: 12px; color: var(--muted-foreground); margin-top: 1px;">有围栏区域</div>
+            </div>
+            <i data-lucide="check-circle" style="width: 18px; height: 18px; color: var(--accent); display: none;"></i>
+          </div>
+
+          <!-- Action Row 3: 宠物商店 -->
+          <div class="flex items-center" style="gap: 12px; padding: 14px 16px;">
+            <div class="flex items-center justify-center" style="width: 36px; height: 36px; border-radius: 9999px; background: var(--pettrace-honey-50); flex-shrink: 0;">
+              <i data-lucide="shopping-bag" style="width: 18px; height: 18px; color: var(--warning);"></i>
+            </div>
+            <div style="flex: 1;">
+              <div style="font-size: 15px; font-weight: 500; color: var(--foreground);">宠物商店</div>
+              <div style="font-size: 12px; color: var(--muted-foreground); margin-top: 1px;">允许携宠入内</div>
+            </div>
+            <i data-lucide="check-circle" style="width: 18px; height: 18px; color: var(--accent); display: none;"></i>
+          </div>
+
+          <!-- Cancel Button -->
+          <div style="border-top: 0.5px solid var(--border); margin-top: 6px;">
+            <div style="padding: 14px; text-align: center; font-size: 15px; font-weight: 600; color: var(--primary); background: var(--surface);">取消</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: ActionSheet (Compact) -->
+    <div style="margin-bottom: 32px;">
+      <div style="font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">ActionSheet — 快捷操作</div>
+
+      <!-- ActionSheet Compact Preview -->
+      <div style="position: relative; width: 100%; height: 380px; border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-2);">
+        <!-- Dimmed Backdrop -->
+        <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3);"></div>
+
+        <!-- Fake page content behind -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; padding: 20px 16px; opacity: 0.4;">
+          <div style="width: 50%; height: 12px; border-radius: 6px; background: var(--foreground); opacity: 0.2;"></div>
+          <div style="width: 70%; height: 12px; border-radius: 6px; background: var(--foreground); opacity: 0.15; margin-top: 8px;"></div>
+          <div style="width: 100%; height: 60px; border-radius: var(--radius-md); background: var(--foreground); opacity: 0.08; margin-top: 16px;"></div>
+        </div>
+
+        <!-- Bottom Sheet -->
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 16px 16px 0 0;">
+          <!-- Drag Handle -->
+          <div class="flex justify-center" style="padding-top: 10px; padding-bottom: 8px;">
+            <div style="width: 144px; height: 4px; border-radius: 9999px; background: rgba(0,0,0,0.12);"></div>
+          </div>
+
+          <!-- Compact Action Row 1 -->
+          <div class="flex items-center" style="gap: 12px; padding: 14px 16px; border-bottom: 0.5px solid var(--border);">
+            <i data-lucide="camera" style="width: 20px; height: 20px; color: var(--foreground); flex-shrink: 0;"></i>
+            <div style="font-size: 15px; font-weight: 500; color: var(--foreground);">拍照验证</div>
+          </div>
+
+          <!-- Compact Action Row 2 -->
+          <div class="flex items-center" style="gap: 12px; padding: 14px 16px; border-bottom: 0.5px solid var(--border);">
+            <i data-lucide="image" style="width: 20px; height: 20px; color: var(--foreground); flex-shrink: 0;"></i>
+            <div style="font-size: 15px; font-weight: 500; color: var(--foreground);">从相册选择</div>
+          </div>
+
+          <!-- Compact Action Row 3 -->
+          <div class="flex items-center" style="gap: 12px; padding: 14px 16px; border-bottom: 0.5px solid var(--border);">
+            <i data-lucide="map-pin" style="width: 20px; height: 20px; color: var(--foreground); flex-shrink: 0;"></i>
+            <div style="font-size: 15px; font-weight: 500; color: var(--foreground);">选择位置</div>
+          </div>
+
+          <!-- Compact Action Row 4 -->
+          <div class="flex items-center" style="gap: 12px; padding: 14px 16px;">
+            <i data-lucide="share-2" style="width: 20px; height: 20px; color: var(--foreground); flex-shrink: 0;"></i>
+            <div style="font-size: 15px; font-weight: 500; color: var(--foreground);">分享给朋友</div>
+          </div>
+
+          <!-- Cancel Button -->
+          <div style="border-top: 0.5px solid var(--border); margin-top: 6px;">
+            <div style="padding: 14px; text-align: center; font-size: 15px; font-weight: 600; color: var(--primary); background: var(--surface);">取消</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Alert Modal -->
+    <div style="margin-bottom: 32px;">
+      <div style="font-family: var(--font-heading); font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Alert — 确认对话框</div>
+
+      <!-- Alert Modal Preview -->
+      <div style="position: relative; width: 100%; height: 360px; border-radius: var(--radius-lg); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-2);">
+        <!-- Dimmed Backdrop -->
+        <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.3);"></div>
+
+        <!-- Fake page content behind -->
+        <div style="position: absolute; top: 0; left: 0; right: 0; padding: 20px 16px; opacity: 0.4;">
+          <div style="width: 55%; height: 12px; border-radius: 6px; background: var(--foreground); opacity: 0.2;"></div>
+          <div style="width: 80%; height: 12px; border-radius: 6px; background: var(--foreground); opacity: 0.15; margin-top: 8px;"></div>
+          <div style="width: 100%; height: 100px; border-radius: var(--radius-md); background: var(--foreground); opacity: 0.08; margin-top: 16px;"></div>
+          <div style="width: 100%; height: 100px; border-radius: var(--radius-md); background: var(--foreground); opacity: 0.08; margin-top: 8px;"></div>
+        </div>
+
+        <!-- Centered Alert Card -->
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px;">
+          <div style="max-width: 300px; width: 100%; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: var(--radius-xl); box-shadow: var(--shadow-4);">
+
+            <!-- Icon Area -->
+            <div class="flex justify-center" style="padding-top: 16px;">
+              <div class="flex items-center justify-center" style="width: 48px; height: 48px; border-radius: 9999px; background: var(--pettrace-coral-100);">
+                <i data-lucide="dog" style="width: 24px; height: 24px; color: var(--primary);"></i>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <div style="font-size: 16px; font-weight: 700; text-align: center; padding: 12px 20px 4px; color: var(--foreground);">确认发布验证？</div>
+
+            <!-- Message -->
+            <div style="font-size: 13px; color: var(--muted-foreground); text-align: center; padding: 0 20px 16px; line-height: 1.5;">发布后将展示在社区信息流中，其他用户可以看到你的验证信息。</div>
+
+            <!-- Buttons -->
+            <div class="flex" style="gap: 10px; padding: 0 16px 16px;">
+              <!-- Cancel -->
+              <div class="flex items-center justify-center" style="flex: 1; height: 40px; border-radius: var(--radius-full); background: var(--surface); border: 0.5px solid var(--border); font-size: 14px; font-weight: 500; color: var(--muted);">取消</div>
+              <!-- Confirm -->
+              <div class="flex items-center justify-center" style="flex: 1; height: 40px; border-radius: var(--radius-full); background: var(--primary); font-size: 14px; font-weight: 600; color: var(--primary-foreground); box-shadow: var(--shadow-2);">确认发布</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

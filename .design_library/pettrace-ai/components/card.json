@@ -1,0 +1,38 @@
+{
+  "slug": "card",
+  "schemaVersion": 2,
+  "name": "Card",
+  "category": "container",
+  "sourceKind": "from-scratch",
+  "confidence": "medium",
+  "semanticTypeCandidates": [
+    { "type": "content-card", "evidence": "Pet profile cards, community feed cards, itinerary cards" },
+    { "type": "info-card", "evidence": "Care schedule card, settings section card" }
+  ],
+  "variantDimensions": [
+    { "axis": "variant", "values": ["default", "soft"] },
+    { "axis": "interactive", "values": ["static", "hoverable"] }
+  ],
+  "representativeVariants": [
+    {
+      "name": "Default Card",
+      "traits": { "variant": "default", "bg": "white/80 backdrop-blur-xl", "border": "black/5", "shadow": "card elevation", "radius": "18px" },
+      "whySelected": "Standard elevated card for content sections",
+      "childrenDigest": "Title + Body + Actions",
+      "visualSpecs": { "title": "宠物档案", "body": "品种 · 体型 · 生日" }
+    },
+    {
+      "name": "Soft Card",
+      "traits": { "variant": "soft", "bg": "white/55 backdrop-blur-lg", "border": "black/4", "shadow": "soft", "radius": "18px" },
+      "whySelected": "Lighter card for less prominent sections",
+      "childrenDigest": "Content only",
+      "visualSpecs": {}
+    }
+  ],
+  "anatomy": ["container"],
+  "structurePatterns": ["rounded-2xl", "bg-white/80", "backdrop-blur-xl", "border-black/5", "shadow-card"],
+  "usageHints": { "priorityHint": "high", "density": "normal" },
+  "doNotInvent": ["outlined-card", "media-card"],
+  "unknowns": [],
+  "keyInsightSeed": "Glassmorphic white cards with soft blur backdrop on cream canvas"
+}

@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "name": "pettrace-session-recorder",
+        "enabled": true,
+        "command": "powershell -ExecutionPolicy Bypass -File .trae/hooks/session-start.ps1"
+      }
+    ]
+  }
+}

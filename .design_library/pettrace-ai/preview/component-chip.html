@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chip — PetTrace AI</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+body { margin: 0; padding: var(--space-3); background: var(--color-background); font-family: var(--font-body); color: var(--color-on-surface); }
+.row { display: flex; gap: var(--space-2); align-items: center; margin-bottom: var(--space-2); flex-wrap: wrap; }
+.label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-muted-foreground); width: 92px; flex-shrink: 0; }
+.divider { border: none; border-top: 1px solid var(--color-outline); margin: var(--space-3) 0; }
+
+/* @component-css-start */
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: var(--space-1) var(--space-3); border-radius: var(--radius-full); font-size: var(--font-size-caption); font-weight: var(--font-weight-caption); font-family: var(--font-body); line-height: 1.5; white-space: nowrap; cursor: pointer; transition: filter .15s, transform .1s; min-width: 56px; justify-content: center; }
+.chip.active { background: var(--accent); color: var(--accent-foreground); box-shadow: 0 2px 8px rgba(247,107,122,.25); border: none; }
+.chip.active:hover { filter: brightness(.92); }
+.chip.active:active { transform: scale(0.97); }
+.chip.inactive { background: var(--color-surface-container-low); color: var(--color-on-surface-variant); border: 1px solid var(--color-outline); box-shadow: none; }
+.chip.inactive:hover { filter: brightness(.95); }
+.chip.inactive:active { transform: scale(0.97); }
+/* @component-css-end */
+</style>
+</head>
+<body>
+<div class="row">
+  <span class="label">分类筛选</span>
+  <button class="chip active" data-evidence-sample="Active Chip">咖啡厅</button>
+  <button class="chip inactive" data-evidence-sample="Inactive Chip">宠物公园</button>
+  <button class="chip inactive">宠物医院</button>
+  <button class="chip inactive">宠物商店</button>
+</div>
+<div class="row">
+  <span class="label">区域筛选</span>
+  <button class="chip active">附近</button>
+  <button class="chip inactive">全城</button>
+  <button class="chip inactive">我的收藏</button>
+</div>
+<hr class="divider">
+<div class="row">
+  <span class="label">活动状态</span>
+  <button class="chip active">散步中</button>
+  <button class="chip inactive">休息</button>
+  <button class="chip inactive">进食中</button>
+</div>
+</body>
+</html>
