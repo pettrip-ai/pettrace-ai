@@ -23,8 +23,15 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_DEPLOY_KEY }}
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_key: ${{ secrets.SSH_DEPLOY_KEY }}
           publish_dir: ./dist
+          external_repository: pettrip-ai/pettrace-ai
+          publish_branch: gh-pages
