@@ -269,8 +269,7 @@
 @media (max-width: 640px) { .leaflet-control-zoom { display: none; } }
 /* Hide mobile tabbar when any Sheet/overlay is open */
 body.sheet-open nav[aria-label="主导航"] {
-  visibility: hidden !important;
-  pointer-events: none !important;
+  display: none !important;
 }
 
 /* Simulator: the screen container sets --sat via inline style when in desktop mode */

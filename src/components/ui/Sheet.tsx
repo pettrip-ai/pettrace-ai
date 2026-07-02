@@ -122,9 +122,9 @@ export function Sheet({
           {children}
         </div>
 
-        {/* Footer — outside scroll, always visible */}
+        {/* Footer — outside scroll, always visible at bottom */}
         {footer && (
-          <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: '0.5px solid var(--border)' }}>
+          <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: '0.5px solid var(--border)', position: 'sticky', bottom: 0, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
             {footer}
           </div>
         )}
