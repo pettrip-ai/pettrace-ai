@@ -13,6 +13,9 @@
     overscroll-behavior-y: contain;
     -webkit-tap-highlight-color: transparent;
     background: var(--background);
+    /* Safe area insets — overridden by simulator */
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
     color: var(--foreground);
     font-family: var(--font-body);
     line-height: 1.55;
@@ -269,5 +272,9 @@ body.sheet-open nav[aria-label="主导航"] {
   visibility: hidden !important;
   pointer-events: none !important;
 }
+
+/* Simulator: the screen container sets --sat via inline style when in desktop mode */
+/* On real devices --sat = env(safe-area-inset-top) which is 0 for non-notched devices */
+/* Pages that have fixed headers should add: padding-top: calc(var(--sat) + their existing padding) */
 
 @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }

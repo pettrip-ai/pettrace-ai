@@ -66,7 +66,7 @@ export default function PlannerPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-bg" style={{ paddingBottom: 170 }}>
+    <div className="flex flex-col h-full bg-bg" style={{ paddingBottom: 170 }}>
       <div className="flex flex-col px-4 pt-6">
         <header className="flex items-center justify-between py-3">
           <div>
@@ -146,7 +146,7 @@ export default function PlannerPage() {
       <div
         className="fixed z-40"
         style={{
-          bottom: 'calc(76px + env(safe-area-inset-bottom, 0px))',
+          bottom: 'calc(76px + var(--sab))',
           left: 16,
           right: 16,
           padding: '0 0 0',

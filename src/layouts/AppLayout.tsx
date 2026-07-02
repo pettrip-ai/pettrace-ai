@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { clsx } from 'clsx'
+
 import { Map, Users, Dog, PawPrint, Settings } from 'lucide-react'
 
 const NAV = [
@@ -127,102 +127,77 @@ function MobileTabBar() {
   )
 }
 
-function DesktopSidebar({ collapsed, onToggle }: { collapsed: boolean; onToggle: () => void }) {
-  const loc = useLocation()
-  const navigate = useNavigate()
-  const items = [
-    { key: 'map', label: '宠物友好地图', path: '/map', icon: Map },
-    { key: 'ai', label: 'AI 行程规划', path: '/ai', icon: Dog, primary: true },
-    { key: 'community', label: '真实验证社区', path: '/community', icon: Users },
-    { key: 'pet', label: '宠物档案 & 护理', path: '/pet', icon: PawPrint },
-    { key: 'settings', label: '设置', path: '/settings', icon: Settings },
-  ]
-  return (
-    <aside
-      className={clsx(
-        'sticky self-start shrink-0 transition-[width] duration-300 overflow-hidden',
-        'mt-4 ml-4 h-[calc(100vh-2rem-1px)] rounded-xl',
-        collapsed ? 'w-[64px]' : 'w-[256px]',
-      )}
-      style={{
-        background: 'rgba(255,255,255,0.70)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-        border: '1px solid rgba(0,0,0,0.05)',
-        boxShadow: 'var(--shadow-1)',
-        padding: 'var(--space-4)',
-        display: 'flex', flexDirection: 'column', gap: 'var(--space-1)',
-      }}
-    >
-      <div style={{ fontFamily: 'var(--font-heading)', fontSize: 'var(--font-size-h4)', fontWeight: 700, color: 'var(--color-primary)', whiteSpace: 'nowrap', padding: 'var(--space-2) var(--space-3)' }}>
-        {collapsed ? '迹' : '宠迹AI'}
-      </div>
-      <div className="flex flex-col gap-1 overflow-y-auto">
-        {items.map(n => {
-          const Icon = n.icon
-          const active = loc.pathname === n.path || loc.pathname.startsWith(n.path + '/')
-          return (
-            <button
-              key={n.key}
-              onClick={() => navigate(n.path)}
-              className={clsx(
-                'group flex items-center gap-3 px-3 py-2 rounded-lg text-left transition whitespace-nowrap text-sm',
-                active && n.primary
-                  ? 'bg-coral-50 text-primary-deep font-semibold'
-                  : active
-                    ? 'bg-coral-50 text-foreground font-semibold'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-surface-container-low',
-                collapsed && 'justify-center px-1',
-              )}
-            >
-              <Icon size={20} className={clsx('shrink-0', active && n.primary && 'text-primary')} />
-              {!collapsed && <span className="truncate">{n.label}</span>}
-            </button>
-          )
-        })}
-      </div>
-      <button
-        onClick={onToggle}
-        className="mt-auto text-xs text-muted-foreground hover:text-foreground py-2 rounded-lg hover:bg-surface-container-low"
-      >
-        {collapsed ? '→' : '< 收起'}
-      </button>
-    </aside>
-  )
-}
-
-function DesktopLayout() {
-  const [collapsed, setCollapsed] = useState(false)
-  return (
-    <div className="min-h-screen h-screen flex flex-col bg-bg">
-      <div className="flex flex-1 min-h-0 overflow-hidden">
-        <DesktopSidebar collapsed={collapsed} onToggle={() => setCollapsed((v) => !v)} />
-        <main className="flex-1 min-w-0 h-full overflow-y-auto">
-          <div className="max-w-6xl mx-auto px-6 py-6 min-h-full">
-            <Outlet />
-          </div>
-        </main>
-      </div>
-    </div>
-  )
-}
-
-function MobileLayout() {
+function MobileLayout({ simulated = false }: { simulated?: boolean }) {
   const location = useLocation()
   const hideBar = DEPTH1_NO_BAR.has(location.pathname) || DEPTH2_NO_BAR.has(location.pathname)
 
+  const h = simulated ? '100%' : '100dvh'
+
   return (
-    <div className="relative w-full h-[100dvh] overflow-hidden bg-bg">
+    <div className="relative w-full overflow-hidden bg-bg" style={{ height: h }}>
       <main
         className="flex flex-col w-full"
         style={{
-          height: hideBar ? '100dvh' : 'calc(100dvh - 84px)',
+          height: hideBar ? h : simulated ? 'calc(100% - 84px)' : 'calc(100dvh - 84px)',
           flexShrink: 0,
+          paddingTop: 'var(--sat)',
         }}
       >
         <Outlet />
       </main>
       {!hideBar && <MobileTabBar />}
+    </div>
+  )
+}
+
+function DesktopLayout() {
+  return (
+    <div
+      className="min-h-screen h-screen flex items-center justify-center overflow-hidden"
+      style={{ background: '#f0ece6' }}
+    >
+      {/* Phone simulator frame */}
+      <div
+        style={{
+          width: 393,
+          height: 852,
+          borderRadius: 40,
+          background: '#1a1a1a',
+          padding: 12,
+          boxShadow: '0 24px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.08)',
+          position: 'relative',
+        }}
+      >
+        {/* Notch / dynamic island */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 12,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 126,
+            height: 34,
+            borderRadius: 20,
+            background: '#1a1a1a',
+            zIndex: 10,
+          }}
+        />
+        {/* Screen — transform creates a new containing block so fixed positioning is scoped */}
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: 28,
+            overflow: 'hidden',
+            position: 'relative',
+            transform: 'translateZ(0)',
+            // Override safe-area-top to simulate Dynamic Island height
+            '--sat': '54px',
+          } as React.CSSProperties}
+        >
+          <MobileLayout simulated />
+        </div>
+      </div>
     </div>
   )
 }

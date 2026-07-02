@@ -12,7 +12,7 @@ export default function AiPage() {
 
   if (chatMode) {
     return (
-      <div className="relative w-full h-full min-h-[100dvh] bg-bg">
+      <div className="relative w-full h-full bg-bg" style={{ minHeight: '100dvh' }}>
         <ChatView pendingText={pendingText} />
       </div>
     )

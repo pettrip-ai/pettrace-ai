@@ -48,10 +48,15 @@ export function sizeLimitLabel(v: string) {
 }
 
 export const OSM_TILE_CANDIDATES: { name: string; url: string; subdomains?: string[]; attribution: string }[] = [
+  // CartoDB Positron — clean, minimal, no transit icons
+  { name: 'carto-positron', url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', subdomains: ['a', 'b', 'c', 'd'], attribution: '© OpenStreetMap contributors © CARTO' },
+  // CartoDB Voyager — slightly more detail, still clean
+  { name: 'carto-voyager', url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', subdomains: ['a', 'b', 'c', 'd'], attribution: '© OpenStreetMap contributors © CARTO' },
+  // OSM standard fallback
   { name: 'osm-intl', url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', subdomains: ['a', 'b', 'c'], attribution: '© OpenStreetMap contributors' },
+  // OSM China mirror
   { name: 'osm-cn', url: 'https://tile-cn.openstreetmap.org/{z}/{x}/{y}.png', subdomains: ['a', 'b', 'c'], attribution: '© OpenStreetMap contributors' },
-  { name: 'osm-jsd', url: 'https://{s}.osm-tiles.de/{z}/{x}/{y}.png', subdomains: ['a', 'b', 'c'], attribution: '© OpenStreetMap contributors' },
-  { name: 'osm-ssh', url: 'https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', attribution: '© OpenStreetMap contributors' },
+  // Amap vector
   { name: 'amap-vec', url: 'https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', subdomains: ['1', '2', '3', '4'], attribution: '© 高德地图' },
   { name: 'amap-sat', url: 'https://webst0{s}.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}', subdomains: ['1', '2', '3', '4'], attribution: '© 高德地图' },
   { name: 'tianditu', url: 'https://t{s}.tianditu.gov.cn/vec_c/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=c&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}', subdomains: ['0', '1', '2', '3', '4', '5', '6', '7'], attribution: '© 天地图' },

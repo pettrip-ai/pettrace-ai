@@ -243,7 +243,7 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
   }, [pendingText])
 
   return (
-    <div ref={ref as any} className="flex flex-col h-full w-full" style={{ height: '100dvh' }}>
+    <div ref={ref as any} className="flex flex-col h-full w-full">
       <header
         className="shrink-0 flex items-center gap-3 px-4 py-2.5"
         style={{

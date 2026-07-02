@@ -23,48 +23,66 @@ function MainEmpty({ onSwitch }: { onSwitch: () => void }) {
 }
 
 function MapOverlayControls() {
+  const zoomIn = () => mapRef.current?.zoomIn()
+  const zoomOut = () => mapRef.current?.zoomOut()
+
   return (
-    <div className="absolute top-2 right-2 z-[700] flex flex-col gap-2 pointer-events-auto">
-      <LocationButton />
-      <FullscreenButton />
+    <div
+      className="fixed z-[850] flex items-center gap-2 pointer-events-auto"
+      style={{ top: 'calc(var(--sat) + 4px)', right: 12 }}
+    >
+      {/* Zoom buttons */}
+      <div
+        className="flex rounded-xl overflow-hidden shrink-0"
+        style={{
+          background: 'rgba(255,255,255,0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '0.5px solid rgba(255,255,255,0.6)',
+          boxShadow: '0 2px 12px rgba(84,49,31,0.1)',
+        }}
+      >
+        <button
+          onClick={zoomIn}
+          className="w-9 h-9 flex items-center justify-center text-foreground hover:bg-[rgba(0,0,0,0.04)] transition active:scale-95"
+          style={{ borderRight: '0.5px solid var(--border)' }}
+          aria-label="放大"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
+        </button>
+        <button
+          onClick={zoomOut}
+          className="w-9 h-9 flex items-center justify-center text-foreground hover:bg-[rgba(0,0,0,0.04)] transition active:scale-95"
+          aria-label="缩小"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
+        </button>
+      </div>
+      {/* Location button */}
+      <button
+        onClick={() => {
+          const city = useStore.getState().city
+          const center: [number, number] = city === 'beijing' ? [39.9042, 116.4074] : [31.2304, 121.4737]
+          const zoom = city === 'beijing' ? 12 : 13
+          mapRef.current?.setView(center, zoom, { animate: true })
+        }}
+        className="w-9 h-9 rounded-xl flex items-center justify-center text-foreground hover:bg-[rgba(0,0,0,0.04)] transition active:scale-95 shrink-0"
+        style={{
+          background: 'rgba(255,255,255,0.85)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '0.5px solid rgba(255,255,255,0.6)',
+          boxShadow: '0 2px 12px rgba(84,49,31,0.1)',
+        }}
+        title="回到当前城市中心"
+        aria-label="回到当前城市中心"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+      </button>
     </div>
-  )
-}
-
-function LocationButton() {
-  const city = useStore((s) => s.city)
-  const center: [number, number] = city === 'beijing' ? [39.9042, 116.4074] : [31.2304, 121.4737]
-  const zoom = city === 'beijing' ? 12 : 13
-  return (
-    <button
-      onClick={() => {
-        const m = mapRef.current as any
-        if (m) {
-          try { m.setView(center, zoom, { animate: true }) } catch {}
-        }
-      }}
-      className="w-10 h-10 rounded-lg bg-surface border border-rule shadow-md flex items-center justify-center text-muted hover:text-foreground hover:bg-outline-variant transition active:scale-95"
-      title="回到当前城市中心"
-      aria-label="回到当前城市中心"
-    >
-      📍
-    </button>
-  )
-}
-
-function FullscreenButton() {
-  return (
-    <button
-      onClick={() => {
-        if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {})
-        else document.exitFullscreen?.().catch(() => {})
-      }}
-      className="w-10 h-10 rounded-lg bg-surface border border-rule shadow-md flex items-center justify-center text-muted hover:text-foreground hover:bg-outline-variant transition active:scale-95"
-      title="全屏"
-      aria-label="全屏"
-    >
-      ⛶
-    </button>
   )
 }
 
@@ -78,7 +96,7 @@ function SearchChip({
   onOpenFilter: () => void
 }) {
   return (
-    <div className="fixed z-[800]" style={{ top: 52, left: 12, right: 12 }}>
+    <div className="fixed z-[800]" style={{ top: 'calc(52px + var(--sat))', left: 12, right: 12 }}>
       <div className="flex items-center gap-2 px-3 h-11 rounded-full bg-[rgba(255,255,255,0.78)] border border-[rgba(255,255,255,0.6)] shadow-2 backdrop-blur-[20px]">
         <Search size={18} className="shrink-0 text-muted" />
         <input
@@ -115,7 +133,7 @@ function CategoryChips({
   return (
     <div
       className="fixed z-[800] flex gap-2 overflow-x-auto no-scrollbar"
-      style={{ top: 104, left: 12, right: 12 }}
+      style={{ top: 'calc(104px + var(--sat))', left: 12, right: 12 }}
     >
       <CategoryPill label="全部" active={catFilter === 'all'} onClick={() => setCatFilter('all')} />
       {CAT_GROUPS.map((c) => (
@@ -378,8 +396,8 @@ export default function MapPage() {
           center={[31.23, 121.47]}
           zoom={13}
           style={{ position: 'absolute', inset: 0 }}
-          attributionControl
-          zoomControl
+          attributionControl={false}
+          zoomControl={false}
         >
           <TileLayerWithFallback />
           <CityFlyer />
@@ -388,8 +406,9 @@ export default function MapPage() {
           {displayPlaces.map((p) => (
             <PlacePopup key={p.id} place={p} highlight={p.id === highlightPlaceId} />
           ))}
-          <MapOverlayControls />
         </MapContainer>
+
+        <MapOverlayControls />
 
         {showError && (
           <div className="absolute inset-0 flex items-center justify-center z-[900] bg-surface/95">
