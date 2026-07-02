@@ -77,68 +77,66 @@ export function Sheet({
         style={{ background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}
         onClick={onClose}
       />
-      {/* Panel — always pinned to bottom */}
+      {/* Panel — flex container with explicit height constraint */}
       <div
         ref={sheetRef}
         className={clsx(
           'absolute bottom-0 left-0 right-0 w-full md:mx-auto md:max-w-[480px]',
+          'flex flex-col',
           'transition-[transform,opacity] duration-250 ease-out',
           open ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0',
+          isFullScreen
+            ? 'h-[calc(100dvh+0px)] md:h-auto rounded-t-2xl md:rounded-2xl'
+            : 'rounded-t-2xl md:rounded-2xl',
           className,
         )}
+        style={{
+          background: 'rgba(255,255,255,0.85)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: isFullScreen ? '16px 16px 0 0' : undefined,
+          // Use max-height only when NOT full-screen; flex layout respects this
+          maxHeight: isFullScreen ? undefined : '70dvh',
+          paddingBottom: 'var(--sab, 0px)',
+          // Critical: allow this flex container to shrink below content size
+          minHeight: 0,
+          overflow: 'hidden',
+        }}
       >
-        <div
-          className={clsx(
-            'w-full flex flex-col overflow-hidden',
-            isFullScreen
-              ? 'h-[calc(100dvh+0px)] md:h-auto rounded-t-2xl md:rounded-2xl'
-              : 'rounded-t-2xl md:rounded-2xl',
-          )}
-          style={{
-            background: 'rgba(255,255,255,0.85)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            borderRadius: isFullScreen ? '16px 16px 0 0' : undefined,
-            maxHeight: isFullScreen ? undefined : '70dvh',
-            minHeight: 0,
-            paddingBottom: 'var(--sab, 0px)',
-          }}
-        >
-          {/* Drag Handle */}
-          <div className="flex justify-center pt-2.5 pb-1.5 md:hidden flex-shrink-0">
-            <div style={{ width: 144, height: 4, borderRadius: 9999, background: 'rgba(0,0,0,0.12)' }} />
-          </div>
-
-          {/* Header / Title — outside scroll */}
-          {header}
-          {title && !header && (
-            <div className="flex items-center justify-between px-5 py-3 flex-shrink-0" style={{ borderBottom: '0.5px solid var(--border)' }}>
-              <span className="w-9 h-9" />
-              <p style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 600, lineHeight: '20px', color: 'var(--foreground)' }}>{title}</p>
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[rgba(0,0,0,0.04)]"
-                style={{ color: 'var(--muted)', fontSize: 20, lineHeight: 1 }}
-                aria-label="关闭"
-              >
-                ×
-              </button>
-            </div>
-          )}
-
-          {/* Scrollable Content Area */}
-          <div className={clsx('flex-1 overflow-auto min-h-0', contentClassName)}>
-            {children}
-          </div>
-
-          {/* Footer — outside scroll, always visible */}
-          {footer && (
-            <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: '0.5px solid var(--border)' }}>
-              {footer}
-            </div>
-          )}
+        {/* Drag Handle */}
+        <div className="flex justify-center pt-2.5 pb-1.5 md:hidden flex-shrink-0">
+          <div style={{ width: 144, height: 4, borderRadius: 9999, background: 'rgba(0,0,0,0.12)' }} />
         </div>
+
+        {/* Header / Title — outside scroll */}
+        {header}
+        {title && !header && (
+          <div className="flex items-center justify-between px-5 py-3 flex-shrink-0" style={{ borderBottom: '0.5px solid var(--border)' }}>
+            <span className="w-9 h-9" />
+            <p style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 600, lineHeight: '20px', color: 'var(--foreground)' }}>{title}</p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[rgba(0,0,0,0.04)]"
+              style={{ color: 'var(--muted)', fontSize: 20, lineHeight: 1 }}
+              aria-label="关闭"
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        {/* Scrollable Content Area */}
+        <div className={clsx('flex-1 overflow-y-auto min-h-0', contentClassName)}>
+          {children}
+        </div>
+
+        {/* Footer — outside scroll, always visible */}
+        {footer && (
+          <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: '0.5px solid var(--border)' }}>
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   )
