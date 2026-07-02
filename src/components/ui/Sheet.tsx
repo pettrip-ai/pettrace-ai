@@ -89,7 +89,7 @@ export function Sheet({
       >
         <div
           className={clsx(
-            'w-full flex flex-col',
+            'w-full flex flex-col overflow-hidden',
             isFullScreen
               ? 'h-[calc(100dvh+0px)] md:h-auto rounded-t-2xl md:rounded-2xl'
               : 'rounded-t-2xl md:rounded-2xl',
@@ -100,6 +100,7 @@ export function Sheet({
             WebkitBackdropFilter: 'blur(20px)',
             borderRadius: isFullScreen ? '16px 16px 0 0' : undefined,
             maxHeight: isFullScreen ? undefined : '70dvh',
+            minHeight: 0,
             paddingBottom: 'var(--sab, 0px)',
           }}
         >

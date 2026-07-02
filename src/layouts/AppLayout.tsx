@@ -140,7 +140,6 @@ function MobileLayout({ simulated = false }: { simulated?: boolean }) {
         style={{
           height: hideBar ? h : simulated ? 'calc(100% - 84px)' : 'calc(100dvh - 84px)',
           flexShrink: 0,
-          paddingTop: 'var(--sat)',
         }}
       >
         <Outlet />

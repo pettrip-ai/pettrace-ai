@@ -323,7 +323,7 @@ function NearbyBottomSheet({
 }: { places: Place[]; onPick: (id: string) => void }) {
   const highlightId = useStore((s) => s.highlightPlaceId)
   return (
-    <div className="fixed bottom-[84px] left-0 right-0 z-[800]">
+    <div className="fixed left-0 right-0 z-[800]" style={{ bottom: 'calc(84px + var(--sab, 0px))' }}>
       <div className="flex justify-center pt-2 pb-1 bg-[rgba(255,255,255,0.72)] backdrop-blur-[20px] rounded-t-xl">
         <div className="w-9 h-1 bg-rule rounded-full" />
       </div>
@@ -342,7 +342,7 @@ function NearbyBottomSheet({
 
 function MapListFloat({ count, setListOpen }: { count: number; setListOpen: (v: boolean) => void }) {
   return (
-    <div className="fixed bottom-[84px] left-0 right-0 z-[800] flex justify-center pointer-events-none">
+    <div className="fixed left-0 right-0 z-[800] flex justify-center pointer-events-none" style={{ bottom: 'calc(84px + var(--sab, 0px))' }}>
       <button
         onClick={() => setListOpen(true)}
         className="pointer-events-auto h-10 px-4 rounded-full bg-[rgba(255,255,255,0.78)] border border-[rgba(255,255,255,0.6)] shadow-2 flex items-center gap-2 text-[13px] font-medium text-foreground active:scale-[0.97] transition"
