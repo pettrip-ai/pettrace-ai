@@ -89,7 +89,7 @@ export function Sheet({
           background: 'rgba(255,255,255,0.85)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          maxHeight: isFullScreen ? 'calc(100dvh - env(safe-area-inset-bottom))' : '70dvh',
+          height: isFullScreen ? 'calc(100dvh - env(safe-area-inset-bottom))' : '70dvh',
           paddingBottom: 'var(--sab, 0px)',
           overflow: 'hidden',
         }}
