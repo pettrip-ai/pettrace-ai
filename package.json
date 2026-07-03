@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build && node scripts/copy404.js",
     "lint": "oxlint",
+    "test:commit-msg": "node scripts/validate-commit-msg.test.mjs",
+    "hooks:install": "git config core.hooksPath .githooks",
     "test": "node scripts/loop1-regression.mjs",
     "preview": "vite preview"
   },

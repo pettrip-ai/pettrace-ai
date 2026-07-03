@@ -32,6 +32,22 @@ npm run dev     # 本地开发，默认 Mock AI
 npm run build   # 生产构建（输出 dist/）
 ```
 
+## ✅ Git Hooks
+
+```bash
+npm run hooks:install
+```
+
+提交信息格式统一为：
+
+```text
+type(module): 中文描述
+```
+
+示例：`docs(plan): 中文化规划文档`、`fix(map-page): 修复地点筛选`。
+
+允许的 `type`：`feat`、`fix`、`docs`、`style`、`refactor`、`test`、`chore`、`ci`、`build`、`perf`、`revert`。
+
 ## 🔑 切换到真实 AI
 
 打开"设置" → 选择 Provider（OpenAI / DeepSeek / Moonshot / DashScope / 自定义）→ 填 API Key → 关闭"Mock AI"开关。未配置时自动走 Mock 规则引擎。
