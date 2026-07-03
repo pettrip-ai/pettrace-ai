@@ -5,9 +5,11 @@ import { Search, SlidersHorizontal, X, MapPin, Star, Coffee, TreePine, ShoppingB
 import clsx from 'clsx'
 import { useStore } from '../../store/useStore'
 import { EmptyState, Button } from '../../components/ui'
+import type { CityId } from '../../data/types'
 import { TileLayerWithFallback } from './tiles'
 import { CityFlyer, HighlightFocuser, mapRef } from './hooks'
-import { useMapPlaces, ListContent, type CategoryFilter, type SizeFilter, type Place } from './components'
+import { ListContent, type CategoryFilter, type SizeFilter, type Place } from './components'
+import { useMapPlaces } from './useMapPlaces'
 import { filterPlaces } from './filter'
 import { getMarkerIcon, getUserLocationMarkerIcon } from './marker'
 import { CAT_GROUPS, CATEGORY_META } from './constants'
@@ -223,8 +225,8 @@ function FilterBottomSheet({
 }
 
 function PlaceCardBottom({
-  p, onPick, highlightId,
-}: { p: Place; onPick: (id: string) => void; highlightId?: string | null }) {
+  p, onPick, highlightId, city,
+}: { p: Place; onPick: (id: string) => void; highlightId?: string | null; city: CityId }) {
   const accentFor = (() => {
     switch (p.category) {
       case 'cafe':
@@ -291,7 +293,6 @@ function PlaceCardBottom({
           <div className="flex flex-col items-end shrink-0 gap-1">
             <span className="text-[11px] font-semibold" style={{ color: 'var(--accent)' }}>
               {useMemo(() => {
-                const city = useStore.getState().city
                 const center = city === 'beijing' ? [39.9042, 116.4074] : [31.2304, 121.4737]
                 const R = 6371000
                 const toRad = (v: number) => v * Math.PI / 180
@@ -300,7 +301,7 @@ function PlaceCardBottom({
                 const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(p.lat)) * Math.cos(toRad(center[0])) * Math.sin(dLng / 2) ** 2
                 const meters = Math.round(2 * R * Math.asin(Math.sqrt(a)))
                 return meters < 1000 ? `${meters}m` : `${(meters / 1000).toFixed(1)}km`
-              }, [p])}
+              }, [p, city])}
             </span>
             <div className="flex items-center gap-0.5">
               <Star size={10} className="text-warning fill-warning" />
@@ -314,9 +315,8 @@ function PlaceCardBottom({
 }
 
 function NearbyBottomSheet({
-  places, onPick, onOpenList,
-}: { places: Place[]; onPick: (id: string) => void; onOpenList: () => void }) {
-  const highlightId = useStore((s) => s.highlightPlaceId)
+  places, onPick, onOpenList, city, highlightId,
+}: { places: Place[]; onPick: (id: string) => void; onOpenList: () => void; city: CityId; highlightId?: string | null }) {
   return (
     <div
       data-map-nearby
@@ -341,7 +341,7 @@ function NearbyBottomSheet({
       </div>
       <ul className="px-4 pb-3 bg-[rgba(255,255,255,0.72)] backdrop-blur-[20px] flex gap-3 overflow-x-auto no-scrollbar overscroll-x-contain">
         {places.map((p) => (
-          <PlaceCardBottom key={p.id} p={p} onPick={onPick} highlightId={highlightId} />
+          <PlaceCardBottom key={p.id} p={p} onPick={onPick} highlightId={highlightId} city={city} />
         ))}
       </ul>
     </div>
@@ -349,7 +349,7 @@ function NearbyBottomSheet({
 }
 
 export default function MapPage() {
-  const { setHighlightPlaceId, highlightPlaceId } = useStore()
+  const { city, setHighlightPlaceId, highlightPlaceId } = useStore()
   const [searchParams] = useSearchParams()
 
   const merged = useMapPlaces()
@@ -435,7 +435,7 @@ export default function MapPage() {
         setSearch={setSearch}
       />
 
-      <NearbyBottomSheet places={displayPlaces} onPick={pickPlace} onOpenList={() => setListOpen(true)} />
+      <NearbyBottomSheet places={displayPlaces} onPick={pickPlace} onOpenList={() => setListOpen(true)} city={city} highlightId={highlightPlaceId} />
 
       {listOpen && (
         <div className="fixed inset-0 z-[1100] flex flex-col justify-end" onClick={() => setListOpen(false)}>
@@ -458,7 +458,7 @@ export default function MapPage() {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto">
-              <ListContent places={displayPlaces} onPick={(id) => { pickPlace(id); setListOpen(false) }} highlightId={highlightPlaceId} />
+              <ListContent places={displayPlaces} onPick={(id) => { pickPlace(id); setListOpen(false) }} city={city} highlightId={highlightPlaceId} />
             </div>
           </div>
         </div>

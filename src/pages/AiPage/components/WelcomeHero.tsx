@@ -1,13 +1,13 @@
 import { Dog, Calendar, Hotel, Compass, PawPrint } from 'lucide-react'
 
-export interface Suggestion {
+interface Suggestion {
   icon: 'calendar' | 'hotel' | 'compass' | 'paw'
   title: string
   subtitle: string
   prompt: string
 }
 
-export const QUICK_SUGGESTIONS: Suggestion[] = [
+const QUICK_SUGGESTIONS: Suggestion[] = [
   {
     icon: 'calendar',
     title: '周末一日游',

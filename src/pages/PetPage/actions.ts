@@ -1,5 +1,5 @@
 import type { CareTask } from '../../data/types'
-import type { ToastKind } from '../../components/ui/Toast'
+import type { ToastKind } from '../../components/ui/toast-context'
 
 type CareTaskInput = Omit<CareTask, 'id'>
 type ShowToast = (message: string, opts?: { kind?: ToastKind; title?: string; duration?: number }) => void

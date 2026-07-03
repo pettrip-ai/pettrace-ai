@@ -4,12 +4,10 @@ import {
   X, ChevronRight, ChevronLeft, Search, MapPin, SlidersHorizontal,
   Coffee, TreePine, Stethoscope, ShoppingBag, Star, Navigation,
 } from 'lucide-react'
-import { useStore } from '../../store/useStore'
 import { CAT_GROUPS } from './constants'
 import { useMap } from 'react-leaflet'
-import { PLACES } from '../../data/mock'
-import { enrichPlace, type CategoryFilter, type SizeFilter, type PlaceRich } from './filter'
-import type { PlaceCategory } from '../../data/types'
+import { type CategoryFilter, type SizeFilter, type PlaceRich } from './filter'
+import type { CityId, PlaceCategory } from '../../data/types'
 
 export type { CategoryFilter, SizeFilter }
 
@@ -95,13 +93,6 @@ function KindTone({ kind }: { kind: CategoryKind }): {
         pillInactive: 'bg-surface/70 text-muted border-rule',
       }
   }
-}
-
-export function useMapPlaces(): Place[] {
-  const city = useStore((s) => s.city)
-  const storePlaces = useStore((s) => s.places)
-  const raw = PLACES[city]
-  return raw.map((p) => enrichPlace(storePlaces[p.id] ?? p, p.city))
 }
 
 export function MapLoading() {
@@ -309,15 +300,14 @@ function CategoryPill({
 }
 
 function PlaceCard({
-  p, onPick, highlightId,
-}: { p: Place; onPick: (id: string) => void; highlightId?: string | null }) {
+  p, onPick, highlightId, city,
+}: { p: Place; onPick: (id: string) => void; highlightId?: string | null; city: CityId }) {
   const kind = classifyKind(p.category)
   const tone = KindTone({ kind })
   const meta = CATEGORY_META_MAP[p.category] ?? { title: p.category, kind }
 
   const meters = useMemo(() => {
     if ((p as any).distance != null) return Math.round((p as any).distance)
-    const city = useStore.getState().city
     const center = city === 'beijing' ? [39.9042, 116.4074] : [31.2304, 121.4737]
     const R = 6371000
     const toRad = (v: number) => v * Math.PI / 180
@@ -325,7 +315,7 @@ function PlaceCard({
     const dLng = toRad(p.lng - center[1])
     const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(p.lat)) * Math.cos(toRad(center[0])) * Math.sin(dLng / 2) ** 2
     return Math.round(2 * R * Math.asin(Math.sqrt(a)))
-  }, [p])
+  }, [p, city])
 
   const distLabel = meters < 1000 ? `${meters}m` : `${(meters / 1000).toFixed(1)}km`
 
@@ -363,12 +353,12 @@ function PlaceCard({
 }
 
 export function ListContent({
-  places, onPick, highlightId,
-}: { places: Place[]; onPick: (id: string) => void; highlightId?: string | null }) {
+  places, onPick, highlightId, city,
+}: { places: Place[]; onPick: (id: string) => void; highlightId?: string | null; city: CityId }) {
   return (
     <ul className="px-3 py-3">
       {places.map((p) => (
-        <PlaceCard key={p.id} p={p} onPick={onPick} highlightId={highlightId} />
+        <PlaceCard key={p.id} p={p} onPick={onPick} highlightId={highlightId} city={city} />
       ))}
     </ul>
   )
@@ -376,8 +366,8 @@ export function ListContent({
 
 export function SidebarDrawer({
   catFilter, setCatFilter, sizeFilter, setSizeFilter, search, setSearch,
-  places, onPick,
-}: FilterProps & { places: Place[]; onPick: (id: string) => void }) {
+  places, onPick, city, highlightId,
+}: FilterProps & { places: Place[]; onPick: (id: string) => void; city: CityId; highlightId?: string | null }) {
   const [open, setOpen] = useState(true)
 
   return (
@@ -474,7 +464,7 @@ export function SidebarDrawer({
             <span className="text-xs text-muted font-normal">{places.length} 个</span>
           </div>
           <div className="overflow-y-auto flex-1">
-            <ListContent places={places} onPick={onPick} />
+            <ListContent places={places} onPick={onPick} city={city} highlightId={highlightId} />
           </div>
         </div>
       )}
@@ -483,10 +473,9 @@ export function SidebarDrawer({
 }
 
 export function PlaceListMobileSheet({
-  open, onClose, places, onPick,
-}: { open: boolean; onClose: () => void; places: Place[]; onPick: (id: string) => void }) {
+  open, onClose, places, onPick, city, highlightId,
+}: { open: boolean; onClose: () => void; places: Place[]; onPick: (id: string) => void; city: CityId; highlightId?: string | null }) {
   const nodeRef = useRef<HTMLDivElement>(null)
-  const highlightId = useStore((s) => s.highlightPlaceId)
 
   useEffect(() => {
     if (open) {
@@ -537,7 +526,7 @@ export function PlaceListMobileSheet({
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          <ListContent places={places} onPick={(id) => { onPick(id); onClose() }} highlightId={highlightId} />
+          <ListContent places={places} onPick={(id) => { onPick(id); onClose() }} city={city} highlightId={highlightId} />
         </div>
       </div>
     </div>

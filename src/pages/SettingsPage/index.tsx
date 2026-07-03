@@ -5,7 +5,8 @@ import {
   Trash2, RefreshCw, PawPrint,
 } from 'lucide-react'
 import { AI_PROVIDER_DEFAULTS, useStore, type AiProvider } from '../../store/useStore'
-import { ToastProvider, useToast } from '../../components/ui/Toast'
+import { ToastProvider } from '../../components/ui/Toast'
+import { useToast } from '../../components/ui/toast-context'
 import { ActionSheet } from '../../components/ui/ActionSheet'
 import { Avatar } from '../../components/ui/Avatar'
 import type { CityId } from '../../data/types'

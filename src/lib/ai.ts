@@ -104,7 +104,7 @@ function normalizeReplyJson(raw: unknown): AiReply {
       const match = raw.match(/\{[\s\S]*\}/)
       if (!match) throw new AiFetchError('AI 返回非 JSON 文本')
       return normalizeReplyJson(JSON.parse(match[0]))
-    } catch (e) {
+    } catch {
       throw new AiFetchError('AI 返回无法解析为 JSON')
     }
   }

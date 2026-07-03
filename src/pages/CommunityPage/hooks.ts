@@ -1,1 +1,1 @@
-export { useToast } from '../../components/ui/Toast'
+export { useToast } from '../../components/ui/toast-context'

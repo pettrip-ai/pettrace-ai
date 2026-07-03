@@ -6,7 +6,7 @@ import { mockAiEngine, detectCity } from '../../lib/mockAiEngine'
 import { sendAiTurn, AiFetchError, type AiReply } from '../../lib/ai'
 import { CITIES, PLACES } from '../../data/mock'
 import type { CityId } from '../../data/types'
-import { useToast } from '../../components/ui/Toast'
+import { useToast } from '../../components/ui/toast-context'
 import {
   petToContext,
   chatToHistory,

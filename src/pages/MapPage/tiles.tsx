@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { TileLayer } from 'react-leaflet'
-import { useToast } from '../../components/ui/Toast'
+import { useToast } from '../../components/ui/toast-context'
 import { OSM_TILE_CANDIDATES } from './constants'
 
 export function TileLayerWithFallback() {

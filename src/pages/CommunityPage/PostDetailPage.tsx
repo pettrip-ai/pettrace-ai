@@ -4,7 +4,7 @@ import { ArrowLeft, Share2, Heart, MessageCircle, Bookmark, MapPin, Star } from 
 import { clsx } from 'clsx'
 import { useStore } from '../../store/useStore'
 import { Button, Avatar, Badge } from '../../components/ui'
-import { useToast } from '../../components/ui/Toast'
+import { useToast } from '../../components/ui/toast-context'
 import type { FeedItem } from '../../data/types'
 
 export default function PostDetailPage() {

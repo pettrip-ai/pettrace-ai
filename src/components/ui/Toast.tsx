@@ -1,6 +1,5 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react'
-
-export type ToastKind = 'info' | 'success' | 'error' | 'warning' | 'ok' | 'warn'
+import { useCallback, useMemo, useRef, useState } from 'react'
+import { ToastContext, type ToastCtx, type ToastKind } from './toast-context'
 
 interface ToastItem {
   id: number
@@ -9,13 +8,6 @@ interface ToastItem {
   title?: string
   duration?: number
 }
-
-interface ToastCtx {
-  show: (message: string, opts?: { kind?: ToastKind; title?: string; duration?: number }) => void
-  dismiss: (id: number) => void
-}
-
-const Ctx = createContext<ToastCtx | null>(null)
 
 const kindStyles: Record<ToastKind, { bg: string; fg: string; ring: string; icon: string }> = {
   info: {
@@ -80,7 +72,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const ctx = useMemo<ToastCtx>(() => ({ show, dismiss }), [show, dismiss])
 
   return (
-    <Ctx.Provider value={ctx}>
+    <ToastContext.Provider value={ctx}>
       {children}
       <div className="fixed top-[88px] left-0 right-0 z-[1400] pointer-events-none flex flex-col items-center gap-2 px-4">
         {items.map((it) => {
@@ -121,26 +113,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           )
         })}
       </div>
-    </Ctx.Provider>
+    </ToastContext.Provider>
   )
-}
-
-export function useToast() {
-  const v = useContext(Ctx)
-  if (!v) throw new Error('useToast must be used inside ToastProvider')
-  return v
-}
-
-export function useSafeToast(): ToastCtx {
-  const v = useContext(Ctx)
-  const show = useCallback(
-    (message: string, opts?: { kind?: ToastKind; title?: string; duration?: number }) => {
-      if (v) v.show(message, opts)
-    },
-    [v],
-  )
-  return {
-    show,
-    dismiss: v?.dismiss ?? (() => {}),
-  }
 }
