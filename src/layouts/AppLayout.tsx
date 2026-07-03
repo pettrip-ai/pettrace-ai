@@ -68,6 +68,7 @@ function MobileTabBar() {
             key={n.key}
             role="tab"
             aria-selected={active}
+            className="mobile-tab-link"
             href={`#${n.path}`}
             onClick={(e) => { e.preventDefault(); navigate(n.path) }}
             style={{
@@ -85,8 +86,10 @@ function MobileTabBar() {
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, flex: 1, paddingBottom: 4 }}>
         <button
+          type="button"
           onClick={() => navigate(AI.path)}
           aria-label={AI.label}
+          className="mobile-ai-tab-button"
           style={{
             width: 46, height: 46, minWidth: 46, borderRadius: 'var(--radius-full)',
             background: 'var(--primary)', color: 'var(--primary-foreground)',
@@ -109,6 +112,7 @@ function MobileTabBar() {
             key={n.key}
             role="tab"
             aria-selected={active}
+            className="mobile-tab-link"
             href={`#${n.path}`}
             onClick={(e) => { e.preventDefault(); navigate(n.path) }}
             style={{
@@ -130,15 +134,20 @@ function MobileTabBar() {
 function MobileLayout({ simulated = false }: { simulated?: boolean }) {
   const location = useLocation()
   const hideBar = DEPTH1_NO_BAR.has(location.pathname) || DEPTH2_NO_BAR.has(location.pathname)
+  const isMapRoute = location.pathname === '/map'
+  const isChatRoute = location.pathname === '/ai/chat'
+  const needsTopInset = !isMapRoute && !isChatRoute
 
   const h = simulated ? '100%' : '100dvh'
 
   return (
     <div className="relative w-full overflow-hidden bg-bg" style={{ height: h }}>
       <main
-        className="flex flex-col w-full"
+        className="flex flex-col w-full min-h-0"
         style={{
           height: hideBar ? h : simulated ? 'calc(100% - 84px)' : 'calc(100dvh - 84px)',
+          paddingTop: needsTopInset ? 'var(--sat, 0px)' : 0,
+          boxSizing: 'border-box',
           flexShrink: 0,
         }}
       >

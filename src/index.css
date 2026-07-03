@@ -1,5 +1,4 @@
 @import './tokens.css';
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -114,6 +113,22 @@
   .btn-danger:hover { filter: brightness(1.08); }
   .btn:disabled { opacity: .5; cursor: not-allowed; pointer-events: none; }
 
+  .mobile-tab-link,
+  .mobile-ai-tab-button {
+    outline: none;
+    border-radius: var(--radius-md);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-tab-link:focus,
+  .mobile-ai-tab-button:focus {
+    outline: none;
+  }
+  .mobile-tab-link:focus-visible,
+  .mobile-ai-tab-button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
+  }
+
   .avatar {
     display: inline-flex;
     align-items: center;
@@ -169,9 +184,9 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
     border: none;
     border-radius: var(--radius-sm);
     background: var(--primary);
@@ -233,22 +248,7 @@
   .pet-bg {
     position: relative;
     isolation: isolate;
-    background: linear-gradient(135deg, var(--background) 0%, var(--pettrace-neutral-100) 40%, var(--pettrace-coral-100) 100%);
-    background-attachment: fixed;
-  }
-  .pet-bg::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
-    background-image:
-      repeating-linear-gradient(0deg, rgba(84, 49, 31, 0.08) 0px, transparent 1px, transparent 48px),
-      repeating-linear-gradient(90deg, rgba(84, 49, 31, 0.08) 0px, transparent 1px, transparent 48px);
-    background-size: 48px 48px;
-    opacity: 0.15;
-    mask-image: radial-gradient(ellipse at 50% 30%, rgba(0,0,0,0.65), rgba(0,0,0,0) 70%);
-    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, rgba(0,0,0,0.65), rgba(0,0,0,0) 70%);
+    background: var(--background);
   }
 }
 

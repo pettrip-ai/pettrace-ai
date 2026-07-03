@@ -152,11 +152,14 @@ interface StoreState {
     byUser?: string
     likes?: number
     likedByMe?: boolean
+    bookmarkedByMe?: boolean
     placeName?: string
     id?: string
   }) => void
   likeFeed: (id: string) => void
   unlikeFeed: (id: string) => void
+  bookmarkFeed: (id: string) => void
+  unbookmarkFeed: (id: string) => void
   verifyPlace: (placeId: string, verdict: 'good' | 'bad' | 'expired', byUser?: string) => void
 
   careTasks: CareTask[]
@@ -286,6 +289,7 @@ export const useStore = create<StoreState>((set, get) => ({
       byUser: f.byUser || '我',
       likes: f.likes ?? 0,
       likedByMe: f.likedByMe ?? false,
+      bookmarkedByMe: f.bookmarkedByMe ?? false,
       placeName: f.placeName || place?.name,
     }
     set({ feeds: [feed, ...get().feeds].slice(0, 100) })
@@ -307,6 +311,22 @@ export const useStore = create<StoreState>((set, get) => ({
         x.id === id && x.likedByMe
           ? { ...x, likes: Math.max(0, x.likes - 1), likedByMe: false }
           : x,
+      ),
+    })
+    debouncedPersist(() => get().persistNow())
+  },
+  bookmarkFeed: (id) => {
+    set({
+      feeds: get().feeds.map((x) =>
+        x.id === id ? { ...x, bookmarkedByMe: true } : x,
+      ),
+    })
+    debouncedPersist(() => get().persistNow())
+  },
+  unbookmarkFeed: (id) => {
+    set({
+      feeds: get().feeds.map((x) =>
+        x.id === id ? { ...x, bookmarkedByMe: false } : x,
       ),
     })
     debouncedPersist(() => get().persistNow())
@@ -387,9 +407,6 @@ export const useStore = create<StoreState>((set, get) => ({
     const existingPetIds = new Set((pets || []).map((p) => p.id))
     const missingPets = DEFAULT_PETS.filter((p) => !existingPetIds.has(p.id))
     const allPets = [...(pets || []), ...missingPets]
-    if (!existingPetIds.has('pet-default')) {
-      allPets.push(...DEFAULT_PETS)
-    }
 
     set({
       city: meta?.city || 'shanghai',

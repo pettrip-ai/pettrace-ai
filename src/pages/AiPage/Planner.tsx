@@ -66,9 +66,9 @@ export default function PlannerPage() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-bg" style={{ paddingBottom: 170 }}>
-      <div className="flex flex-col px-4 pt-6">
-        <header className="flex items-center justify-between py-3">
+    <div className="h-full min-h-0 overflow-y-auto bg-bg" style={{ paddingBottom: 'calc(150px + var(--sab, 0px))' }}>
+      <div className="flex flex-col px-4 pt-3">
+        <header className="flex items-center justify-between pb-3">
           <div>
             <h1 className="pettrace-h3 truncate" style={{ margin: 0, fontSize: 24, color: 'var(--color-on-surface)' }}>
               {hourGreeting}，铲屎官

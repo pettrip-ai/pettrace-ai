@@ -14,14 +14,14 @@ export const CITY_TABS: { key: CityId | 'all'; label: string }[] = [
   { key: 'shanghai', label: '上海' },
   { key: 'beijing', label: '北京' },
   { key: 'guangzhou', label: '广州' },
-  { key: 'chengdu', label: '深圳' },
+  { key: 'chengdu', label: '成都' },
 ]
 
 export const CITY_NAMES: Record<CityId, string> = {
   shanghai: '上海',
   beijing: '北京',
   guangzhou: '广州',
-  chengdu: '深圳',
+  chengdu: '成都',
 }
 
 export function feedCityOf(

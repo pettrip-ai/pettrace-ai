@@ -77,6 +77,7 @@ export interface FeedItem {
   byUser: string
   likes: number
   likedByMe?: boolean
+  bookmarkedByMe?: boolean
   placeName?: string
   image?: string
 }

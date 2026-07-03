@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { MapContainer, Marker } from 'react-leaflet'
-import { Search, SlidersHorizontal, X, MapPin, Navigation, Star, Coffee, TreePine, ShoppingBag, Stethoscope } from 'lucide-react'
+import { Search, SlidersHorizontal, X, MapPin, Star, Coffee, TreePine, ShoppingBag, Stethoscope, Plus, Minus } from 'lucide-react'
 import clsx from 'clsx'
 import { useStore } from '../../store/useStore'
 import { EmptyState, Button } from '../../components/ui'
@@ -25,40 +25,35 @@ function MainEmpty({ onSwitch }: { onSwitch: () => void }) {
 function MapOverlayControls() {
   const zoomIn = () => mapRef.current?.zoomIn()
   const zoomOut = () => mapRef.current?.zoomOut()
+  const mapToolHitClass = 'w-11 h-11 p-1 flex items-center justify-center text-foreground transition active:scale-95'
+  const mapToolFaceClass = 'w-9 h-9 rounded-lg flex items-center justify-center bg-[rgba(255,255,255,0.84)] border border-[rgba(255,255,255,0.72)] shadow-[0_1px_6px_rgba(84,49,31,0.10)] backdrop-blur-[12px]'
 
   return (
     <div
-      className="fixed z-[850] flex items-center gap-2 pointer-events-auto"
-      style={{ top: 'calc(var(--sat) + 4px)', right: 12 }}
+      data-map-controls
+      className="fixed z-[820] flex flex-col items-end gap-1.5 pointer-events-auto"
+      style={{ top: 'calc(var(--sat, 0px) + 140px)', right: 'max(16px, var(--sar, 0px))' }}
     >
-      {/* Zoom buttons */}
-      <div
-        className="flex rounded-xl overflow-hidden shrink-0"
-        style={{
-          background: 'rgba(255,255,255,0.85)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '0.5px solid rgba(255,255,255,0.6)',
-          boxShadow: '0 2px 12px rgba(84,49,31,0.1)',
-        }}
-      >
+      <div className="flex flex-col gap-1 shrink-0">
         <button
           onClick={zoomIn}
-          className="w-9 h-9 flex items-center justify-center text-foreground hover:bg-[rgba(0,0,0,0.04)] transition active:scale-95"
-          style={{ borderRight: '0.5px solid var(--border)' }}
+          className={mapToolHitClass}
           aria-label="放大"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
+          <span className={mapToolFaceClass}>
+            <Plus size={15} strokeWidth={2} />
+          </span>
         </button>
         <button
           onClick={zoomOut}
-          className="w-9 h-9 flex items-center justify-center text-foreground hover:bg-[rgba(0,0,0,0.04)] transition active:scale-95"
+          className={mapToolHitClass}
           aria-label="缩小"
         >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
+          <span className={mapToolFaceClass}>
+            <Minus size={15} strokeWidth={2} />
+          </span>
         </button>
       </div>
-      {/* Location button */}
       <button
         onClick={() => {
           const city = useStore.getState().city
@@ -66,21 +61,13 @@ function MapOverlayControls() {
           const zoom = city === 'beijing' ? 12 : 13
           mapRef.current?.setView(center, zoom, { animate: true })
         }}
-        className="w-9 h-9 rounded-xl flex items-center justify-center text-foreground hover:bg-[rgba(0,0,0,0.04)] transition active:scale-95 shrink-0"
-        style={{
-          background: 'rgba(255,255,255,0.85)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          border: '0.5px solid rgba(255,255,255,0.6)',
-          boxShadow: '0 2px 12px rgba(84,49,31,0.1)',
-        }}
+        className={mapToolHitClass}
         title="回到当前城市中心"
         aria-label="回到当前城市中心"
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </svg>
+        <span className={mapToolFaceClass}>
+          <MapPin size={15} strokeWidth={2} />
+        </span>
       </button>
     </div>
   )
@@ -96,9 +83,9 @@ function SearchChip({
   onOpenFilter: () => void
 }) {
   return (
-    <div className="fixed z-[800]" style={{ top: 'calc(52px + var(--sat))', left: 12, right: 12 }}>
-      <div className="flex items-center gap-2 px-3 h-11 rounded-full bg-[rgba(255,255,255,0.78)] border border-[rgba(255,255,255,0.6)] shadow-2 backdrop-blur-[20px]">
-        <Search size={18} className="shrink-0 text-muted" />
+    <div data-map-search className="fixed z-[800]" style={{ top: 'calc(var(--sat, 0px) + 12px)', left: 'max(16px, var(--sal, 0px))', right: 'max(16px, var(--sar, 0px))' }}>
+      <div className="flex items-center gap-1.5 pl-3 pr-1 h-11 rounded-full bg-[rgba(255,255,255,0.78)] border border-[rgba(255,255,255,0.6)] shadow-2 backdrop-blur-[20px]">
+        <Search size={17} className="shrink-0 text-muted" />
         <input
           type="text"
           placeholder="搜索宠物友好地点..."
@@ -109,7 +96,7 @@ function SearchChip({
         {search && (
           <button
             onClick={() => onSearchChange('')}
-            className="shrink-0 w-6 h-6 rounded-full bg-outline hover:bg-rule text-muted hover:text-foreground flex items-center justify-center"
+            className="shrink-0 w-11 h-11 p-2 rounded-full text-muted hover:text-foreground flex items-center justify-center"
             aria-label="清除搜索"
           >
             <X size={12} />
@@ -117,10 +104,12 @@ function SearchChip({
         )}
         <button
           onClick={onOpenFilter}
-          className="w-9 h-9 rounded-full bg-primary text-primary-fg flex items-center justify-center shadow-primary-btn active:scale-95 transition shrink-0"
+          className="w-11 h-11 p-1 rounded-full text-primary-fg flex items-center justify-center active:scale-95 transition shrink-0"
           aria-label="筛选"
         >
-          <SlidersHorizontal size={16} />
+          <span className="w-9 h-9 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_8px_rgba(247,107,122,0.24)]">
+            <SlidersHorizontal size={15} />
+          </span>
         </button>
       </div>
     </div>
@@ -132,8 +121,9 @@ function CategoryChips({
 }: { catFilter: CategoryFilter; setCatFilter: (v: CategoryFilter) => void }) {
   return (
     <div
+      data-map-categories
       className="fixed z-[800] flex gap-2 overflow-x-auto no-scrollbar"
-      style={{ top: 'calc(104px + var(--sat))', left: 12, right: 12 }}
+      style={{ top: 'calc(var(--sat, 0px) + 70px)', left: 'max(16px, var(--sal, 0px))', right: 'max(16px, var(--sar, 0px))' }}
     >
       <CategoryPill label="全部" active={catFilter === 'all'} onClick={() => setCatFilter('all')} />
       {CAT_GROUPS.map((c) => (
@@ -151,11 +141,13 @@ function CategoryChips({
 function CategoryPill({
   label, active, onClick,
 }: { label: string; active: boolean; onClick: () => void }) {
+  const mapCategoryChipClass = 'shrink-0 h-9 px-4 rounded-full text-[13px] leading-none transition active:scale-95'
+
   return (
     <button
       onClick={onClick}
       className={clsx(
-        'shrink-0 h-8 px-4 rounded-full text-[13px] transition active:scale-95',
+        mapCategoryChipClass,
         active
           ? 'bg-primary text-primary-fg font-semibold shadow-primary-btn border border-primary'
           : 'bg-[rgba(255,255,255,0.7)] text-muted font-medium border-[0.5px] border-rule',
@@ -187,7 +179,7 @@ function FilterBottomSheet({
       >
         <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-rule shrink-0">
           <span className="text-[15px] font-semibold text-ink">筛选地点</span>
-          <button onClick={onClose} className="p-1.5 rounded-md text-muted hover:text-foreground hover:bg-outline-variant">
+          <button onClick={onClose} className="w-11 h-11 rounded-md text-muted hover:text-foreground hover:bg-outline-variant flex items-center justify-center" aria-label="关闭">
             <X size={18} />
           </button>
         </div>
@@ -218,11 +210,11 @@ function FilterBottomSheet({
               setSizeFilter('all')
               setSearch('')
             }}
-            className="flex-1 h-10 rounded-xl border border-rule text-foreground text-sm active:scale-[0.97] transition bg-surface/70 hover:bg-surface"
+            className="flex-1 h-11 rounded-xl border border-rule text-foreground text-sm active:scale-[0.97] transition bg-surface/70 hover:bg-surface"
           >重置</button>
           <button
             onClick={onClose}
-            className="flex-[2] h-10 rounded-xl bg-primary text-primary-fg text-sm font-medium active:scale-[0.97] transition"
+            className="flex-[2] h-11 rounded-xl bg-primary text-primary-fg text-sm font-medium active:scale-[0.97] transition"
           >完成</button>
         </div>
       </div>
@@ -277,9 +269,12 @@ function PlaceCardBottom({
     <li className="shrink-0 w-[260px]">
       <button
         onClick={() => onPick(p.id)}
+        data-place-card-active={highlightId === p.id ? 'true' : 'false'}
         className={clsx(
-          'w-full text-left rounded-[16px] p-3 bg-[rgba(255,255,255,0.8)] backdrop-blur-[12px] border-[0.5px] border-[rgba(255,255,255,0.6)] shadow-card transition active:scale-[0.99]',
-          highlightId === p.id ? 'ring-2 ring-primary/50' : '',
+          'w-full text-left rounded-[16px] p-3 bg-[rgba(255,255,255,0.8)] backdrop-blur-[12px] border transition active:scale-[0.99] outline-none focus:outline-none focus-visible:outline-none focus-visible:border-primary focus-visible:shadow-[0_0_0_2px_rgba(247,107,122,0.22)]',
+          highlightId === p.id
+            ? 'border-primary shadow-[0_10px_24px_rgba(84,49,31,0.08),inset_0_0_0_1px_rgba(247,107,122,0.45)]'
+            : 'border-[rgba(255,255,255,0.6)] shadow-card',
         )}
       >
         <div className="flex items-center gap-3">
@@ -319,37 +314,36 @@ function PlaceCardBottom({
 }
 
 function NearbyBottomSheet({
-  places, onPick,
-}: { places: Place[]; onPick: (id: string) => void }) {
+  places, onPick, onOpenList,
+}: { places: Place[]; onPick: (id: string) => void; onOpenList: () => void }) {
   const highlightId = useStore((s) => s.highlightPlaceId)
   return (
-    <div className="fixed left-0 right-0 z-[800]" style={{ bottom: 'calc(84px + var(--sab, 0px))' }}>
+    <div
+      data-map-nearby
+      className="fixed left-0 right-0 z-[800]"
+      style={{
+        bottom: 'calc(84px + var(--sab, 0px))',
+        paddingLeft: 'max(0px, var(--sal, 0px))',
+        paddingRight: 'max(0px, var(--sar, 0px))',
+      }}
+    >
       <div className="flex justify-center pt-2 pb-1 bg-[rgba(255,255,255,0.72)] backdrop-blur-[20px] rounded-t-xl">
         <div className="w-9 h-1 bg-rule rounded-full" />
       </div>
       <div className="flex items-center justify-between px-4 pt-1 pb-2 bg-[rgba(255,255,255,0.72)] backdrop-blur-[20px]">
         <h3 className="font-semibold text-[16px] text-foreground truncate">附近宠物友好地点</h3>
-        <span className="text-xs text-muted whitespace-nowrap">{places.length}个结果</span>
+        <button
+          onClick={onOpenList}
+          className="h-11 px-3 rounded-full text-xs text-muted whitespace-nowrap hover:bg-surface/70 active:scale-[0.97] transition"
+        >
+          {places.length}个结果
+        </button>
       </div>
-      <ul className="px-4 pb-3 bg-[rgba(255,255,255,0.72)] backdrop-blur-[20px] flex gap-3 overflow-x-auto">
+      <ul className="px-4 pb-3 bg-[rgba(255,255,255,0.72)] backdrop-blur-[20px] flex gap-3 overflow-x-auto no-scrollbar overscroll-x-contain">
         {places.map((p) => (
           <PlaceCardBottom key={p.id} p={p} onPick={onPick} highlightId={highlightId} />
         ))}
       </ul>
-    </div>
-  )
-}
-
-function MapListFloat({ count, setListOpen }: { count: number; setListOpen: (v: boolean) => void }) {
-  return (
-    <div className="fixed left-0 right-0 z-[800] flex justify-center pointer-events-none" style={{ bottom: 'calc(84px + var(--sab, 0px))' }}>
-      <button
-        onClick={() => setListOpen(true)}
-        className="pointer-events-auto h-10 px-4 rounded-full bg-[rgba(255,255,255,0.78)] border border-[rgba(255,255,255,0.6)] shadow-2 flex items-center gap-2 text-[13px] font-medium text-foreground active:scale-[0.97] transition"
-      >
-        <Navigation size={14} className="text-primary" />
-        <span>附近 {count} 个</span>
-      </button>
     </div>
   )
 }
@@ -441,9 +435,7 @@ export default function MapPage() {
         setSearch={setSearch}
       />
 
-      <NearbyBottomSheet places={displayPlaces} onPick={pickPlace} />
-
-      <MapListFloat count={displayPlaces.length} setListOpen={setListOpen} />
+      <NearbyBottomSheet places={displayPlaces} onPick={pickPlace} onOpenList={() => setListOpen(true)} />
 
       {listOpen && (
         <div className="fixed inset-0 z-[1100] flex flex-col justify-end" onClick={() => setListOpen(false)}>
@@ -461,7 +453,7 @@ export default function MapPage() {
                 <span className="text-[16px] font-semibold text-ink">附近地点</span>
                 <span className="text-xs text-muted">{displayPlaces.length} 个结果</span>
               </div>
-              <button onClick={() => setListOpen(false)} className="p-1.5 rounded-md text-muted hover:text-foreground hover:bg-outline" aria-label="关闭">
+              <button onClick={() => setListOpen(false)} className="w-11 h-11 rounded-md text-muted hover:text-foreground hover:bg-outline flex items-center justify-center" aria-label="关闭">
                 <X size={18} />
               </button>
             </div>

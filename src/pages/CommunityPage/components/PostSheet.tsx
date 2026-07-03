@@ -112,66 +112,65 @@ export function PostSheet({ open, onClose, city, placesById, onSuccess }: PostSh
   // Step 1: ActionSheet-style type selection
   if (step === 1) {
     return (
-      <Sheet open={open} onClose={onClose} className="!max-h-[70dvh]">
-        <div>
-          {/* Title centered */}
-          <div style={{ fontSize: 15, fontWeight: 600, textAlign: 'center', padding: '16px 16px 8px', color: 'var(--foreground)' }}>
-            选择发布类型
-          </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)', textAlign: 'center', paddingBottom: 16 }}>
+      <Sheet
+        open={open}
+        onClose={onClose}
+        title="选择发布类型"
+        footer={
+          <button
+            type="button"
+            className="w-full h-11 rounded-full flex items-center justify-center text-sm font-semibold"
+            style={{
+              color: 'var(--primary)',
+              background: 'var(--surface)',
+              border: '0.5px solid var(--border)',
+            }}
+            onClick={onClose}
+          >
+            取消
+          </button>
+        }
+      >
+        <div className="px-5 pt-2 pb-4">
+          <div style={{ fontSize: 13, color: 'var(--muted)', textAlign: 'center', paddingBottom: 14 }}>
             选择你要验证的地点类型
           </div>
 
           {/* Action Rows */}
-          {TYPE_ROWS.map((row, idx) => {
-            const isLast = idx === TYPE_ROWS.length - 1
-            return (
-              <div
-                key={row.key}
-                className="flex items-center cursor-pointer"
-                style={{
-                  gap: 12,
-                  padding: '14px 20px',
-                  borderBottom: isLast ? 'none' : '0.5px solid var(--border)',
-                }}
-                onClick={() => handleTypeSelect(row.key)}
-              >
-                <div
-                  className="flex items-center justify-center flex-shrink-0"
+          <div className="overflow-hidden rounded-xl border border-rule/60 bg-surface/70">
+            {TYPE_ROWS.map((row, idx) => {
+              const isLast = idx === TYPE_ROWS.length - 1
+              return (
+                <button
+                  key={row.key}
+                  type="button"
+                  className="w-full min-h-[64px] flex items-center text-left active:bg-coral-50/60 transition"
                   style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: 9999,
-                    background: row.iconBg,
+                    gap: 12,
+                    padding: '12px 14px',
+                    borderBottom: isLast ? 'none' : '0.5px solid var(--border)',
                   }}
+                  onClick={() => handleTypeSelect(row.key)}
                 >
-                  <span style={{ color: row.iconColor }}>{row.icon}</span>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 15, fontWeight: 500, color: 'var(--foreground)' }}>{row.label}</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted-foreground)', marginTop: 1 }}>{row.desc}</div>
-                </div>
-                <CheckCircle size={18} style={{ color: 'var(--accent)', opacity: selectedType === row.key ? 1 : 0 }} />
-              </div>
-            )
-          })}
-
-          {/* Cancel Button */}
-          <div style={{ borderTop: '0.5px solid var(--border)', marginTop: 6 }}>
-            <div
-              className="cursor-pointer"
-              style={{
-                padding: 14,
-                textAlign: 'center',
-                fontSize: 15,
-                fontWeight: 600,
-                color: 'var(--primary)',
-                background: 'var(--surface)',
-              }}
-              onClick={onClose}
-            >
-              取消
-            </div>
+                  <div
+                    className="flex items-center justify-center flex-shrink-0"
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 9999,
+                      background: row.iconBg,
+                    }}
+                  >
+                    <span style={{ color: row.iconColor }}>{row.icon}</span>
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 15, fontWeight: 500, color: 'var(--foreground)' }}>{row.label}</div>
+                    <div style={{ fontSize: 12, color: 'var(--muted-foreground)', marginTop: 1 }}>{row.desc}</div>
+                  </div>
+                  <CheckCircle size={18} style={{ color: 'var(--accent)', opacity: selectedType === row.key ? 1 : 0 }} />
+                </button>
+              )
+            })}
           </div>
         </div>
       </Sheet>
@@ -188,7 +187,7 @@ export function PostSheet({ open, onClose, city, placesById, onSuccess }: PostSh
         <div className="flex items-center gap-3">
           <button
             onClick={() => setStep(1)}
-            className="flex-1 h-10 rounded-full flex items-center justify-center text-sm font-medium"
+            className="flex-1 h-11 rounded-full flex items-center justify-center text-sm font-medium"
             style={{
               background: 'var(--surface)',
               border: '0.5px solid var(--border)',
@@ -201,7 +200,7 @@ export function PostSheet({ open, onClose, city, placesById, onSuccess }: PostSh
             onClick={submit}
             disabled={!text.trim() || !placeId}
             className={clsx(
-              'flex-1 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition',
+              'flex-1 h-11 rounded-full flex items-center justify-center text-sm font-semibold transition',
               text.trim() && placeId
                 ? 'text-white'
                 : 'opacity-50 cursor-not-allowed',

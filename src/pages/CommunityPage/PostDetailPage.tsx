@@ -4,6 +4,7 @@ import { ArrowLeft, Share2, Heart, MessageCircle, Bookmark, MapPin, Star } from 
 import { clsx } from 'clsx'
 import { useStore } from '../../store/useStore'
 import { Button, Avatar, Badge } from '../../components/ui'
+import { useToast } from '../../components/ui/Toast'
 import type { FeedItem } from '../../data/types'
 
 export default function PostDetailPage() {
@@ -13,6 +14,10 @@ export default function PostDetailPage() {
   const placesRaw = useStore((s) => s.places)
   const likeFeed = useStore((s) => s.likeFeed)
   const unlikeFeed = useStore((s) => s.unlikeFeed)
+  const bookmarkFeed = useStore((s) => s.bookmarkFeed)
+  const unbookmarkFeed = useStore((s) => s.unbookmarkFeed)
+  const setCity = useStore((s) => s.setCity)
+  const { show } = useToast()
 
   const post = useMemo<FeedItem | undefined>(
     () => feeds.find((f) => f.id === postId),
@@ -25,7 +30,7 @@ export default function PostDetailPage() {
   )
 
   const [liked, setLiked] = useState(!!post?.likedByMe)
-  const [saved, setSaved] = useState(false)
+  const saved = !!post?.bookmarkedByMe
 
   if (!post) {
     return (
@@ -42,6 +47,40 @@ export default function PostDetailPage() {
     setLiked((v) => !v)
   }
 
+  const toggleSave = () => {
+    if (saved) {
+      unbookmarkFeed(post.id)
+      show('已取消收藏')
+    } else {
+      bookmarkFeed(post.id)
+      show('已收藏', { kind: 'ok' })
+    }
+  }
+
+  const handleShare = async () => {
+    const url = typeof window !== 'undefined' ? window.location.href : ''
+    const title = post.placeName ? `${post.placeName} - PetTrace AI` : 'PetTrace AI 社区帖子'
+    try {
+      if (typeof navigator !== 'undefined' && navigator.share) {
+        await navigator.share({ title, text: post.text.slice(0, 80), url })
+        return
+      }
+      if (typeof navigator !== 'undefined' && navigator.clipboard && url) {
+        await navigator.clipboard.writeText(url)
+        show('链接已复制', { kind: 'ok' })
+        return
+      }
+      show('当前环境暂不支持分享', { kind: 'warn' })
+    } catch {
+      show('分享已取消', { kind: 'warn' })
+    }
+  }
+
+  const handleCheckIn = () => {
+    if (place) setCity(place.city)
+    navigate(`/map?place=${post.placeId}`)
+  }
+
   return (
     <div className="relative h-full w-full flex flex-col bg-bg">
       <Header
@@ -49,8 +88,10 @@ export default function PostDetailPage() {
         title="帖子详情"
         right={
           <button
-            className="w-9 h-9 rounded-full bg-outline-variant hover:bg-outline text-muted hover:text-foreground flex items-center justify-center transition"
+            onClick={handleShare}
+            className="w-11 h-11 rounded-full bg-outline-variant hover:bg-outline text-muted hover:text-foreground flex items-center justify-center transition"
             title="分享"
+            aria-label="分享"
           >
             <Share2 size={16} />
           </button>
@@ -115,7 +156,8 @@ export default function PostDetailPage() {
         likes={post.likes + (liked && !post.likedByMe ? 1 : 0)}
         saved={saved}
         onLike={toggleLike}
-        onSave={() => setSaved((v) => !v)}
+        onSave={toggleSave}
+        onCheckIn={handleCheckIn}
       />
     </div>
   )
@@ -162,26 +204,28 @@ function ActionBar({
   saved,
   onLike,
   onSave,
+  onCheckIn,
 }: {
   liked: boolean
   likes: number
   saved: boolean
   onLike: () => void
   onSave: () => void
+  onCheckIn: () => void
 }) {
   return (
     <div className="fixed bottom-3 left-3 right-3 md:left-6 md:right-6 z-[80] bg-surface/80 backdrop-blur-2xl border border-rule/40 rounded-xl shadow-2 flex items-center gap-1 px-1.5 py-1.5">
       <button
         onClick={onLike}
         className={clsx(
-          'flex items-center gap-1.5 px-3 h-9 rounded-xl text-[13px] font-medium transition active:scale-[0.97]',
+          'flex items-center gap-1.5 px-3 h-11 rounded-xl text-[13px] font-medium transition active:scale-[0.97]',
           liked ? 'bg-primary/10 text-primary' : 'bg-outline-variant/70 text-muted hover:text-foreground',
         )}
       >
         <Heart size={16} className={clsx(liked && 'fill-primary')} />
         <span>{likes > 0 ? likes : '喜欢'}</span>
       </button>
-      <button className="flex items-center gap-1.5 px-3 h-9 rounded-xl text-[13px] font-medium bg-outline-variant/70 text-muted hover:text-foreground transition active:scale-[0.97]">
+      <button className="flex items-center gap-1.5 px-3 h-11 rounded-xl text-[13px] font-medium bg-outline-variant/70 text-muted hover:text-foreground transition active:scale-[0.97]">
         <MessageCircle size={16} />
         <span>评论</span>
       </button>
@@ -189,15 +233,16 @@ function ActionBar({
       <button
         onClick={onSave}
         className={clsx(
-          'w-9 h-9 rounded-xl flex items-center justify-center transition active:scale-[0.97]',
+          'w-11 h-11 rounded-xl flex items-center justify-center transition active:scale-[0.97]',
           saved ? 'bg-honey-50 text-honey' : 'bg-outline-variant/70 text-muted hover:text-foreground',
         )}
         title="收藏"
         aria-label="收藏"
+        aria-pressed={saved}
       >
         <Bookmark size={16} className={clsx(saved && 'fill-honey')} />
       </button>
-      <Button variant="primary" size="sm" className="h-9 rounded-xl px-3">
+      <Button variant="primary" size="sm" className="h-11 rounded-xl px-3" onClick={onCheckIn}>
         去打卡
       </Button>
     </div>

@@ -48,6 +48,24 @@
   --ring: #f76b7a;
   --link: #ef4460;
 
+  /* Runtime aliases used by Tailwind config and legacy components */
+  --color-primary-container: var(--pettrace-coral-100);
+  --color-primary: var(--primary);
+  --color-accent: var(--accent);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-on-surface: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-on-surface-variant: var(--muted);
+  --color-outline: var(--border);
+  --color-outline-variant: var(--surface-container-low);
+  --pettrace-coral: var(--primary);
+  --pettrace-mint: var(--accent);
+  --pettrace-error: var(--error);
+  --pettrace-honey: var(--warning);
+  --danger: var(--error);
+  --line-height-caption: 1.5;
+
   /* ── Coral Scale ── */
   --pettrace-coral-50: #fff1f2;
   --pettrace-coral-100: #ffe0e3;

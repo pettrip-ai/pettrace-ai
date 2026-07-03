@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import clsx from 'clsx'
 import { Icon } from './Icon'
 
@@ -74,6 +74,8 @@ export function ActionSheet({
 }: ActionSheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(open)
+  const titleId = useId()
+  const descriptionId = useId()
 
   useEffect(() => {
     if (open) setMounted(true)
@@ -91,6 +93,15 @@ export function ActionSheet({
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
+
+  useEffect(() => {
+    if (!mounted) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [mounted])
 
   if (!mounted) return null
 
@@ -129,6 +140,11 @@ export function ActionSheet({
       {/* Sheet panel */}
       <div
         ref={sheetRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={displayTitle ? titleId : undefined}
+        aria-describedby={displayDesc ? descriptionId : undefined}
+        tabIndex={-1}
         className={clsx(
           'relative mx-3 md:mx-auto md:max-w-[420px] mb-[calc(10px+var(--sab,0px))] rounded-t-2xl overflow-hidden',
           'bg-[rgba(255,255,255,0.85)] backdrop-blur-[20px]',
@@ -144,7 +160,7 @@ export function ActionSheet({
         {/* Optional title */}
         {displayTitle && (
           <div className="px-5 pt-2 pb-1 text-center">
-            <p className="text-[15px] font-semibold leading-5 text-[color:var(--foreground)]">
+            <p id={titleId} className="text-[15px] font-semibold leading-5 text-[color:var(--foreground)]">
               {displayTitle}
             </p>
           </div>
@@ -153,7 +169,7 @@ export function ActionSheet({
         {/* Optional description */}
         {displayDesc && (
           <div className="px-5 pb-3 text-center">
-            <p className="text-[13px] leading-5 text-[color:var(--muted)]">
+            <p id={descriptionId} className="text-[13px] leading-5 text-[color:var(--muted)]">
               {displayDesc}
             </p>
           </div>

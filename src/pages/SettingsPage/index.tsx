@@ -1,23 +1,18 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { clsx } from 'clsx'
 import {
   Dog, Bug, HardDrive, Info, ChevronRight,
-  Trash2, Eye, EyeOff, RefreshCw, PawPrint,
+  Trash2, RefreshCw, PawPrint,
 } from 'lucide-react'
-import { useStore, type AiProvider } from '../../store/useStore'
+import { AI_PROVIDER_DEFAULTS, useStore, type AiProvider } from '../../store/useStore'
 import { ToastProvider, useToast } from '../../components/ui/Toast'
 import { ActionSheet } from '../../components/ui/ActionSheet'
 import { Avatar } from '../../components/ui/Avatar'
 import type { CityId } from '../../data/types'
 import { PROVIDER_LABELS, CITIES, VERSION } from './constants'
+import { ApiKeyField, TextField } from './components'
 
 const KIND_LABEL: Record<string, string> = { dog: '狗', cat: '猫', rabbit: '兔', hamster: '仓鼠', other: '其它' }
-
-function maskApiKey(v: string) {
-  if (!v) return '未设置'
-  if (v.length <= 8) return '****'
-  return `${v.slice(0, 4)}...${v.slice(-4)}`
-}
 
 function useDebouncedSave(ms = 300) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -62,18 +57,6 @@ function Row({
   )
 }
 
-function RowChevron({ label, value, onClick }: { label: string; value?: React.ReactNode; onClick?: () => void }) {
-  return (
-    <button onClick={onClick} className="w-full flex items-center justify-between px-4 py-3 border-b border-rule/50 last:border-b-0 active:bg-surface">
-      <span className="text-[14px] text-ink">{label}</span>
-      <div className="flex items-center gap-1 min-w-0">
-        <span className="font-mono text-[13px] text-muted truncate max-w-[160px] md:max-w-[240px]">{value ?? '未设置'}</span>
-        <ChevronRight size={14} className="text-muted shrink-0" />
-      </div>
-    </button>
-  )
-}
-
 function RowToggle({
   label,
   desc,
@@ -110,14 +93,13 @@ function RowToggle({
 }
 
 function SettingsPageInner() {
-  const { settings, updateSettings, applyProviderDefaults, clearAll, pets } = useStore()
+  const { settings, updateSettings, clearAll, pets } = useStore()
   const [provider, setProvider] = useState<AiProvider>(settings.aiProvider)
   const [apiKey, setApiKey] = useState(settings.apiKey)
   const [baseUrl, setBaseUrl] = useState(settings.baseUrl)
   const [model, setModel] = useState(settings.model)
   const [enableMockAi, setEnableMockAi] = useState(settings.enableMockAi)
   const [mockCity, setMockCity] = useState<string>(settings.mockCity)
-  const [showApiKey, setShowApiKey] = useState(false)
   const [sheetOpen, setSheetOpen] = useState(false)
 
   const { show } = useToast()
@@ -130,17 +112,44 @@ function SettingsPageInner() {
     [run, updateSettings, show],
   )
 
+  useEffect(() => {
+    setProvider(settings.aiProvider)
+    setApiKey(settings.apiKey)
+    setBaseUrl(settings.baseUrl)
+    setModel(settings.model)
+    setEnableMockAi(settings.enableMockAi)
+    setMockCity(settings.mockCity)
+  }, [
+    settings.aiProvider,
+    settings.apiKey,
+    settings.baseUrl,
+    settings.model,
+    settings.enableMockAi,
+    settings.mockCity,
+  ])
+
   const handleProviderChange = (p: AiProvider) => {
     setProvider(p)
-    applyProviderDefaults(p, settings.baseUrl)
+    if (p !== 'custom') {
+      const next = AI_PROVIDER_DEFAULTS[p]
+      setBaseUrl(next.baseUrl)
+      setModel(next.model)
+      updateSettings({ aiProvider: p, baseUrl: next.baseUrl, model: next.model })
+    } else {
+      updateSettings({ aiProvider: p })
+    }
     show('已保存')
   }
+
   const handleResetProvider = () => {
-    applyProviderDefaults(provider, settings.baseUrl)
+    if (provider !== 'custom') {
+      const next = AI_PROVIDER_DEFAULTS[provider]
+      setBaseUrl(next.baseUrl)
+      setModel(next.model)
+      updateSettings({ aiProvider: provider, baseUrl: next.baseUrl, model: next.model })
+    }
     show('已恢复默认')
   }
-
-  const masked = showApiKey ? (apiKey || '未设置') : maskApiKey(apiKey)
 
   const mainPet = pets[0]
 
@@ -156,7 +165,7 @@ function SettingsPageInner() {
   }
 
   return (
-    <div className="pet-bg min-h-full h-full w-full overflow-y-auto px-4 md:px-5 py-4 md:py-5 pb-28 space-y-5">
+    <div className="min-h-full h-full w-full overflow-y-auto bg-bg px-4 md:px-5 pt-3 md:pt-4 pb-28 space-y-5">
       <div>
         <h2 className="font-display font-extrabold text-xl md:text-[22px] tracking-tight text-ink">设置</h2>
         <p className="text-[12px] md:text-[13px] text-muted mt-1">配置AI服务与本地数据</p>
@@ -205,19 +214,35 @@ function SettingsPageInner() {
               </div>
             }
           />
-          <Row
-            label="API Key"
-            right={
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[13px] text-muted">{masked}</span>
-                <button onClick={() => setShowApiKey((v) => !v)} className="p-1 rounded hover:bg-outline-variant text-muted" aria-label={showApiKey ? '隐藏' : '显示'}>
-                  {showApiKey ? <EyeOff size={13} /> : <Eye size={13} />}
-                </button>
-              </div>
-            }
-          />
-          <RowChevron label="Base URL" value={baseUrl || '未设置'} />
-          <RowChevron label="Model" value={model || '未设置'} />
+          <div className="px-4 py-3 border-b border-rule/50 space-y-3">
+            <ApiKeyField
+              value={apiKey}
+              onChange={(value) => {
+                setApiKey(value)
+                debouncedPersist({ apiKey: value })
+              }}
+            />
+            <TextField
+              id="ai-base-url"
+              label="Base URL"
+              value={baseUrl}
+              placeholder="https://api.example.com/v1"
+              onChange={(value) => {
+                setBaseUrl(value)
+                debouncedPersist({ baseUrl: value })
+              }}
+            />
+            <TextField
+              id="ai-model"
+              label="Model"
+              value={model}
+              placeholder="gpt-4o-mini"
+              onChange={(value) => {
+                setModel(value)
+                debouncedPersist({ model: value })
+              }}
+            />
+          </div>
           <div className="flex items-center justify-between px-4 py-3 border-t border-rule/50">
             <span className="text-[14px] text-ink">当前提供商</span>
             <div className="flex items-center gap-2">

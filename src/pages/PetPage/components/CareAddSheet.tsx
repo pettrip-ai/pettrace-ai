@@ -98,7 +98,7 @@ export function CareAddSheet({ open, onClose, defaultPetId, pets, onSave }: Care
         <div className="flex items-center gap-3">
           <button
             onClick={onClose}
-            className="flex-1 h-10 rounded-full flex items-center justify-center text-sm font-medium"
+            className="flex-1 h-11 rounded-full flex items-center justify-center text-sm font-medium"
             style={{ background: 'var(--surface)', border: '0.5px solid var(--border)', color: 'var(--muted)' }}
           >
             取消
@@ -106,7 +106,7 @@ export function CareAddSheet({ open, onClose, defaultPetId, pets, onSave }: Care
           <button
             onClick={submit}
             disabled={!petId || !date}
-            className="flex-1 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition"
+            className="flex-1 h-11 rounded-full flex items-center justify-center text-sm font-semibold transition"
             style={{
               background: petId && date ? 'var(--primary)' : 'var(--muted)',
               color: 'var(--primary-foreground)',

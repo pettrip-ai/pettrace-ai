@@ -4,12 +4,14 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '../../store/useStore'
 import { mockAiEngine, detectCity } from '../../lib/mockAiEngine'
 import { sendAiTurn, AiFetchError, type AiReply } from '../../lib/ai'
-import { CITIES } from '../../data/mock'
+import { CITIES, PLACES } from '../../data/mock'
+import type { CityId } from '../../data/types'
 import { useToast } from '../../components/ui/Toast'
 import {
   petToContext,
   chatToHistory,
   placesListFor,
+  placeNameOf,
 } from './constants'
 import { useAutoGrow, useScrollToBottom, useTypewriter } from './hooks'
 
@@ -26,6 +28,15 @@ const QUICK_SUGGESTIONS = [
   { icon: DogIcon, label: '附近宠物店' },
   { icon: Calendar, label: '周末行程' },
 ]
+
+function findPlaceById(city: CityId, placeId?: string) {
+  if (!placeId) return undefined
+  const cityPlace = PLACES[city]?.find((place) => place.id === placeId)
+  if (cityPlace) return cityPlace
+  return (Object.keys(PLACES) as CityId[])
+    .flatMap((key) => PLACES[key])
+    .find((place) => place.id === placeId)
+}
 
 function TypingIndicator() {
   return (
@@ -65,10 +76,19 @@ function PlaceCard({ data, placeId }: {
   placeId?: string
 }) {
   const navigate = useNavigate()
+  const { show } = useToast()
+  const [saved, setSaved] = useState(false)
   const goToMap = () => {
     if (placeId) {
       navigate(`/map?place=${placeId}`)
     }
+  }
+  function toggleSaved() {
+    setSaved((value) => {
+      const next = !value
+      show(next ? '已收藏' : '已取消收藏', { kind: next ? 'ok' : 'info' })
+      return next
+    })
   }
   return (
     <div
@@ -111,7 +131,7 @@ function PlaceCard({ data, placeId }: {
           <button
             onClick={goToMap}
             style={{
-              flex: 1, height: 36, background: 'var(--primary)', color: 'var(--primary-foreground)',
+              flex: 1, height: 44, background: 'var(--primary)', color: 'var(--primary-foreground)',
               borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: 13, fontFamily: 'var(--font-heading)',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               boxShadow: '0 2px 8px rgba(247,107,122,0.2)', border: 'none', cursor: 'pointer',
@@ -120,14 +140,16 @@ function PlaceCard({ data, placeId }: {
             <Route size={14} />查看路线
           </button>
           <button
+            onClick={toggleSaved}
+            aria-pressed={saved}
             style={{
-              flex: 1, height: 36, background: 'rgba(255,255,255,0.8)', color: 'var(--foreground)',
+              flex: 1, height: 44, background: saved ? 'var(--pettrace-honey-50)' : 'rgba(255,255,255,0.8)', color: saved ? 'var(--warning)' : 'var(--foreground)',
               borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: 13, fontFamily: 'var(--font-heading)',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               border: '0.5px solid var(--border)', cursor: 'pointer',
             }}
           >
-            <Bookmark size={14} />收藏
+            <Bookmark size={14} className={saved ? 'fill-honey' : undefined} />{saved ? '已收藏' : '收藏'}
           </button>
         </div>
       </div>
@@ -226,6 +248,10 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
     setValue(`关于"${label}"，帮我想想`)
   }
 
+  function handleAttachmentClick() {
+    show('附件功能暂未开放', { kind: 'info' })
+  }
+
   const lastAssistantKey = renderedMessages.map((m) => m.key).at(-1)
   const lastAssistantProse = lastAssistantKey ? proseByKey[lastAssistantKey] ?? '' : ''
   const typewrittenLast = useTypewriter(lastAssistantProse, 12, !!lastAssistantProse && !isTyping)
@@ -243,14 +269,17 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
   }, [pendingText])
 
   return (
-    <div ref={ref as any} className="flex flex-col h-full w-full">
+    <div ref={ref as any} className="flex flex-col h-full min-h-0 w-full overflow-hidden">
       <header
-        className="shrink-0 flex items-center gap-3 px-4 py-2.5"
+        data-ai-chat-header
+        className="shrink-0 flex items-center gap-3 px-4"
         style={{
           background: 'rgba(255,247,240,0.82)',
           backdropFilter: 'saturate(180%) blur(20px)',
           WebkitBackdropFilter: 'saturate(180%) blur(20px)',
           borderBottom: '0.5px solid rgba(84,49,31,0.08)',
+          paddingTop: 'calc(var(--sat, 0px) + 10px)',
+          paddingBottom: 10,
         }}
       >
         <button
@@ -278,8 +307,8 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
 
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto no-scrollbar"
-        style={{ padding: '12px 12px 4px', display: 'flex', flexDirection: 'column', gap: 12 }}
+        className="flex-1 min-h-0 overflow-y-auto no-scrollbar"
+        style={{ padding: '12px 12px 4px', display: 'flex', flexDirection: 'column', gap: 12, overscrollBehavior: 'contain' }}
       >
         <div className="flex items-center gap-3" style={{ padding: '0 16px' }}>
           <div style={{ flex: 1, height: 0.5, background: 'rgba(84,49,31,0.08)' }} />
@@ -351,19 +380,22 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
                         wordBreak: 'break-word', overflowWrap: 'break-word',
                       }}
                     >{bubbleContent}</div>
-                    {msg.structured && Array.isArray(msg.structured.itinerary) && msg.structured.itinerary.map((p, pi) => (
-                      <PlaceCard
-                        key={pi}
-                        placeId={p.placeId}
-                        data={{
-                          name: p.name ?? p.place ?? '推荐地点',
-                          tagline: p.tagline ?? p.type,
-                          rating: p.rating,
-                          address: p.address ?? p.area,
-                          distanceKm: p.distanceKm,
-                        }}
-                      />
-                    ))}
+                    {msg.structured && Array.isArray(msg.structured.itinerary) && msg.structured.itinerary.map((p, pi) => {
+                      const place = findPlaceById(city, p.placeId)
+                      return (
+                        <PlaceCard
+                          key={pi}
+                          placeId={p.placeId}
+                          data={{
+                            name: p.name ?? p.place ?? (p.placeId ? placeNameOf(city, p.placeId) : '推荐地点'),
+                            tagline: p.tagline ?? p.type ?? p.label ?? place?.category,
+                            rating: p.rating ?? place?.rating,
+                            address: p.address ?? p.area ?? place?.address,
+                            distanceKm: p.distanceKm,
+                          }}
+                        />
+                      )
+                    })}
                   </div>
                 </div>
               )}
@@ -376,14 +408,18 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
         {isTyping && renderedMessages.length === 0 && <TypingIndicator />}
       </div>
 
-      <div className="shrink-0 flex gap-2 overflow-x-auto no-scrollbar px-3 py-2" style={{ background: 'transparent' }}>
+      <div
+        data-ai-chat-suggestions
+        className="shrink-0 flex gap-2 overflow-x-auto no-scrollbar px-3 py-2"
+        style={{ background: 'transparent' }}
+      >
         {QUICK_SUGGESTIONS.map((s, i) => {
           const I = s.icon
           return (
             <button
               key={i}
               className="chip inactive"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 6, minHeight: 44, padding: '8px 14px', fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0 }}
               onClick={() => onQuickPick(s.label)}
             >
               <I size={13} />
@@ -394,6 +430,7 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
       </div>
 
       <div
+        data-ai-chat-composer
         className="shrink-0 flex flex-col"
         style={{
           background: 'rgba(255,247,240,0.82)',
@@ -423,7 +460,8 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
             />
             <div className="flex items-center gap-1.5 shrink-0 ml-2" style={{ paddingTop: 2 }}>
               <button
-                style={{ width: 28, height: 28, borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted-foreground)', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                onClick={handleAttachmentClick}
+                style={{ width: 44, height: 44, borderRadius: 'var(--radius-full)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted-foreground)', background: 'transparent', border: 'none', cursor: 'pointer' }}
                 aria-label="添加附件"
               >
                 <Plus size={18} />
@@ -434,7 +472,7 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
             onClick={() => handleSend()}
             disabled={!value.trim() || isTyping}
             style={{
-              width: 42, height: 42, borderRadius: 'var(--radius-full)',
+              width: 44, height: 44, borderRadius: 'var(--radius-full)',
               background: 'linear-gradient(135deg, var(--primary), var(--pettrace-coral-600))',
               color: 'var(--primary-foreground)',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',

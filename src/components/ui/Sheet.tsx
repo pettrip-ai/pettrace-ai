@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import clsx from 'clsx'
 
 interface SheetProps {
@@ -25,6 +25,7 @@ export function Sheet({
   contentClassName,
 }: SheetProps) {
   const [mounted, setMounted] = useState(open)
+  const titleId = useId()
 
   useEffect(() => {
     if (open) setMounted(true)
@@ -65,7 +66,7 @@ export function Sheet({
   const isFullScreen = fullScreenOnMobile
 
   return (
-    <div className="fixed inset-0 z-[1100]">
+    <div className="fixed inset-0 z-[1100] overflow-hidden">
       {/* Backdrop */}
       <div
         className={clsx(
@@ -77,6 +78,9 @@ export function Sheet({
       />
       {/* Panel */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={title ? titleId : undefined}
         className={clsx(
           'absolute bottom-0 left-0 right-0 w-full md:mx-auto md:max-w-[480px]',
           'flex flex-col',
@@ -89,8 +93,9 @@ export function Sheet({
           background: 'rgba(255,255,255,0.85)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          height: isFullScreen ? 'calc(100dvh - env(safe-area-inset-bottom))' : '70dvh',
-          paddingBottom: 'var(--sab, 0px)',
+          height: isFullScreen ? '100%' : 'min(86%, calc(100% - max(16px, var(--sat, 0px))))',
+          maxHeight: '100%',
+          boxSizing: 'border-box',
           overflow: 'hidden',
         }}
       >
@@ -103,12 +108,12 @@ export function Sheet({
         {header}
         {title && !header && (
           <div className="flex items-center justify-between px-5 py-3 flex-shrink-0" style={{ borderBottom: '0.5px solid var(--border)' }}>
-            <span className="w-9 h-9" />
-            <p style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 600, lineHeight: '20px', color: 'var(--foreground)' }}>{title}</p>
+            <span className="w-11 h-11" />
+            <p id={titleId} style={{ fontFamily: 'var(--font-heading)', fontSize: 16, fontWeight: 600, lineHeight: '20px', color: 'var(--foreground)' }}>{title}</p>
             <button
               type="button"
               onClick={onClose}
-              className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-[rgba(0,0,0,0.04)]"
+              className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-[rgba(0,0,0,0.04)]"
               style={{ color: 'var(--muted)', fontSize: 20, lineHeight: 1 }}
               aria-label="关闭"
             >
@@ -118,13 +123,26 @@ export function Sheet({
         )}
 
         {/* Scrollable Content Area */}
-        <div className={clsx('flex-1 overflow-y-auto min-h-0', contentClassName)}>
+        <div
+          className={clsx('flex-1 overflow-y-auto min-h-0', contentClassName)}
+          style={{ overscrollBehavior: 'contain' }}
+        >
           {children}
         </div>
 
         {/* Footer — outside scroll, always visible at bottom */}
         {footer && (
-          <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: '0.5px solid var(--border)', position: 'sticky', bottom: 0, background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}>
+          <div
+            data-sheet-footer
+            className="px-4 pt-3 flex-shrink-0"
+            style={{
+              borderTop: '0.5px solid var(--border)',
+              paddingBottom: 'calc(12px + var(--sab, 0px))',
+              background: 'rgba(255,255,255,0.92)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+            }}
+          >
             {footer}
           </div>
         )}

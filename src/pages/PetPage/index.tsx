@@ -10,6 +10,7 @@ import { PetSheet } from './components/PetSheet'
 import { CareAddSheet } from './components/CareAddSheet'
 import { useToast } from './hooks'
 import type { PetSaveInput } from './constants'
+import { createCareTaskSaveHandler } from './actions'
 
 function calcAge(birthday?: string) {
   if (!birthday) return null
@@ -111,6 +112,7 @@ export default function PetPage() {
 
   const addPet = useStore((s) => s.addPet)
   const updatePet = useStore((s) => s.updatePet)
+  const addCareTask = useStore((s) => s.addCareTask)
 
   const handleOpenAdd = () => { setEditingPet(null); setEditOpen(true) }
   const handleOpenEdit = (p: Pet) => { setEditingPet(p); setEditOpen(true) }
@@ -149,8 +151,13 @@ export default function PetPage() {
       .slice(0, 4)
   }, [careTasks, pets])
 
+  const handleSaveCareTask = useMemo(
+    () => createCareTaskSaveHandler(addCareTask, show),
+    [addCareTask, show],
+  )
+
   return (
-    <div className="pet-bg min-h-full h-full w-full overflow-y-auto px-4 md:px-5 py-4 md:py-5 pb-28">
+    <div className="min-h-full h-full w-full overflow-y-auto bg-bg px-4 md:px-5 pt-3 md:pt-4 pb-28">
       <div>
         <h2 className="font-display font-extrabold text-2xl md:text-[22px] tracking-tight text-ink">宠物档案</h2>
         <p className="text-xs md:text-[13px] text-muted mt-1">管理你的毛孩子</p>
@@ -208,7 +215,7 @@ export default function PetPage() {
         onClose={() => setAddOpen(false)}
         defaultPetId={pets[0]?.id || 'pet-default'}
         pets={pets}
-        onSave={() => { show('已添加', { kind: 'ok' }) }}
+        onSave={handleSaveCareTask}
       />
     </div>
   )

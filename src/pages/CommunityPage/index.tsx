@@ -14,6 +14,8 @@ export default function CommunityPage() {
   const placesRaw = useStore((s) => s.places)
   const likeFeed = useStore((s) => s.likeFeed)
   const unlikeFeed = useStore((s) => s.unlikeFeed)
+  const bookmarkFeed = useStore((s) => s.bookmarkFeed)
+  const unbookmarkFeed = useStore((s) => s.unbookmarkFeed)
   const verifyPlace = useStore((s) => s.verifyPlace)
   const setCityStore = useStore((s) => s.setCity)
 
@@ -117,6 +119,8 @@ export default function CommunityPage() {
                 placesById={placesById}
                 onLike={() => likeFeed(feed.id)}
                 onUnlike={() => unlikeFeed(feed.id)}
+                onBookmark={() => bookmarkFeed(feed.id)}
+                onUnbookmark={() => unbookmarkFeed(feed.id)}
                 onVerify={(v) => handleVerify(feed.id, feed.placeId, v)}
                 onNavigateMap={handleNavigateMap}
               />

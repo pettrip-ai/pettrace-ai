@@ -16,7 +16,7 @@ const CITY_NAMES: Record<CityId, string> = {
   shanghai: '上海',
   beijing: '北京',
   guangzhou: '广州',
-  chengdu: '深圳',
+  chengdu: '成都',
 }
 
 function formatTime(iso: string) {
@@ -75,15 +75,18 @@ export interface FeedCardProps {
   placesById: Record<string, { id: string; name: string; city: CityId; address?: string } | undefined>
   onLike: () => void
   onUnlike: () => void
+  onBookmark: () => void
+  onUnbookmark: () => void
   onVerify: (verdict: 'good' | 'bad') => void
   onNavigateMap: (placeId: string) => void
 }
 
-export function FeedCard({ feed, placesById, onLike, onUnlike, onNavigateMap }: FeedCardProps) {
+export function FeedCard({ feed, placesById, onLike, onUnlike, onBookmark, onUnbookmark, onNavigateMap }: FeedCardProps) {
   const [overflows, setOverflows] = useState(false)
   const textRef = useRef<HTMLParagraphElement | null>(null)
   const place = placesById[feed.placeId]
   const liked = !!feed.likedByMe
+  const bookmarked = !!feed.bookmarkedByMe
 
   useEffect(() => {
     const el = textRef.current
@@ -144,6 +147,9 @@ export function FeedCard({ feed, placesById, onLike, onUnlike, onNavigateMap }: 
             alt={title}
             className="w-full h-full object-cover"
             loading="lazy"
+            decoding="async"
+            width={640}
+            height={360}
           />
         </div>
       ) : (
@@ -164,7 +170,7 @@ export function FeedCard({ feed, placesById, onLike, onUnlike, onNavigateMap }: 
         <button
           onClick={() => (liked ? onUnlike() : onLike())}
           className={clsx(
-            'inline-flex items-center gap-[3px] text-[13px] leading-none transition',
+            'inline-flex min-h-11 items-center gap-[3px] rounded-lg px-2 -ml-2 text-[13px] leading-none transition',
             liked ? 'text-primary' : 'text-muted-foreground hover:text-primary',
           )}
           aria-label={liked ? '取消点赞' : '点赞'}
@@ -172,14 +178,19 @@ export function FeedCard({ feed, placesById, onLike, onUnlike, onNavigateMap }: 
           <Heart size={15} className={clsx(liked ? 'fill-primary' : 'fill-transparent')} />
           <span>{feed.likes}</span>
         </button>
-        <span className="inline-flex items-center gap-[3px] text-[13px] text-muted-foreground leading-none">
+        <span className="inline-flex min-h-11 items-center gap-[3px] text-[13px] text-muted-foreground leading-none">
           <MessageCircle size={15} /> 0
         </span>
         <button
-          className="ml-auto text-muted-foreground hover:text-primary"
-          aria-label="收藏"
+          onClick={() => (bookmarked ? onUnbookmark() : onBookmark())}
+          className={clsx(
+            'ml-auto w-11 h-11 rounded-lg flex items-center justify-center hover:text-primary',
+            bookmarked ? 'text-primary bg-primary/10' : 'text-muted-foreground',
+          )}
+          aria-label={bookmarked ? '取消收藏' : '收藏'}
+          aria-pressed={bookmarked}
         >
-          <Bookmark size={15} />
+          <Bookmark size={15} className={clsx(bookmarked && 'fill-primary')} />
         </button>
       </footer>
     </article>
