@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pettrace-ai-v3';
+const CACHE_NAME = 'pettrace-ai-v4';
 const STATIC_ASSETS = [
   './',
   './index.html',

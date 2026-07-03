@@ -141,7 +141,7 @@ function CategoryChips({
 function CategoryPill({
   label, active, onClick,
 }: { label: string; active: boolean; onClick: () => void }) {
-  const mapCategoryChipClass = 'shrink-0 h-9 px-4 rounded-full text-[13px] leading-none transition active:scale-95'
+  const mapCategoryChipClass = 'shrink-0 h-8 px-3.5 rounded-full text-[12px] leading-none transition active:scale-95'
 
   return (
     <button

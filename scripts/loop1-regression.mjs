@@ -316,6 +316,7 @@ test('pwa assets are base-path safe and service worker does not pin stale runtim
   }
 
   const sw = await readFile(new URL('../public/sw.js', import.meta.url), 'utf8')
+  assert.match(sw, /CACHE_NAME = 'pettrace-ai-v4'/)
   assert.match(sw, /STATIC_ASSETS/)
   assert.match(sw, /cache\.addAll/)
   assert.match(sw, /event\.request\.method !== 'GET'/)
@@ -442,15 +443,26 @@ test('map overlays use compact visual controls without native horizontal scrollb
 
 test('map category chips stay compact and selected nearby cards keep a full border', async () => {
   const mapPage = await readFile(new URL('../src/pages/MapPage/index.tsx', import.meta.url), 'utf8')
-  assert.match(mapPage, /const mapCategoryChipClass = 'shrink-0 h-9 px-4/)
+  const mapComponents = await readFile(new URL('../src/pages/MapPage/components.tsx', import.meta.url), 'utf8')
+
+  assert.match(mapPage, /const mapCategoryChipClass = 'shrink-0 h-8 px-3\.5 rounded-full text-\[12px\]/)
   assert.match(mapPage, /className=\{clsx\(\s*mapCategoryChipClass,/)
+  assert.doesNotMatch(mapPage, /shrink-0 h-9 px-4/)
   assert.doesNotMatch(mapPage, /shrink-0 h-11 px-4 rounded-full text-\[13px\]/)
+  assert.match(mapComponents, /shrink-0 h-8 px-3\.5 rounded-full text-\[12px\]/)
+  assert.doesNotMatch(mapComponents, /shrink-0 h-8 px-4 rounded-full text-\[13px\]/)
 
   assert.match(mapPage, /data-place-card-active=\{highlightId === p\.id \? 'true' : 'false'\}/)
   assert.match(mapPage, /outline-none focus:outline-none focus-visible:outline-none focus-visible:border-primary/)
   assert.match(mapPage, /highlightId === p\.id\s*\?\s*'border-primary shadow-\[0_10px_24px_rgba\(84,49,31,0\.08\),inset_0_0_0_1px_rgba\(247,107,122,0\.45\)\]'/)
   assert.match(mapPage, /:\s*'border-\[rgba\(255,255,255,0\.6\)\] shadow-card'/)
   assert.doesNotMatch(mapPage, /ring-2 ring-primary/)
+
+  assert.match(mapComponents, /data-place-list-card-active=\{highlightId === p\.id \? 'true' : 'false'\}/)
+  assert.match(mapComponents, /outline-none focus:outline-none focus-visible:outline-none focus-visible:border-primary/)
+  assert.match(mapComponents, /highlightId === p\.id\s*\?\s*'border-primary shadow-\[0_10px_24px_rgba\(84,49,31,0\.08\),inset_0_0_0_1px_rgba\(247,107,122,0\.45\)\]'/)
+  assert.match(mapComponents, /:\s*'border-\[rgba\(255,255,255,0\.6\)\] shadow-card'/)
+  assert.doesNotMatch(mapComponents, /ring-2 ring-primary/)
 })
 
 test('mobile tab bar avoids default focus rectangles while keeping keyboard focus visible', async () => {

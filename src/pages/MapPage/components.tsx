@@ -196,7 +196,7 @@ export function FilterBarMobile({
                 key={c.key}
                 onClick={() => setCatFilter(c.key as CategoryFilter)}
                 className={clsx(
-                  'shrink-0 h-8 px-4 rounded-full text-[13px] font-medium transition border active:scale-95',
+                  'shrink-0 h-8 px-3.5 rounded-full text-[12px] font-medium transition border active:scale-95',
                   active ? tone.pillActive : tone.pillInactive,
                 )}
               >
@@ -297,7 +297,7 @@ function CategoryPill({
     <button
       onClick={onClick}
       className={clsx(
-        'shrink-0 h-8 px-4 rounded-full text-[13px] font-medium transition border active:scale-95',
+        'shrink-0 h-8 px-3.5 rounded-full text-[12px] font-medium transition border active:scale-95',
         active
           ? 'bg-primary text-primary-fg shadow-primary-btn border-primary'
           : 'bg-surface/70 text-muted border-rule',
@@ -333,9 +333,12 @@ function PlaceCard({
     <li>
       <button
         onClick={() => onPick(p.id)}
+        data-place-list-card-active={highlightId === p.id ? 'true' : 'false'}
         className={clsx(
-          'w-full text-left pet-card mb-3 transition active:scale-[0.99]',
-          highlightId === p.id ? 'ring-2 ring-primary/50' : '',
+          'w-full text-left rounded-[16px] p-3 bg-[rgba(255,255,255,0.8)] backdrop-blur-[12px] border transition active:scale-[0.99] outline-none focus:outline-none focus-visible:outline-none focus-visible:border-primary focus-visible:shadow-[0_0_0_2px_rgba(247,107,122,0.22)] mb-3',
+          highlightId === p.id
+            ? 'border-primary shadow-[0_10px_24px_rgba(84,49,31,0.08),inset_0_0_0_1px_rgba(247,107,122,0.45)]'
+            : 'border-[rgba(255,255,255,0.6)] shadow-card',
         )}
       >
         <div className="flex items-center gap-3">
