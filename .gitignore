@@ -13,6 +13,8 @@ dist
 dist-ssr
 build
 build-ssr
+playwright-report/
+test-results/
 *.local
 .env
 .env.local
