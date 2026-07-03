@@ -50,7 +50,7 @@
 - **时间**：2026-06-26 18:23 ~ 当日
 - **Session ID**：`.1810261475335466:1810261475335466_6a3e4db57d00d6336047b679`
 - **Trae CN**：当前会话
-- **核心内容**：执行 REFACTOR_SPEC.md 完整重构（Phase 1–6）。
+- **核心内容**：执行 `docs/REFACTOR_SPEC.md` 完整重构（Phase 1–6）。
 - **主要改动**：
   - 重写 tokens.css，建立完整语义变量系统
   - 创建 Icon.tsx、Sheet.tsx、ActionSheet.tsx、Alert.tsx、Toast.tsx、Loading.tsx 组件

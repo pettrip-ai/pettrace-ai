@@ -47,6 +47,7 @@ npm run build   # 生产构建（输出 dist/）
 | 路径 | 说明 |
 | --- | --- |
 | [`docs/spec/`](./docs/spec) | Spec 规划文档：PRD (`spec.md`)、实现计划 (`tasks.md`)、验证清单 (`checklist.md`) |
+| [`docs/REFACTOR_SPEC.md`](./docs/REFACTOR_SPEC.md) | UI 与设计系统完整重构规格 |
 | [`docs/images/`](./docs/images) | 图片素材 |
 | [`docs/trae/`](./docs/trae) | Trae 相关截图（预留） |
 | [`docs/pettrace-ai-signup-standalone.html`](./docs/pettrace-ai-signup-standalone.html) | 报名帖 HTML |
