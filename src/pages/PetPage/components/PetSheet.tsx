@@ -13,6 +13,23 @@ export interface PetSheetProps {
   onSave: (p: PetSaveInput) => void
 }
 
+function toDateInputValue(date: Date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function getDefaultPetBirthday(reference = new Date()) {
+  const date = new Date(reference)
+  date.setFullYear(date.getFullYear() - 3)
+  return toDateInputValue(date)
+}
+
+function getMaxPetBirthday(reference = new Date()) {
+  return toDateInputValue(reference)
+}
+
 export function PetSheet({ open, onClose, initial, onSave }: PetSheetProps) {
   const isEdit = !!initial
   const [name, setName] = useState(initial?.name || '')
@@ -20,10 +37,11 @@ export function PetSheet({ open, onClose, initial, onSave }: PetSheetProps) {
   const [breed, setBreed] = useState(initial?.breed || '')
   const [size, setSize] = useState<Pet['size']>(initial?.size)
   const [traits, setTraits] = useState<string[]>(initial?.traits || [])
-  const [birthday, setBirthday] = useState(initial?.birthday || '')
+  const [birthday, setBirthday] = useState(() => initial?.birthday || getDefaultPetBirthday())
   const [weight, setWeight] = useState<string>(initial?.weightKg ? String(initial.weightKg) : '')
   const [notes, setNotes] = useState(initial?.notes || '')
   const [err, setErr] = useState('')
+  const maxBirthday = getMaxPetBirthday()
 
   useEffect(() => {
     if (!open) return
@@ -32,7 +50,7 @@ export function PetSheet({ open, onClose, initial, onSave }: PetSheetProps) {
     setBreed(initial?.breed || '')
     setSize(initial?.size)
     setTraits(initial?.traits || [])
-    setBirthday(initial?.birthday || '')
+    setBirthday(initial?.birthday || getDefaultPetBirthday())
     setWeight(initial?.weightKg ? String(initial.weightKg) : '')
     setNotes(initial?.notes || '')
     setErr('')
@@ -172,8 +190,10 @@ export function PetSheet({ open, onClose, initial, onSave }: PetSheetProps) {
             <input
               type="date"
               value={birthday}
+              max={maxBirthday}
+              aria-label="宠物生日"
               onChange={(e) => setBirthday(e.target.value)}
-              className="mt-1 w-full px-3 py-2 bg-bg border border-rule rounded-md text-sm text-ink focus:outline-none focus:ring-1 focus:ring-primary"
+              className="mt-1 w-full h-11 px-3 bg-bg border border-rule rounded-md text-sm text-ink focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
           <div>

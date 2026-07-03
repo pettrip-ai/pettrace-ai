@@ -74,6 +74,22 @@ test('care sheet save handler persists the submitted care task', async () => {
   assert.deepEqual(messages, [{ message: '已添加', options: { kind: 'ok' } }])
 })
 
+test('new pet sheet initializes birthday date input for mobile browsers', async () => {
+  const { PetSheet } = await server.ssrLoadModule('/src/pages/PetPage/components/PetSheet.tsx')
+  const html = renderToStaticMarkup(
+    React.createElement(PetSheet, {
+      open: true,
+      onClose: () => {},
+      initial: null,
+      onSave: () => {},
+    }),
+  )
+
+  assert.match(html, /type="date"[^>]*value="\d{4}-\d{2}-\d{2}"/)
+  assert.match(html, /type="date"[^>]*max="\d{4}-\d{2}-\d{2}"/)
+  assert.doesNotMatch(html, /type="date"[^>]*value=""/)
+})
+
 test('settings page renders editable AI service fields', async () => {
   const { default: SettingsPage } = await server.ssrLoadModule('/src/pages/SettingsPage/index.tsx')
   const html = renderToStaticMarkup(React.createElement(SettingsPage))
