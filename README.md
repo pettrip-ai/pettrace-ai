@@ -32,6 +32,18 @@ npm run dev     # 本地开发，默认 Mock AI
 npm run build   # 生产构建（输出 dist/）
 ```
 
+## 质量检查
+
+```bash
+npm run lint             # oxlint 静态检查
+npm run test:regression  # Node + SSR 回归脚本
+npm run test:e2e         # Playwright 浏览器烟测
+npm run build            # TypeScript + Vite 生产构建
+npm run bundle:report    # dist 产物体积报告
+npm run quality          # lint + regression + build + bundle report
+npm run quality:full     # quality + Playwright E2E
+```
+
 ## ✅ Git Hooks
 
 ```bash
