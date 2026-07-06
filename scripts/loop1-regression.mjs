@@ -161,16 +161,17 @@ test('design tokens expose the runtime aliases used by components', async () => 
   }
 })
 
-test('toast tones use explicit readable color pairs instead of unsupported opacity modifiers', async () => {
+test('toast tones use explicit readable color pairs and replace prior transient feedback', async () => {
   const source = await readFile(new URL('../src/components/ui/Toast.tsx', import.meta.url), 'utf8')
 
   assert.doesNotMatch(source, /bg-\[color:var\([^)]+\)\]\/\d+/)
+  assert.doesNotMatch(source, /setItems\(\(prev\)\s*=>\s*\[\.\.\.prev,/)
+  assert.match(source, /setItems\(\[\{ id, kind, message, title: opts\?\.title, duration \}\]\)/)
+  assert.match(source, /ok:\s*{\s*bg: 'bg-\[color:var\(--pettrace-coral-50\)\]'/)
 
   for (const token of [
     '--pettrace-coral-50',
     '--pettrace-coral-800',
-    '--pettrace-mint-50',
-    '--pettrace-mint-800',
     '--pettrace-error-50',
     '--pettrace-error-800',
     '--pettrace-honey-50',
@@ -178,6 +179,13 @@ test('toast tones use explicit readable color pairs instead of unsupported opaci
   ]) {
     assert.ok(source.includes(token), `${token} should be used by Toast tones`)
   }
+})
+
+test('AI place bookmark toast is fired outside the state updater', async () => {
+  const source = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
+
+  assert.doesNotMatch(source, /setSaved\(\s*\([^)]*\)\s*=>\s*{[\s\S]*?show\(/)
+  assert.match(source, /const next = !saved\s+setSaved\(next\)\s+show\(next \? '已收藏' : '已取消收藏'/)
 })
 
 test('sheet components render dialog semantics when open', async () => {

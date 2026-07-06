@@ -84,11 +84,9 @@ function PlaceCard({ data, placeId }: {
     }
   }
   function toggleSaved() {
-    setSaved((value) => {
-      const next = !value
-      show(next ? '已收藏' : '已取消收藏', { kind: next ? 'ok' : 'info' })
-      return next
-    })
+    const next = !saved
+    setSaved(next)
+    show(next ? '已收藏' : '已取消收藏', { kind: next ? 'ok' : 'info' })
   }
   return (
     <div

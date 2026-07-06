@@ -39,10 +39,10 @@ const kindStyles: Record<ToastKind, { bg: string; fg: string; ring: string; hove
     icon: 'alert-triangle',
   },
   ok: {
-    bg: 'bg-[color:var(--pettrace-mint-50)]',
-    fg: 'text-[color:var(--pettrace-mint-800)]',
-    ring: 'border-[color:var(--pettrace-mint-300)]',
-    hover: 'hover:bg-[color:var(--pettrace-mint-100)]',
+    bg: 'bg-[color:var(--pettrace-coral-50)]',
+    fg: 'text-[color:var(--pettrace-coral-800)]',
+    ring: 'border-[color:var(--pettrace-coral-300)]',
+    hover: 'hover:bg-[color:var(--pettrace-coral-100)]',
     icon: 'check-circle',
   },
   warn: {
@@ -67,7 +67,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       const id = idRef.current++
       const kind = opts?.kind ?? 'info'
       const duration = opts?.duration ?? 2600
-      setItems((prev) => [...prev, { id, kind, message, title: opts?.title, duration }])
+      setItems([{ id, kind, message, title: opts?.title, duration }])
       if (duration > 0) {
         setTimeout(() => dismiss(id), duration)
       }
