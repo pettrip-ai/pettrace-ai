@@ -47,6 +47,18 @@ export default function CommunityPage() {
     show(verdict === 'good' ? '已确认真实验证' : '已标记为避雷', { kind: 'ok' })
   }
 
+  const handleLike = (feedId: string, liked: boolean) => {
+    if (liked) unlikeFeed(feedId)
+    else likeFeed(feedId)
+    show(liked ? '已取消点赞' : '已点赞', { kind: liked ? 'info' : 'ok' })
+  }
+
+  const handleBookmark = (feedId: string, bookmarked: boolean) => {
+    if (bookmarked) unbookmarkFeed(feedId)
+    else bookmarkFeed(feedId)
+    show(bookmarked ? '已取消收藏' : '已收藏', { kind: bookmarked ? 'info' : 'ok' })
+  }
+
   const handleNavigateMap = (placeId: string) => {
     const place = placesById[placeId]
     if (place) {
@@ -117,10 +129,10 @@ export default function CommunityPage() {
                 key={feed.id}
                 feed={feed}
                 placesById={placesById}
-                onLike={() => likeFeed(feed.id)}
-                onUnlike={() => unlikeFeed(feed.id)}
-                onBookmark={() => bookmarkFeed(feed.id)}
-                onUnbookmark={() => unbookmarkFeed(feed.id)}
+                onLike={() => handleLike(feed.id, !!feed.likedByMe)}
+                onUnlike={() => handleLike(feed.id, !!feed.likedByMe)}
+                onBookmark={() => handleBookmark(feed.id, !!feed.bookmarkedByMe)}
+                onUnbookmark={() => handleBookmark(feed.id, !!feed.bookmarkedByMe)}
                 onVerify={(v) => handleVerify(feed.id, feed.placeId, v)}
                 onNavigateMap={handleNavigateMap}
               />

@@ -44,13 +44,14 @@ export default function PostDetailPage() {
   const toggleLike = () => {
     if (liked) unlikeFeed(post.id)
     else likeFeed(post.id)
-    setLiked((v) => !v)
+    setLiked(!liked)
+    show(liked ? '已取消点赞' : '已点赞', { kind: liked ? 'info' : 'ok' })
   }
 
   const toggleSave = () => {
     if (saved) {
       unbookmarkFeed(post.id)
-      show('已取消收藏')
+      show('已取消收藏', { kind: 'info' })
     } else {
       bookmarkFeed(post.id)
       show('已收藏', { kind: 'ok' })

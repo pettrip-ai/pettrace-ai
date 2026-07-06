@@ -167,9 +167,13 @@ test('toast tones use explicit readable color pairs and replace prior transient 
   assert.doesNotMatch(source, /bg-\[color:var\([^)]+\)\]\/\d+/)
   assert.doesNotMatch(source, /setItems\(\(prev\)\s*=>\s*\[\.\.\.prev,/)
   assert.match(source, /setItems\(\[\{ id, kind, message, title: opts\?\.title, duration \}\]\)/)
+  assert.match(source, /info:\s*{\s*bg: 'bg-\[color:var\(--pettrace-neutral-50\)\]'/)
   assert.match(source, /ok:\s*{\s*bg: 'bg-\[color:var\(--pettrace-coral-50\)\]'/)
+  assert.doesNotMatch(source, /info:\s*{[\s\S]*?bg: 'bg-\[color:var\(--pettrace-coral-50\)\]'[\s\S]*?ok:/)
 
   for (const token of [
+    '--pettrace-neutral-50',
+    '--pettrace-neutral-800',
     '--pettrace-coral-50',
     '--pettrace-coral-800',
     '--pettrace-error-50',
@@ -179,6 +183,21 @@ test('toast tones use explicit readable color pairs and replace prior transient 
   ]) {
     assert.ok(source.includes(token), `${token} should be used by Toast tones`)
   }
+})
+
+test('community feed reactions show toast feedback for like and bookmark changes', async () => {
+  const source = await readFile(new URL('../src/pages/CommunityPage/index.tsx', import.meta.url), 'utf8')
+
+  assert.match(source, /const handleLike = \(feedId: string, liked: boolean\) => {[\s\S]*show\(liked \? '已取消点赞' : '已点赞', \{ kind: liked \? 'info' : 'ok' \}\)/)
+  assert.match(source, /const handleBookmark = \(feedId: string, bookmarked: boolean\) => {[\s\S]*show\(bookmarked \? '已取消收藏' : '已收藏', \{ kind: bookmarked \? 'info' : 'ok' \}\)/)
+  assert.match(source, /onLike=\{\(\) => handleLike\(feed\.id, !!feed\.likedByMe\)\}/)
+  assert.match(source, /onBookmark=\{\(\) => handleBookmark\(feed\.id, !!feed\.bookmarkedByMe\)\}/)
+})
+
+test('community post detail like action shows toast feedback', async () => {
+  const source = await readFile(new URL('../src/pages/CommunityPage/PostDetailPage.tsx', import.meta.url), 'utf8')
+
+  assert.match(source, /const toggleLike = \(\) => {[\s\S]*show\(liked \? '已取消点赞' : '已点赞', \{ kind: liked \? 'info' : 'ok' \}\)/)
 })
 
 test('AI place bookmark toast is fired outside the state updater', async () => {

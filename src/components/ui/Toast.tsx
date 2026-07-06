@@ -11,10 +11,10 @@ interface ToastItem {
 
 const kindStyles: Record<ToastKind, { bg: string; fg: string; ring: string; hover: string; icon: string }> = {
   info: {
-    bg: 'bg-[color:var(--pettrace-coral-50)]',
-    fg: 'text-[color:var(--pettrace-coral-800)]',
-    ring: 'border-[color:var(--pettrace-coral-300)]',
-    hover: 'hover:bg-[color:var(--pettrace-coral-100)]',
+    bg: 'bg-[color:var(--pettrace-neutral-50)]',
+    fg: 'text-[color:var(--pettrace-neutral-800)]',
+    ring: 'border-[color:var(--pettrace-neutral-200)]',
+    hover: 'hover:bg-[color:var(--pettrace-neutral-100)]',
     icon: 'info',
   },
   success: {
