@@ -9,41 +9,47 @@ interface ToastItem {
   duration?: number
 }
 
-const kindStyles: Record<ToastKind, { bg: string; fg: string; ring: string; icon: string }> = {
+const kindStyles: Record<ToastKind, { bg: string; fg: string; ring: string; hover: string; icon: string }> = {
   info: {
-    bg: 'bg-[color:var(--pettrace-coral)]/92',
-    fg: 'text-white',
-    ring: 'border-[color:var(--primary)]',
+    bg: 'bg-[color:var(--pettrace-coral-50)]',
+    fg: 'text-[color:var(--pettrace-coral-800)]',
+    ring: 'border-[color:var(--pettrace-coral-300)]',
+    hover: 'hover:bg-[color:var(--pettrace-coral-100)]',
     icon: 'info',
   },
   success: {
-    bg: 'bg-[color:var(--pettrace-mint)]/92',
-    fg: 'text-white',
-    ring: 'border-[color:var(--accent)]',
+    bg: 'bg-[color:var(--pettrace-mint-50)]',
+    fg: 'text-[color:var(--pettrace-mint-800)]',
+    ring: 'border-[color:var(--pettrace-mint-300)]',
+    hover: 'hover:bg-[color:var(--pettrace-mint-100)]',
     icon: 'check-circle',
   },
   error: {
-    bg: 'bg-[color:var(--pettrace-error)]/92',
-    fg: 'text-white',
-    ring: 'border-[color:var(--danger)]',
+    bg: 'bg-[color:var(--pettrace-error-50)]',
+    fg: 'text-[color:var(--pettrace-error-800)]',
+    ring: 'border-[color:var(--pettrace-error-300)]',
+    hover: 'hover:bg-[color:var(--pettrace-error-100)]',
     icon: 'alert-circle',
   },
   warning: {
-    bg: 'bg-[color:var(--pettrace-honey)]/92',
-    fg: 'text-white',
-    ring: 'border-[color:var(--warning)]',
+    bg: 'bg-[color:var(--pettrace-honey-50)]',
+    fg: 'text-[color:var(--pettrace-honey-800)]',
+    ring: 'border-[color:var(--pettrace-honey-300)]',
+    hover: 'hover:bg-[color:var(--pettrace-honey-100)]',
     icon: 'alert-triangle',
   },
   ok: {
-    bg: 'bg-[color:var(--pettrace-mint)]/92',
-    fg: 'text-white',
-    ring: 'border-[color:var(--accent)]',
+    bg: 'bg-[color:var(--pettrace-mint-50)]',
+    fg: 'text-[color:var(--pettrace-mint-800)]',
+    ring: 'border-[color:var(--pettrace-mint-300)]',
+    hover: 'hover:bg-[color:var(--pettrace-mint-100)]',
     icon: 'check-circle',
   },
   warn: {
-    bg: 'bg-[color:var(--pettrace-honey)]/92',
-    fg: 'text-white',
-    ring: 'border-[color:var(--warning)]',
+    bg: 'bg-[color:var(--pettrace-honey-50)]',
+    fg: 'text-[color:var(--pettrace-honey-800)]',
+    ring: 'border-[color:var(--pettrace-honey-300)]',
+    hover: 'hover:bg-[color:var(--pettrace-honey-100)]',
     icon: 'alert-triangle',
   },
 }
@@ -105,7 +111,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 type="button"
                 aria-label="关闭"
                 onClick={() => dismiss(it.id)}
-                className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center hover:bg-white/20"
+                className={[
+                  'shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-colors',
+                  s.hover,
+                ].join(' ')}
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
               </button>

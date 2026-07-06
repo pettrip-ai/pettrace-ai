@@ -161,6 +161,25 @@ test('design tokens expose the runtime aliases used by components', async () => 
   }
 })
 
+test('toast tones use explicit readable color pairs instead of unsupported opacity modifiers', async () => {
+  const source = await readFile(new URL('../src/components/ui/Toast.tsx', import.meta.url), 'utf8')
+
+  assert.doesNotMatch(source, /bg-\[color:var\([^)]+\)\]\/\d+/)
+
+  for (const token of [
+    '--pettrace-coral-50',
+    '--pettrace-coral-800',
+    '--pettrace-mint-50',
+    '--pettrace-mint-800',
+    '--pettrace-error-50',
+    '--pettrace-error-800',
+    '--pettrace-honey-50',
+    '--pettrace-honey-800',
+  ]) {
+    assert.ok(source.includes(token), `${token} should be used by Toast tones`)
+  }
+})
+
 test('sheet components render dialog semantics when open', async () => {
   const { Sheet } = await server.ssrLoadModule('/src/components/ui/Sheet.tsx')
   const sheetHtml = renderToStaticMarkup(
