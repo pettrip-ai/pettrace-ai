@@ -5,12 +5,17 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 concurrency:
   group: pages-deploy
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -19,7 +24,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
@@ -28,17 +33,21 @@ jobs:
       - name: Quality checks and build
         run: npm run quality
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_DEPLOY_KEY }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          deploy_key: ${{ secrets.SSH_DEPLOY_KEY }}
-          publish_dir: ./dist
-          external_repository: pettrip-ai/pettrace-ai
-          publish_branch: gh-pages
-          allow_empty_commit: true
-          force_orphan: true
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
