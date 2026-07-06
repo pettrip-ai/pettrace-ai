@@ -35,7 +35,7 @@ npm run build   # 生产构建（输出 dist/）
 ## 质量检查
 
 ```bash
-npm run lint             # oxlint 静态检查
+npm run lint             # oxlint 静态检查，warning 也会失败
 npm run test:regression  # Node + SSR 回归脚本
 npm run test:e2e         # Playwright 浏览器烟测
 npm run build            # TypeScript + Vite 生产构建
@@ -43,6 +43,8 @@ npm run bundle:report    # dist 产物体积报告
 npm run quality          # lint + regression + build + bundle report
 npm run quality:full     # quality + Playwright E2E
 ```
+
+首次运行浏览器烟测前执行 `npx playwright install chromium`。
 
 ## ✅ Git Hooks
 
