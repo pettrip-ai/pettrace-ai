@@ -1,9 +1,36 @@
+export type AiReplySource = 'mock' | 'api' | 'fallback'
+
+export type AiRiskType = 'rule' | 'environment' | 'execution'
+
+export interface AiPlanSummary {
+  title: string
+  city?: string
+  days?: number
+  confidenceLabel?: string
+  source?: AiReplySource
+  petProfileUsed?: boolean
+}
+
+export interface AiRiskSection {
+  type: AiRiskType
+  title: string
+  items: string[]
+}
+
+export interface AiItineraryAlternative {
+  placeId: string
+  reason: string
+}
+
 export interface AiItineraryStep {
   time?: string
   placeId?: string
   label: string
   ruleBrief?: string
   action?: string
+  reason?: string
+  verifyHint?: string
+  alternatives?: Array<{ placeId: string; reason: string }>
   name?: string
   place?: string
   tagline?: string
@@ -26,6 +53,8 @@ export interface AiReply {
   itinerary: AiItineraryStep[]
   risks: string[]
   checklist: string[]
+  summary?: AiPlanSummary
+  riskSections?: AiRiskSection[]
 }
 
 export interface PetContext {
@@ -72,7 +101,13 @@ function buildSystemPrompt(opts: SendAiTurnOptions): string {
   )
   parts.push('所有地点请只引用我已提供的候选 list 中的地点 id。')
   parts.push(
-    '请严格按 JSON 输出，字段：prose, itinerary(每步 { time:"09:00", placeId:"xxx", label:"餐厅", ruleBrief:"大型犬可进", action:"打车前往" }), risks[], checklist[]。',
+    '请严格按 JSON 输出，必填字段：prose, itinerary, risks, checklist。可选字段：summary, riskSections。',
+  )
+  parts.push(
+    'itinerary 每步字段：time, placeId, label, ruleBrief, action, reason, verifyHint, alternatives。所有 placeId 必须来自候选地点列表。',
+  )
+  parts.push(
+    'riskSections 每项字段：type(rule/environment/execution), title, items。summary 字段：title, city, days, confidenceLabel, source, petProfileUsed。',
   )
   if (opts.city) parts.push(`当前城市: ${opts.city}`)
   if (opts.places && opts.places.length) {
@@ -114,7 +149,13 @@ function normalizeReplyJson(raw: unknown): AiReply {
   const risks = Array.isArray(obj.risks) ? (obj.risks as string[]) : []
   const checklist = Array.isArray(obj.checklist) ? (obj.checklist as string[]) : []
   const prose = typeof obj.prose === 'string' ? obj.prose : ''
-  return { prose, itinerary, risks, checklist }
+  const summary = obj.summary && typeof obj.summary === 'object'
+    ? (obj.summary as AiPlanSummary)
+    : undefined
+  const riskSections = Array.isArray(obj.riskSections)
+    ? (obj.riskSections as AiRiskSection[])
+    : undefined
+  return { prose, itinerary, risks, checklist, summary, riskSections }
 }
 
 export async function sendAiTurn(

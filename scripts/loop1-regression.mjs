@@ -207,6 +207,28 @@ test('AI place bookmark toast is fired outside the state updater', async () => {
   assert.match(source, /const next = !saved\s+setSaved\(next\)\s+show\(next \? '已收藏' : '已取消收藏'/)
 })
 
+test('AI response types include optional mission-control fields', async () => {
+  const source = await readFile(new URL('../src/lib/ai.ts', import.meta.url), 'utf8')
+
+  assert.match(source, /export type AiReplySource = 'mock' \| 'api' \| 'fallback'/)
+  assert.match(source, /export interface AiPlanSummary/)
+  assert.match(source, /export interface AiRiskSection/)
+  assert.match(source, /summary\?: AiPlanSummary/)
+  assert.match(source, /riskSections\?: AiRiskSection\[\]/)
+  assert.match(source, /reason\?: string/)
+  assert.match(source, /verifyHint\?: string/)
+  assert.match(source, /alternatives\?: Array<\{ placeId: string; reason: string \}>/)
+})
+
+test('AI chat only passes pet context when profile authorization is enabled', async () => {
+  const chatView = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
+
+  assert.match(chatView, /showPetInChat/)
+  assert.match(chatView, /const petCtx = showPetInChat && pet \? petToContext\(pet\) : undefined/)
+  assert.match(chatView, /usePetContext: !!petCtx/)
+  assert.doesNotMatch(chatView, /const petCtx = pet \? petToContext\(pet\) : undefined/)
+})
+
 test('sheet components render dialog semantics when open', async () => {
   const { Sheet } = await server.ssrLoadModule('/src/components/ui/Sheet.tsx')
   const sheetHtml = renderToStaticMarkup(
