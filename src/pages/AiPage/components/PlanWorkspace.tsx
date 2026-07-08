@@ -140,29 +140,37 @@ export function ItineraryTimeline({
 
         return (
           <article key={`${step.placeId ?? 'step'}-${index}`} className="card rounded-xl p-3.5">
-            <div className="flex gap-3">
-              <div className="flex flex-col items-center">
+            <div className="flex gap-2.5">
+              <div className="flex w-11 shrink-0 flex-col items-center">
                 <div className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-primary px-2 text-[11px] font-heading font-semibold text-primary-foreground">
                   {step.time ?? `第 ${index + 1} 站`}
                 </div>
                 <div className="mt-2 h-full min-h-10 w-px bg-border" />
               </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <h3 className="m-0 truncate font-heading text-[14px] font-semibold text-ink">{placeName}</h3>
-                    <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">{reason}</p>
-                  </div>
-                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-mint-soft px-2 py-0.5 text-[11px] font-heading font-semibold text-accent">
-                    <CheckCircle2 size={11} />
-                    {step.ruleBrief || place?.rule.notes || '规则待核验'}
+              <div data-ai-itinerary-step-body className="min-w-0 flex-1 space-y-2">
+                <div className="min-w-0 space-y-1.5">
+                  <h3
+                    data-ai-itinerary-step-title
+                    className="m-0 max-w-full break-words font-heading text-[14px] font-semibold leading-snug text-ink"
+                  >
+                    {placeName}
+                  </h3>
+                  <span
+                    data-ai-itinerary-rule-chip
+                    className="inline-flex max-w-full items-start gap-1 rounded-full bg-mint-soft px-2 py-0.5 text-[11px] font-heading font-semibold leading-snug text-accent"
+                  >
+                    <CheckCircle2 size={11} className="mt-0.5 shrink-0" />
+                    <span className="min-w-0 break-words">
+                      {step.ruleBrief || place?.rule.notes || '规则待核验'}
+                    </span>
                   </span>
+                  <p className="m-0 max-w-full break-words text-[12px] leading-relaxed text-muted-foreground">{reason}</p>
                 </div>
 
-                <p className="mt-2 text-[12px] leading-relaxed text-ink">{action}</p>
+                <p className="m-0 max-w-full break-words text-[12px] leading-relaxed text-ink">{action}</p>
 
                 {step.verifyHint && (
-                  <p className="mt-2 rounded-lg bg-[color:var(--pettrace-neutral-50)] px-2.5 py-2 text-[12px] leading-relaxed text-muted-foreground">
+                  <p className="m-0 max-w-full break-words rounded-lg bg-[color:var(--pettrace-neutral-50)] px-2.5 py-2 text-[12px] leading-relaxed text-muted-foreground">
                     {step.verifyHint}
                   </p>
                 )}

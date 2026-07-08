@@ -283,6 +283,7 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
           const isLastAssistant = msg.role === 'assistant' && idx === renderedMessages.length - 1
           const showTypewriter = isLastAssistant && typewrittenLast
           const bubbleContent = showTypewriter ? typewrittenLast : msg.content
+          const hasStructuredPlan = msg.role === 'assistant' && !!msg.structured && Array.isArray(msg.structured.itinerary)
 
           return (
             <div key={msg.key} className="space-y-2">
@@ -299,16 +300,26 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
                   }}
                 >{bubbleContent}</div>
               ) : (
-                <div className="flex gap-2.5" style={{ alignSelf: 'flex-start', maxWidth: '82%' }}>
+                <div
+                  data-ai-structured-plan-row={hasStructuredPlan ? 'true' : undefined}
+                  className="flex gap-2.5"
+                  style={{
+                    alignSelf: 'flex-start',
+                    maxWidth: hasStructuredPlan ? '100%' : '82%',
+                    width: hasStructuredPlan ? '100%' : undefined,
+                  }}
+                >
                   <div
                     className="inline-flex items-center justify-center rounded-full shrink-0"
                     style={{ width: 32, height: 32, background: 'linear-gradient(135deg, var(--pettrace-coral-100), var(--pettrace-coral-200))', boxShadow: '0 2px 8px rgba(247,107,122,0.12)' }}
                   >
                     <DogIcon size={17} style={{ color: 'var(--primary)' }} />
                   </div>
-                  <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6, flex: hasStructuredPlan ? 1 : undefined }}>
                     <div
                       style={{
+                        alignSelf: hasStructuredPlan ? 'flex-start' : undefined,
+                        maxWidth: hasStructuredPlan ? '82%' : undefined,
                         background: 'rgba(255,255,255,0.75)',
                         backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
                         borderRadius: '18px 18px 18px 4px', padding: '12px 14px',

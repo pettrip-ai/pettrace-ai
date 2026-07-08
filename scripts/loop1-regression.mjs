@@ -400,6 +400,49 @@ test('AI generated plan workspace exposes timeline, risk, checklist, and verific
   assert.doesNotMatch(chatView, /msg\.structured\.itinerary\.map/)
 })
 
+test('AI itinerary timeline keeps long mobile copy readable', async () => {
+  const workspace = await readFile(new URL('../src/pages/AiPage/components/PlanWorkspace.tsx', import.meta.url), 'utf8')
+  const chatView = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
+  assert.match(chatView, /hasStructuredPlan/)
+  assert.match(chatView, /data-ai-structured-plan-row/)
+  assert.match(chatView, /maxWidth: hasStructuredPlan \? '100%' : '82%'/)
+  assert.match(chatView, /width: hasStructuredPlan \? '100%' : undefined/)
+  assert.doesNotMatch(workspace, /items-start justify-between gap-2/)
+  assert.match(workspace, /data-ai-itinerary-step-body/)
+  assert.match(workspace, /data-ai-itinerary-rule-chip/)
+  assert.match(workspace, /max-w-full/)
+  assert.match(workspace, /break-words/)
+
+  const { PlanWorkspace } = await server.ssrLoadModule('/src/pages/AiPage/components/PlanWorkspace.tsx')
+  const html = renderToStaticMarkup(
+    React.createElement(PlanWorkspace, {
+      reply: {
+        prose: 'plan',
+        itinerary: [{
+          time: '18:00',
+          name: 'Bistro & Pet Friendly Indoor Dining Very Long Name',
+          reason: '用餐时段优先选择室内可进，减少排队和天气影响',
+          action: '室内用餐',
+          ruleBrief: '全天寸·室内可进，需要提前确认',
+          verifyHint: '到店后确认宠物是否仍可进入室内区域',
+          placeId: 'missing-place',
+        }],
+        risks: [],
+        checklist: [],
+      },
+      city: 'shanghai',
+      findPlace: () => undefined,
+      onOpenMap: () => {},
+      onVerifyPlace: () => {},
+      onRefine: () => {},
+    }),
+  )
+
+  assert.match(html, /data-ai-itinerary-step-body/)
+  assert.match(html, /data-ai-itinerary-rule-chip/)
+  assert.match(html, /break-words/)
+})
+
 test('AI plan workspace renders persisted malformed optional metadata safely', async () => {
   const { PlanWorkspace } = await server.ssrLoadModule('/src/pages/AiPage/components/PlanWorkspace.tsx')
   const reply = {
