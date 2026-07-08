@@ -10,29 +10,45 @@ test('AI itinerary detail remains readable on narrow mobile width', async ({ pag
   await page.goto('/pettrace-ai/ai/chat?q=%E4%B8%8A%E6%B5%B7%E5%B8%A6%E7%8B%97%E4%B8%80%E6%97%A5%E6%B8%B8%EF%BC%8C%E5%AE%89%E6%8E%92%E5%AE%A4%E5%86%85%E7%94%A8%E9%A4%90%E5%92%8C%E6%88%B7%E5%A4%96%E6%95%A3%E6%AD%A5')
 
   const planRow = page.locator('[data-ai-structured-plan-row="true"]').first()
+  const itineraryCard = page.locator('[data-ai-itinerary-card]').first()
+  const timeChip = page.locator('[data-ai-itinerary-time-chip]').first()
   const stepBody = page.locator('[data-ai-itinerary-step-body]').first()
   const stepTitle = page.locator('[data-ai-itinerary-step-title]').first()
   const ruleChip = page.locator('[data-ai-itinerary-rule-chip]').first()
 
   await expect(planRow).toBeVisible()
+  await expect(itineraryCard).toBeVisible()
+  await expect(timeChip).toBeVisible()
   await expect(stepBody).toBeVisible()
 
   const viewportWidth = page.viewportSize()?.width ?? 393
   const rowBox = await planRow.boundingBox()
+  const cardBox = await itineraryCard.boundingBox()
   const bodyBox = await stepBody.boundingBox()
   const titleBox = await stepTitle.boundingBox()
   const ruleBox = await ruleChip.boundingBox()
+  const timeStyles = await timeChip.evaluate((el) => {
+    const styles = window.getComputedStyle(el)
+    return {
+      backgroundColor: styles.backgroundColor,
+      color: styles.color,
+    }
+  })
 
   expect(rowBox).not.toBeNull()
+  expect(cardBox).not.toBeNull()
   expect(bodyBox).not.toBeNull()
   expect(titleBox).not.toBeNull()
   expect(ruleBox).not.toBeNull()
-  if (!rowBox || !bodyBox || !titleBox || !ruleBox) return
+  if (!rowBox || !cardBox || !bodyBox || !titleBox || !ruleBox) return
 
   expect(rowBox.width).toBeGreaterThan(viewportWidth * 0.86)
+  expect(cardBox.width).toBeGreaterThan(viewportWidth * 0.72)
   expect(bodyBox.width).toBeGreaterThan(220)
   expect(ruleBox.width).toBeLessThanOrEqual(bodyBox.width + 1)
   expect(titleBox.height).toBeLessThan(48)
+  expect(timeStyles.backgroundColor).not.toBe('rgb(247, 107, 122)')
+  expect(timeStyles.color).not.toBe('rgb(84, 49, 31)')
 })
 
 async function expectStoredSetting(page: Page, key: 'apiKey' | 'model', value: string) {

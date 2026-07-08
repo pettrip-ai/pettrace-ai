@@ -23,6 +23,7 @@ export default {
         rule: 'var(--border)',
         outline: 'var(--border)',
         'outline-variant': 'var(--color-outline-variant)',
+        'primary-foreground': 'var(--primary-foreground)',
         primary: {
           DEFAULT: 'var(--primary)',
           fg: 'var(--primary-foreground)',

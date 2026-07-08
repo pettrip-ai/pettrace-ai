@@ -137,6 +137,7 @@ test('community city labels use Chengdu for chengdu places', async () => {
 
 test('design tokens expose the runtime aliases used by components', async () => {
   const css = await readFile(new URL('../src/tokens.css', import.meta.url), 'utf8')
+  const tailwind = await readFile(new URL('../tailwind.config.js', import.meta.url), 'utf8')
   const requiredTokens = [
     '--color-primary-container',
     '--color-primary',
@@ -159,6 +160,7 @@ test('design tokens expose the runtime aliases used by components', async () => 
   for (const token of requiredTokens) {
     assert.ok(css.includes(`${token}:`), `${token} should be defined in tokens.css`)
   }
+  assert.match(tailwind, /'primary-foreground': 'var\(--primary-foreground\)'/)
 })
 
 test('toast tones use explicit readable color pairs and replace prior transient feedback', async () => {
@@ -409,7 +411,13 @@ test('AI itinerary timeline keeps long mobile copy readable', async () => {
   assert.match(chatView, /width: hasStructuredPlan \? '100%' : undefined/)
   assert.doesNotMatch(workspace, /items-start justify-between gap-2/)
   assert.match(workspace, /data-ai-itinerary-step-body/)
+  assert.match(workspace, /data-ai-itinerary-card/)
+  assert.match(workspace, /data-ai-itinerary-time-chip/)
   assert.match(workspace, /data-ai-itinerary-rule-chip/)
+  assert.match(workspace, /bg-\[color:var\(--pettrace-coral-50\)\]/)
+  assert.match(workspace, /text-\[color:var\(--pettrace-coral-800\)\]/)
+  assert.match(workspace, /border border-rule\/50 bg-white\/90/)
+  assert.doesNotMatch(workspace, /rounded-full bg-primary px-2 text-\[11px\]/)
   assert.match(workspace, /max-w-full/)
   assert.match(workspace, /break-words/)
 
@@ -439,6 +447,8 @@ test('AI itinerary timeline keeps long mobile copy readable', async () => {
   )
 
   assert.match(html, /data-ai-itinerary-step-body/)
+  assert.match(html, /data-ai-itinerary-card/)
+  assert.match(html, /data-ai-itinerary-time-chip/)
   assert.match(html, /data-ai-itinerary-rule-chip/)
   assert.match(html, /break-words/)
 })

@@ -139,15 +139,21 @@ export function ItineraryTimeline({
         const action = step.action || step.label || '到店前再次确认接待规则'
 
         return (
-          <article key={`${step.placeId ?? 'step'}-${index}`} className="card rounded-xl p-3.5">
-            <div className="flex gap-2.5">
-              <div className="flex w-11 shrink-0 flex-col items-center">
-                <div className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-primary px-2 text-[11px] font-heading font-semibold text-primary-foreground">
+          <article
+            key={`${step.placeId ?? 'step'}-${index}`}
+            data-ai-itinerary-card
+            className="rounded-2xl border border-rule/50 bg-white/90 p-3.5 shadow-card"
+          >
+            <div className="flex items-start gap-3">
+              <div className="shrink-0">
+                <div
+                  data-ai-itinerary-time-chip
+                  className="inline-flex h-8 min-w-[52px] items-center justify-center rounded-full border border-coral-200 bg-[color:var(--pettrace-coral-50)] px-2.5 text-[11px] font-heading font-bold text-[color:var(--pettrace-coral-800)]"
+                >
                   {step.time ?? `第 ${index + 1} 站`}
                 </div>
-                <div className="mt-2 h-full min-h-10 w-px bg-border" />
               </div>
-              <div data-ai-itinerary-step-body className="min-w-0 flex-1 space-y-2">
+              <div data-ai-itinerary-step-body className="min-w-0 flex-1">
                 <div className="min-w-0 space-y-1.5">
                   <h3
                     data-ai-itinerary-step-title
@@ -164,43 +170,45 @@ export function ItineraryTimeline({
                       {step.ruleBrief || place?.rule.notes || '规则待核验'}
                     </span>
                   </span>
-                  <p className="m-0 max-w-full break-words text-[12px] leading-relaxed text-muted-foreground">{reason}</p>
                 </div>
+              </div>
+            </div>
 
-                <p className="m-0 max-w-full break-words text-[12px] leading-relaxed text-ink">{action}</p>
+            <div className="mt-3 space-y-2 border-t border-rule/40 pt-3">
+              <p className="m-0 max-w-full break-words text-[12px] leading-relaxed text-muted-foreground">{reason}</p>
+              <p className="m-0 max-w-full break-words text-[12px] leading-relaxed text-ink">{action}</p>
 
-                {step.verifyHint && (
-                  <p className="m-0 max-w-full break-words rounded-lg bg-[color:var(--pettrace-neutral-50)] px-2.5 py-2 text-[12px] leading-relaxed text-muted-foreground">
-                    {step.verifyHint}
-                  </p>
-                )}
+              {step.verifyHint && (
+                <p className="m-0 max-w-full break-words rounded-lg bg-[color:var(--pettrace-neutral-50)] px-2.5 py-2 text-[12px] leading-relaxed text-muted-foreground">
+                  {step.verifyHint}
+                </p>
+              )}
 
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => onOpenMap(step.placeId)}
-                    className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full bg-primary px-3 text-[12px] font-heading font-semibold text-primary-foreground"
-                  >
-                    <MapPin size={13} />
-                    查看地图
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onVerifyPlace(step.placeId)}
-                    className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white/80 px-3 text-[12px] font-heading font-semibold text-ink"
-                  >
-                    <ShieldCheck size={13} />
-                    标记已验证
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => onRefine(refineText(placeName))}
-                    className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white/80 px-3 text-[12px] font-heading font-semibold text-ink"
-                  >
-                    <RefreshCw size={13} />
-                    替换
-                  </button>
-                </div>
+              <div className="flex flex-wrap gap-2 pt-1">
+                <button
+                  type="button"
+                  onClick={() => onOpenMap(step.placeId)}
+                  className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full bg-primary px-3 text-[12px] font-heading font-semibold text-primary-fg"
+                >
+                  <MapPin size={13} />
+                  查看地图
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onVerifyPlace(step.placeId)}
+                  className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white/80 px-3 text-[12px] font-heading font-semibold text-ink"
+                >
+                  <ShieldCheck size={13} />
+                  标记已验证
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onRefine(refineText(placeName))}
+                  className="inline-flex min-h-9 items-center justify-center gap-1.5 rounded-full border border-[color:var(--border)] bg-white/80 px-3 text-[12px] font-heading font-semibold text-ink"
+                >
+                  <RefreshCw size={13} />
+                  替换
+                </button>
               </div>
             </div>
           </article>
