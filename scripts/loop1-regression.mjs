@@ -200,13 +200,16 @@ test('community post detail like action shows toast feedback', async () => {
   assert.match(source, /const toggleLike = \(\) => {[\s\S]*show\(liked \? '已取消点赞' : '已点赞', \{ kind: liked \? 'info' : 'ok' \}\)/)
 })
 
-test('AI place bookmark toast is fired outside the state updater', async () => {
+test('AI chat uses the generated plan workspace instead of inline place cards', async () => {
   const source = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
 
-  assert.doesNotMatch(source, /setSaved\(\s*\([^)]*\)\s*=>\s*{[\s\S]*?show\(/)
-  assert.match(source, /const next = !saved\s+setSaved\(next\)\s+show\(next \? '已收藏' : '已取消收藏'/)
+  assert.match(source, /import \{ PlanWorkspace \} from '\.\/components\/PlanWorkspace'/)
+  assert.match(source, /<PlanWorkspace/)
+  assert.match(source, /function markVerified/)
+  assert.match(source, /function fillRefinePrompt/)
+  assert.doesNotMatch(source, /function PlaceCard/)
+  assert.doesNotMatch(source, /const \[saved, setSaved\]/)
 })
-
 test('AI response types include optional mission-control fields', async () => {
   const source = await readFile(new URL('../src/lib/ai.ts', import.meta.url), 'utf8')
 
@@ -462,9 +465,10 @@ test('feed bookmarks persist and expose pressed state', async () => {
 test('known dead buttons have explicit handlers or feedback paths', async () => {
   const chatView = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
   assert.match(chatView, /function handleAttachmentClick/)
-  assert.match(chatView, /function toggleSaved/)
   assert.match(chatView, /onClick=\{handleAttachmentClick\}/)
-  assert.match(chatView, /aria-pressed=\{saved\}/)
+  assert.match(chatView, /onOpenMap=\{openMapPlace\}/)
+  assert.match(chatView, /onVerifyPlace=\{markVerified\}/)
+  assert.match(chatView, /onRefine=\{fillRefinePrompt\}/)
 
   const postDetail = await readFile(new URL('../src/pages/CommunityPage/PostDetailPage.tsx', import.meta.url), 'utf8')
   assert.match(postDetail, /const handleShare/)
@@ -556,8 +560,8 @@ test('ai chat itinerary view fits phone safe areas and resolves real place cards
   assert.match(chatView, /data-ai-chat-composer/)
   assert.match(chatView, /minHeight: 44/)
   assert.match(chatView, /function findPlaceById/)
-  assert.match(chatView, /placeNameOf\(city, p\.placeId/)
-  assert.doesNotMatch(chatView, /name:\s*p\.name\s*\?\?\s*p\.place\s*\?\?\s*'推荐地点'/)
+  assert.match(chatView, /findPlace=\{\(placeId\) => findPlaceById\(city, placeId\)\}/)
+  assert.doesNotMatch(chatView, /function PlaceCard/)
 })
 
 test('app shell applies top safe area globally while map controls avoid the notch', async () => {

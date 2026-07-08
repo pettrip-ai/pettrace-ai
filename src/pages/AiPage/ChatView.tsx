@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, forwardRef, useEffect } from 'react'
-import { Send, Plus, Route, Bookmark, Footprints, Clock, Calendar, Dog as DogIcon, ChevronLeft } from 'lucide-react'
+import { Send, Plus, Footprints, Clock, Calendar, Dog as DogIcon, ChevronLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../../store/useStore'
 import { mockAiEngine, detectCity } from '../../lib/mockAiEngine'
@@ -11,7 +11,6 @@ import {
   petToContext,
   chatToHistory,
   placesListFor,
-  placeNameOf,
 } from './constants'
 import { useAutoGrow, useScrollToBottom, useTypewriter } from './hooks'
 import { PlanWorkspace } from './components/PlanWorkspace'
@@ -37,10 +36,6 @@ function findPlaceById(city: CityId, placeId?: string) {
   return (Object.keys(PLACES) as CityId[])
     .flatMap((key) => PLACES[key])
     .find((place) => place.id === placeId)
-}
-
-function legacyPlaceCardName(city: CityId, p: { placeId?: string; name?: string; place?: string }) {
-  return p.name ?? p.place ?? (p.placeId ? placeNameOf(city, p.placeId) : '推荐地点')
 }
 
 function TypingIndicator() {
@@ -71,90 +66,6 @@ function TypingIndicator() {
         <span className="typing-dot" />
         <span className="typing-dot" style={{ animationDelay: '0.2s' }} />
         <span className="typing-dot" style={{ animationDelay: '0.4s' }} />
-      </div>
-    </div>
-  )
-}
-
-function PlaceCard({ data, placeId }: {
-  data: { name: string; tagline?: string; rating?: number; address?: string; distanceKm?: number }
-  placeId?: string
-}) {
-  const navigate = useNavigate()
-  const { show } = useToast()
-  const [saved, setSaved] = useState(false)
-  const goToMap = () => {
-    if (placeId) {
-      navigate(`/map?place=${placeId}`)
-    }
-  }
-  function toggleSaved() {
-    const next = !saved
-    setSaved(next)
-    show(next ? '已收藏' : '已取消收藏', { kind: next ? 'ok' : 'info' })
-  }
-  return (
-    <div
-      className="card"
-      style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden', padding: 0, boxShadow: 'var(--shadow-2)' }}
-    >
-      <div style={{ flexShrink: 0, height: 6, background: 'linear-gradient(90deg, var(--primary), var(--pettrace-coral-300))' }} />
-      <div style={{ padding: '14px 14px 12px' }}>
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2 min-w-0">
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              width: 36, height: 36, borderRadius: 'var(--radius-md)',
-              background: 'var(--color-primary-container)',
-            }}>
-              <DogIcon size={18} style={{ color: 'var(--primary)' }} />
-            </div>
-            <div className="min-w-0">
-              <p className="truncate" style={{ fontWeight: 600, fontSize: 14, color: 'var(--foreground)', margin: 0, fontFamily: 'var(--font-heading)' }}>{data.name}</p>
-              <p className="pettrace-caption truncate" style={{ color: 'var(--muted-foreground)', margin: '2px 0 0' }}>{data.tagline ?? '宠物友好地点'}</p>
-            </div>
-          </div>
-          {data.rating != null && (
-            <div
-              className="flex items-center gap-1 rounded-full shrink-0"
-              style={{ padding: '3px 8px', background: 'var(--pettrace-honey-50)' }}
-            >
-              <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--warning)', fontFamily: 'var(--font-heading)' }}>★ {data.rating.toFixed(1)}</span>
-            </div>
-          )}
-        </div>
-        {(data.address || data.distanceKm != null) && (
-          <div className="flex items-center gap-1.5 mb-3">
-            {data.address && <span style={{ fontSize: 13, color: 'var(--muted-foreground)' }}>{data.address}</span>}
-            {data.address && data.distanceKm != null && <span style={{ color: 'var(--border)', margin: '0 2px' }}>·</span>}
-            {data.distanceKm != null && <span style={{ fontSize: 13, color: 'var(--accent)' }}>{data.distanceKm}km</span>}
-          </div>
-        )}
-        <div className="flex gap-2">
-          <button
-            onClick={goToMap}
-            style={{
-              flex: 1, height: 44, background: 'var(--primary)', color: 'var(--primary-foreground)',
-              borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: 13, fontFamily: 'var(--font-heading)',
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-              boxShadow: '0 2px 8px rgba(247,107,122,0.2)', border: 'none', cursor: 'pointer',
-            }}
-          >
-            <Route size={14} />查看路线
-          </button>
-          <button
-            onClick={toggleSaved}
-            aria-pressed={saved}
-            style={{
-              flex: 1, height: 44, background: saved ? 'var(--pettrace-honey-50)' : 'rgba(255,255,255,0.8)', color: saved ? 'var(--warning)' : 'var(--foreground)',
-              borderRadius: 'var(--radius-full)', fontWeight: 600, fontSize: 13, fontFamily: 'var(--font-heading)',
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-              border: '0.5px solid var(--border)', cursor: 'pointer',
-            }}
-          >
-            <Bookmark size={14} className={saved ? 'fill-honey' : undefined} />{saved ? '已收藏' : '收藏'}
-          </button>
-        </div>
       </div>
     </div>
   )
@@ -282,10 +193,6 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
   const lastAssistantKey = renderedMessages.map((m) => m.key).at(-1)
   const lastAssistantProse = lastAssistantKey ? proseByKey[lastAssistantKey] ?? '' : ''
   const typewrittenLast = useTypewriter(lastAssistantProse, 12, !!lastAssistantProse && !isTyping)
-
-  // Keep legacy PlaceCard reachable until Task 7 removes the old rendering path.
-  void PlaceCard
-  void legacyPlaceCardName
 
   useEffect(() => {
     if (pendingText) {
