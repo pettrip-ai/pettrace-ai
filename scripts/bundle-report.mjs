@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 const distDir = fileURLToPath(new URL('../dist', import.meta.url))
 
 const budgets = {
-  largestJsBytes: 700 * 1024,
+  largestJsBytes: 500 * 1024,
   largestCssBytes: 120 * 1024,
   totalBytes: 3 * 1024 * 1024,
 }

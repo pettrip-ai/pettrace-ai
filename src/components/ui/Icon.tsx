@@ -1,9 +1,33 @@
-import { useMemo, type ComponentType, type SVGProps } from 'react'
-import * as LucideIcons from 'lucide-react'
+import type { ComponentType, SVGProps } from 'react'
+import {
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle,
+  Inbox,
+  Info,
+  PawPrint,
+  SearchX,
+} from 'lucide-react'
 
-type IconName = keyof typeof LucideIcons
+const ICON_REGISTRY = {
+  'alert-circle': AlertCircle,
+  'alert-triangle': AlertTriangle,
+  'check-circle': CheckCircle,
+  inbox: Inbox,
+  info: Info,
+  'paw-print': PawPrint,
+  'search-x': SearchX,
+} as unknown as Record<string, ComponentType<SVGProps<SVGSVGElement>>>
 
 export type IconLike = string | ComponentType<SVGProps<SVGSVGElement>>
+
+function normalizeIconName(name: string) {
+  return name
+    .trim()
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase()
+}
 
 export function Icon({
   name,
@@ -18,16 +42,11 @@ export function Icon({
   color?: string
   strokeWidth?: number
 }) {
-  const Comp = useMemo(() => {
-    if (!name) return null
-    if (typeof name !== 'string') return name as ComponentType<SVGProps<SVGSVGElement>>
-    const key = name
-      .split('-')
-      .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
-      .join('') as IconName
-    const Maybe = (LucideIcons as unknown as Record<IconName, ComponentType<SVGProps<SVGSVGElement>> | undefined>)[key]
-    return Maybe ?? null
-  }, [name])
+  const Comp = name
+    ? typeof name === 'string'
+      ? ICON_REGISTRY[normalizeIconName(name)] ?? null
+      : name
+    : null
 
   if (!Comp) return null
   return (
