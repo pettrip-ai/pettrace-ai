@@ -259,26 +259,55 @@ test('AI planner mission-control files expose core landing sections', async () =
   const helper = await readFile(new URL('../src/pages/AiPage/missionControl.ts', import.meta.url), 'utf8')
   const components = await readFile(new URL('../src/pages/AiPage/components/MissionControl.tsx', import.meta.url), 'utf8')
   const planner = await readFile(new URL('../src/pages/AiPage/Planner.tsx', import.meta.url), 'utf8')
+  const { DEMO_SCENARIOS, scenarioPromptForPet } = await server.ssrLoadModule('/src/pages/AiPage/missionControl.ts')
 
   assert.match(helper, /export function buildPlanningSignals/)
+  assert.match(helper, /export function scenarioPromptForPet/)
   assert.match(helper, /export const DEMO_SCENARIOS/)
   assert.match(components, /export function MissionControlHero/)
   assert.match(components, /export function PlanningSignals/)
   assert.match(components, /export function DemoScenarioCard/)
   assert.match(components, /让 AI 把宠物档案、地点规则和社区验证变成一份可执行行程/)
+  assert.match(components, /hasPet/)
+  assert.match(components, /disabled=\{!hasPet\}/)
   assert.match(planner, /MissionControlHero/)
   assert.match(planner, /PlanningSignals/)
   assert.match(planner, /DemoScenarioCard/)
+  assert.match(planner, /petNameForDemo = pet\?\.name \?\? '豆豆'/)
+  assert.match(planner, /petLabelForUi = pet \? pet\.name : '未添加宠物'/)
+  assert.doesNotMatch(planner, /const petLabel = pet\?\.name \?\? '豆豆'/)
+
+  const prompts = DEMO_SCENARIOS.map((scenario) => scenarioPromptForPet(scenario.prompt, '可乐'))
+  assert.equal(prompts.length, 3)
+  assert.ok(prompts.every((prompt) => prompt.includes('可乐')))
+  assert.doesNotMatch(prompts[0], /豆豆/)
+  assert.doesNotMatch(prompts[1], /带狗/)
+  assert.doesNotMatch(prompts[2], /金毛/)
 })
 
 test('AI planner exposes an explicit pet profile authorization control', async () => {
   const planner = await readFile(new URL('../src/pages/AiPage/Planner.tsx', import.meta.url), 'utf8')
   const missionControl = await readFile(new URL('../src/pages/AiPage/components/MissionControl.tsx', import.meta.url), 'utf8')
+  const { MissionControlHero } = await server.ssrLoadModule('/src/pages/AiPage/components/MissionControl.tsx')
 
   assert.match(planner, /showPetInChat/)
   assert.match(planner, /setShowPetInChat/)
   assert.match(missionControl, /授权档案/)
-  assert.match(missionControl, /aria-pressed=\{showPetInChat\}/)
+  assert.match(missionControl, /petContextEnabled = hasPet && showPetInChat/)
+  assert.match(missionControl, /aria-pressed=\{petContextEnabled\}/)
+
+  const noPetHtml = renderToStaticMarkup(
+    React.createElement(MissionControlHero, {
+      petLabel: '未添加宠物',
+      cityName: '上海',
+      hasPet: false,
+      showPetInChat: true,
+      onTogglePetContext: () => {},
+    }),
+  )
+  assert.match(noPetHtml, /aria-pressed="false"/)
+  assert.match(noPetHtml, /disabled=""/)
+  assert.match(noPetHtml, /先添加宠物档案/)
 })
 
 test('sheet components render dialog semantics when open', async () => {

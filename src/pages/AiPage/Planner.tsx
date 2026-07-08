@@ -2,24 +2,25 @@ import { PawPrint, Send } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { CITIES } from '../../data/mock'
 import { useStore } from '../../store/useStore'
-import { DEMO_SCENARIOS, buildPlanningSignals, petDisplayName } from './missionControl'
+import { DEMO_SCENARIOS, buildPlanningSignals, petDisplayName, scenarioPromptForPet } from './missionControl'
 import { DemoScenarioCard, MissionControlHero, PlanningSignals, ScenarioRail } from './components/MissionControl'
 
 export default function PlannerPage() {
   const { city, pets, places, feeds, clearChat, showPetInChat, setShowPetInChat } = useStore()
   const navigate = useNavigate()
   const pet = pets[0]
-  const petLabel = pet?.name ?? '豆豆'
+  const petNameForDemo = pet?.name ?? '豆豆'
+  const petLabelForUi = pet ? pet.name : '未添加宠物'
   const petDetail = petDisplayName(pet)
   const cityName = CITIES[city]?.name ?? '当前城市'
   const signals = buildPlanningSignals({ city, pet, showPetInChat, places, feeds })
   const primaryScenario = {
     ...DEMO_SCENARIOS[0],
-    prompt: DEMO_SCENARIOS[0].prompt.replace('豆豆', petLabel),
+    prompt: scenarioPromptForPet(DEMO_SCENARIOS[0].prompt, petNameForDemo),
   }
   const secondaryScenarios = DEMO_SCENARIOS.slice(1).map((scenario) => ({
     ...scenario,
-    prompt: scenario.prompt.replace('豆豆', petLabel),
+    prompt: scenarioPromptForPet(scenario.prompt, petNameForDemo),
   }))
 
   function runScenario(prompt: string) {
@@ -36,8 +37,9 @@ export default function PlannerPage() {
     <div className="h-full min-h-0 overflow-y-auto bg-bg" style={{ paddingBottom: 'calc(150px + var(--sab, 0px))' }}>
       <div className="flex flex-col px-4 pt-3">
         <MissionControlHero
-          petLabel={petLabel}
+          petLabel={petLabelForUi}
           cityName={cityName}
+          hasPet={!!pet}
           showPetInChat={showPetInChat}
           onTogglePetContext={() => setShowPetInChat(!showPetInChat)}
         />
@@ -53,8 +55,8 @@ export default function PlannerPage() {
             当前档案
           </p>
           <div className="flex items-center gap-3">
-            <div className="avatar gradient sm shrink-0" title={petLabel}>
-              {petLabel.slice(0, 1)}
+            <div className="avatar gradient sm shrink-0" title={petLabelForUi}>
+              {petLabelForUi.slice(0, 1)}
             </div>
             <p className="pettrace-body truncate" style={{ margin: 0, color: 'var(--color-on-surface)' }}>
               {petDetail}

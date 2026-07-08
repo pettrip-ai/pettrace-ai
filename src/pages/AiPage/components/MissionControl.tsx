@@ -18,14 +18,18 @@ const signalIcons = {
 export function MissionControlHero({
   petLabel,
   cityName,
+  hasPet,
   showPetInChat,
   onTogglePetContext,
 }: {
   petLabel: string
   cityName: string
+  hasPet: boolean
   showPetInChat: boolean
   onTogglePetContext: () => void
 }) {
+  const petContextEnabled = hasPet && showPetInChat
+
   return (
     <section className="card shadow-card mb-4 overflow-hidden rounded-2xl border-rule/50 p-4">
       <div className="flex items-start gap-3">
@@ -48,18 +52,24 @@ export function MissionControlHero({
 
       <button
         type="button"
-        aria-pressed={showPetInChat}
-        onClick={onTogglePetContext}
+        aria-pressed={petContextEnabled}
+        disabled={!hasPet}
+        onClick={() => {
+          if (hasPet) onTogglePetContext()
+        }}
         className="mt-4 flex min-h-11 w-full items-center justify-between rounded-2xl px-3 text-sm font-semibold"
         style={{
-          background: showPetInChat ? 'var(--color-primary-container)' : 'rgba(255,255,255,0.8)',
-          color: showPetInChat ? 'var(--primary)' : 'var(--color-on-surface)',
+          background: petContextEnabled ? 'var(--color-primary-container)' : 'rgba(255,255,255,0.8)',
+          color: petContextEnabled ? 'var(--primary)' : 'var(--color-on-surface)',
           border: '0.5px solid var(--border)',
+          opacity: hasPet ? 1 : 0.68,
         }}
       >
         <span className="inline-flex min-w-0 items-center gap-2">
           <PawPrint size={16} className="shrink-0" />
-          <span className="truncate">{showPetInChat ? `已授权档案：${petLabel}` : '授权档案给 AI'}</span>
+          <span className="truncate">
+            {!hasPet ? '先添加宠物档案' : petContextEnabled ? `已授权档案：${petLabel}` : '授权档案给 AI'}
+          </span>
         </span>
         <ArrowRight size={16} className="shrink-0" />
       </button>

@@ -52,6 +52,20 @@ export function petDisplayName(pet?: Pet): string {
   return `${pet.name} · ${pet.breed ?? pet.kind} · ${size}`
 }
 
+export function scenarioPromptForPet(prompt: string, petLabel: string): string {
+  const trimmedPetLabel = petLabel.trim()
+  if (!trimmedPetLabel) return prompt
+
+  const replacements: Array<[RegExp, string]> = [
+    [/豆豆/g, trimmedPetLabel],
+    [/金毛/g, trimmedPetLabel],
+    [/带狗/g, `带${trimmedPetLabel}`],
+  ]
+  const nextPrompt = replacements.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), prompt)
+
+  return nextPrompt.includes(trimmedPetLabel) ? nextPrompt : `带${trimmedPetLabel}：${nextPrompt}`
+}
+
 export function buildPlanningSignals(args: {
   city: CityId
   pet?: Pet
@@ -60,7 +74,7 @@ export function buildPlanningSignals(args: {
   feeds: FeedItem[]
 }): PlanningSignal[] {
   const storePlaces = Object.values(args.places).filter((place) => place.city === args.city)
-  const places = storePlaces.length > 0 ? storePlaces : PLACES[args.city]
+  const places = storePlaces.length > 0 ? storePlaces : (PLACES[args.city] ?? PLACES.shanghai ?? [])
   const placeIds = new Set(places.map((place) => place.id))
   const indoorCount = places.filter((place) => place.rule.allowIndoor).length
   const largeDogCount = places.filter((place) => ['large', 'any'].includes(place.rule.sizeLimit)).length
