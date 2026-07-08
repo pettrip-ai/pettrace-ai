@@ -41,7 +41,7 @@ const HOT_DEST = [
 ]
 
 export default function PlannerPage() {
-  const { pets, clearChat } = useStore()
+  const { pets, clearChat, showPetInChat, setShowPetInChat } = useStore()
   const navigate = useNavigate()
   const pet = pets[0]
 
@@ -82,6 +82,23 @@ export default function PlannerPage() {
             <ChevronDown size={14} style={{ color: 'var(--color-on-surface-variant)' }} />
           </div>
         </header>
+
+        <div className="mb-4">
+          <button
+            type="button"
+            aria-pressed={showPetInChat}
+            onClick={() => setShowPetInChat(!showPetInChat)}
+            className="inline-flex items-center gap-2 rounded-full px-3 py-2 text-[12px] font-semibold"
+            style={{
+              background: showPetInChat ? 'var(--color-primary-container)' : 'rgba(255,255,255,0.72)',
+              color: showPetInChat ? 'var(--primary)' : 'var(--color-muted-foreground)',
+              border: '0.5px solid var(--border)',
+            }}
+          >
+            <PawPrint size={13} />
+            {showPetInChat ? `已授权档案：${petLabel}` : '授权档案给 AI'}
+          </button>
+        </div>
 
         <section className="mb-5">
           <h2 className="pettrace-h4 truncate" style={{ margin: '0 0 12px', color: 'var(--color-on-surface)', fontSize: 20 }}>推荐行程</h2>

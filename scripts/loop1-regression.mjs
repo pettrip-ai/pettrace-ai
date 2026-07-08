@@ -229,6 +229,15 @@ test('AI chat only passes pet context when profile authorization is enabled', as
   assert.doesNotMatch(chatView, /const petCtx = pet \? petToContext\(pet\) : undefined/)
 })
 
+test('AI planner exposes an explicit pet profile authorization control', async () => {
+  const planner = await readFile(new URL('../src/pages/AiPage/Planner.tsx', import.meta.url), 'utf8')
+
+  assert.match(planner, /showPetInChat/)
+  assert.match(planner, /setShowPetInChat/)
+  assert.match(planner, /授权档案/)
+  assert.match(planner, /aria-pressed=\{showPetInChat\}/)
+})
+
 test('sheet components render dialog semantics when open', async () => {
   const { Sheet } = await server.ssrLoadModule('/src/components/ui/Sheet.tsx')
   const sheetHtml = renderToStaticMarkup(

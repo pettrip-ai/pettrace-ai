@@ -168,6 +168,7 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
     chat,
     addMessage,
     settings,
+    showPetInChat,
   } = useStore()
 
   const pet = pets[0]
@@ -210,7 +211,7 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
 
     const targetCity = detectCity(text, city)
     if (targetCity !== city) setCity(targetCity)
-    const petCtx = pet ? petToContext(pet) : undefined
+    const petCtx = showPetInChat && pet ? petToContext(pet) : undefined
     const history = chatToHistory([...chat, { role: 'user', content: text }])
     const useMock = settings.enableMockAi || !settings.apiKey
 
