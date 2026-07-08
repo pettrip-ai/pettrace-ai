@@ -12,12 +12,41 @@ interface PlanWorkspaceProps {
   onRefine: (text: string) => void
 }
 
-function riskFallback(risks: string[]): AiRiskSection[] {
-  if (!risks.length) return []
-  return [{ type: 'execution', title: '风险提示', items: risks }]
+function stringListOf(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return []
+  return raw.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
 }
 
-function sourceLabel(source?: NonNullable<AiReply['summary']>['source']) {
+function stringValue(raw: unknown): string {
+  return typeof raw === 'string' ? raw.trim() : ''
+}
+
+function riskTypeOf(raw: unknown): AiRiskSection['type'] {
+  return raw === 'rule' || raw === 'environment' || raw === 'execution' ? raw : 'execution'
+}
+
+function safeRiskSections(raw: unknown): AiRiskSection[] {
+  if (!Array.isArray(raw)) return []
+  return raw.flatMap((section): AiRiskSection[] => {
+    if (!section || typeof section !== 'object') return []
+    const obj = section as Record<string, unknown>
+    const items = stringListOf(obj.items)
+    if (!items.length) return []
+    return [{
+      type: riskTypeOf(obj.type),
+      title: stringValue(obj.title) || '风险提示',
+      items,
+    }]
+  })
+}
+
+function riskFallback(risks: unknown): AiRiskSection[] {
+  const items = stringListOf(risks)
+  if (!items.length) return []
+  return [{ type: 'execution', title: '风险提示', items }]
+}
+
+function sourceLabel(source?: unknown) {
   if (source === 'fallback') return 'Mock fallback'
   if (source === 'api') return '真实 AI'
   return 'Mock AI'
@@ -42,7 +71,8 @@ function refineText(placeName: string) {
 }
 
 export function PlanWorkspace({ reply, city, findPlace, onOpenMap, onVerifyPlace, onRefine }: PlanWorkspaceProps) {
-  const risks = reply.riskSections?.length ? reply.riskSections : riskFallback(reply.risks ?? [])
+  const riskSections = safeRiskSections(reply.riskSections)
+  const risks = riskSections.length ? riskSections : riskFallback(reply.risks)
 
   return (
     <section className="space-y-2.5" aria-label="AI 生成计划工作台">
@@ -56,15 +86,15 @@ export function PlanWorkspace({ reply, city, findPlace, onOpenMap, onVerifyPlace
         onRefine={onRefine}
       />
       <RiskPanel sections={risks} />
-      <ChecklistPanel items={reply.checklist ?? []} />
+      <ChecklistPanel items={stringListOf(reply.checklist)} />
     </section>
   )
 }
 
 export function PlanSummaryCard({ reply }: { reply: AiReply }) {
-  const title = reply.summary?.title?.trim() || `为你规划了 ${reply.itinerary.length} 步行程`
-  const confidence = reply.summary?.confidenceLabel?.trim() || '规则已标注'
-  const petProfileText = reply.summary?.petProfileUsed ? '已使用宠物档案' : '未使用宠物档案'
+  const title = stringValue(reply.summary?.title) || `为你规划了 ${reply.itinerary.length} 步行程`
+  const confidence = stringValue(reply.summary?.confidenceLabel) || '规则已标注'
+  const petProfileText = reply.summary?.petProfileUsed === true ? '已使用宠物档案' : '未使用宠物档案'
 
   return (
     <div className="card rounded-xl p-3.5">
@@ -173,7 +203,8 @@ export function ItineraryTimeline({
 }
 
 export function RiskPanel({ sections }: { sections: AiRiskSection[] }) {
-  if (!sections.length) return null
+  const safeSections = safeRiskSections(sections)
+  if (!safeSections.length) return null
 
   return (
     <section className="card rounded-xl p-3.5" aria-label="风险提示">
@@ -182,7 +213,7 @@ export function RiskPanel({ sections }: { sections: AiRiskSection[] }) {
         <h2 className="m-0 font-heading text-[14px] font-semibold text-ink">风险提示</h2>
       </div>
       <div className="space-y-2">
-        {sections.map((section, index) => (
+        {safeSections.map((section, index) => (
           <div key={`${section.type}-${index}`} className="border-t border-[color:var(--border)] pt-2 first:border-t-0 first:pt-0">
             <div className="mb-1 flex items-center gap-2">
               <span className="rounded-full bg-honey-soft px-2 py-0.5 text-[11px] font-heading font-semibold text-warning">

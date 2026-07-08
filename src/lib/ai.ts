@@ -3,7 +3,7 @@ export type AiReplySource = 'mock' | 'api' | 'fallback'
 export type AiRiskType = 'rule' | 'environment' | 'execution'
 
 export interface AiPlanSummary {
-  title: string
+  title?: string
   city?: string
   days?: number
   confidenceLabel?: string
@@ -163,6 +163,21 @@ function normalizeRiskSections(raw: unknown): AiRiskSection[] | undefined {
   return sections.length > 0 ? sections : undefined
 }
 
+function normalizeSummary(raw: unknown): AiPlanSummary | undefined {
+  if (!raw || typeof raw !== 'object') return undefined
+  const obj = raw as Record<string, unknown>
+  const summary: AiPlanSummary = {}
+
+  if (typeof obj.title === 'string') summary.title = obj.title
+  if (typeof obj.city === 'string') summary.city = obj.city
+  if (typeof obj.confidenceLabel === 'string') summary.confidenceLabel = obj.confidenceLabel
+  if (typeof obj.days === 'number' && Number.isFinite(obj.days)) summary.days = obj.days
+  if (obj.source === 'mock' || obj.source === 'api' || obj.source === 'fallback') summary.source = obj.source
+  if (typeof obj.petProfileUsed === 'boolean') summary.petProfileUsed = obj.petProfileUsed
+
+  return Object.keys(summary).length > 0 ? summary : undefined
+}
+
 function normalizeReplyJson(raw: unknown): AiReply {
   if (typeof raw === 'string') {
     try {
@@ -179,9 +194,7 @@ function normalizeReplyJson(raw: unknown): AiReply {
   const risks = stringListOf(obj.risks)
   const checklist = stringListOf(obj.checklist)
   const prose = typeof obj.prose === 'string' ? obj.prose : ''
-  const summary = obj.summary && typeof obj.summary === 'object'
-    ? (obj.summary as AiPlanSummary)
-    : undefined
+  const summary = normalizeSummary(obj.summary)
   const riskSections = normalizeRiskSections(obj.riskSections)
   return { prose, itinerary, risks, checklist, summary, riskSections }
 }

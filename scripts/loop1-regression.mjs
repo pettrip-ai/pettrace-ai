@@ -245,6 +245,7 @@ test('AI response normalization drops malformed risk sections', async () => {
       itinerary: [],
       risks: ['legacy risk', 42, 'keep risk'],
       checklist: ['lead', null, 'water'],
+      summary: { title: 123, confidenceLabel: 42, source: 'bad', petProfileUsed: 'yes' },
       riskSections: [
         { type: 'rule', title: 'missing items' },
         { type: 'unknown', title: 'custom title', items: ['valid item', 9, ''] },
@@ -255,6 +256,7 @@ test('AI response normalization drops malformed risk sections', async () => {
     const mixed = await sendAiTurn([{ role: 'user', content: 'plan' }], options)
     assert.deepEqual(mixed.risks, ['legacy risk', 'keep risk'])
     assert.deepEqual(mixed.checklist, ['lead', 'water'])
+    assert.equal(mixed.summary, undefined)
     assert.deepEqual(mixed.riskSections, [
       { type: 'execution', title: 'custom title', items: ['valid item'] },
       { type: 'environment', title: '风险提示', items: ['rain cover'] },
@@ -396,6 +398,32 @@ test('AI generated plan workspace exposes timeline, risk, checklist, and verific
   assert.match(workspace, /行前清单/)
   assert.match(chatView, /<PlanWorkspace/)
   assert.doesNotMatch(chatView, /msg\.structured\.itinerary\.map/)
+})
+
+test('AI plan workspace renders persisted malformed optional metadata safely', async () => {
+  const { PlanWorkspace } = await server.ssrLoadModule('/src/pages/AiPage/components/PlanWorkspace.tsx')
+  const reply = {
+    prose: 'persisted malformed reply',
+    itinerary: [],
+    risks: ['legacy fallback risk'],
+    checklist: [],
+    summary: { title: 123, confidenceLabel: 42, source: 'bad', petProfileUsed: 'yes' },
+    riskSections: [{ type: 'rule', title: '坏数据' }],
+  }
+
+  const html = renderToStaticMarkup(
+    React.createElement(PlanWorkspace, {
+      reply,
+      city: 'shanghai',
+      findPlace: () => undefined,
+      onOpenMap: () => {},
+      onVerifyPlace: () => {},
+      onRefine: () => {},
+    }),
+  )
+
+  assert.doesNotMatch(html, /123|42|坏数据/)
+  assert.match(html, /legacy fallback risk/)
 })
 
 test('sheet components render dialog semantics when open', async () => {
