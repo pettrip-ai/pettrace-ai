@@ -220,6 +220,32 @@ test('AI response types include optional mission-control fields', async () => {
   assert.match(source, /alternatives\?: Array<\{ placeId: string; reason: string \}>/)
 })
 
+test('mock ai returns mission-control itinerary metadata', async () => {
+  const { mockAiEngine } = await server.ssrLoadModule('/src/lib/mockAiEngine.ts')
+  const reply = mockAiEngine({
+    message: '周六带大型犬去上海玩一天，午餐要室内可进，下午避开高温',
+    city: 'shanghai',
+    petContext: {
+      name: '豆豆',
+      kind: 'dog',
+      breed: '金毛',
+      size: 'large',
+      personality: '温和',
+      weightKg: 28,
+    },
+  })
+
+  assert.equal(reply.summary?.source, 'mock')
+  assert.equal(reply.summary?.petProfileUsed, true)
+  assert.ok(reply.summary?.title.includes('上海'))
+  assert.ok(reply.itinerary.length >= 4)
+  assert.ok(reply.itinerary.every((step) => typeof step.reason === 'string' && step.reason.length > 0))
+  assert.ok(reply.itinerary.every((step) => typeof step.verifyHint === 'string' && step.verifyHint.length > 0))
+  assert.ok(reply.riskSections?.some((section) => section.type === 'rule'))
+  assert.ok(reply.riskSections?.some((section) => section.type === 'environment'))
+  assert.ok(reply.riskSections?.some((section) => section.type === 'execution'))
+})
+
 test('AI chat only passes pet context when profile authorization is enabled', async () => {
   const chatView = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
 

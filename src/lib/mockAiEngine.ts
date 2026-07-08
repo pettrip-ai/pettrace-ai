@@ -61,6 +61,58 @@ export function detectFocus(text: string): {
   }
 }
 
+interface TripIntent {
+  days: number
+  wantsIndoor: boolean
+  wantsHotel: boolean
+  rainy: boolean
+  weekend: boolean
+  largeDog: boolean
+  avoidHeat: boolean
+}
+
+function detectIntent(text: string, petContext?: PetContext): TripIntent {
+  const days = detectDays(text, 1)
+  const largeDog = /大型犬|金毛|拉布拉多|阿拉斯加|哈士奇/.test(text) || petContext?.size === 'large'
+  return {
+    days,
+    wantsIndoor: /室内|进店|可进|雨天|下雨/.test(text),
+    wantsHotel: /酒店|住宿|住|两天|2\s*天|过夜/.test(text),
+    rainy: /雨|下雨|雨天/.test(text),
+    weekend: /周末|周六|周日|星期六|星期日/.test(text),
+    largeDog,
+    avoidHeat: /避暑|高温|太热|中暑|下午/.test(text),
+  }
+}
+
+function canFitLargeDog(p: Place) {
+  return p.rule.sizeLimit === 'any' || p.rule.sizeLimit === 'large'
+}
+
+function placeReason(p: Place, label: string, intent: TripIntent) {
+  if (label.includes('午餐') || label.includes('晚餐')) {
+    if (p.rule.allowIndoor) return '用餐时段优先选择室内可进，减少排队和天气影响'
+    if (p.rule.hasOutdoorSeat) return '该地点有户外座位，适合作为宠物友好用餐点'
+  }
+  if (p.category === 'pet_park') return '宠物公园能释放精力，适合作为中段活动'
+  if (p.category === 'park') return intent.avoidHeat ? '安排在上午活动，避开下午高温' : '开放空间更适合牵引散步'
+  if (p.category === 'hotel') return '住宿点支持宠物入住，适合多日行程'
+  return '地点规则清晰，社区验证信号较完整'
+}
+
+function verifyHintOf(p: Place) {
+  if (p.rule.allowIndoor) return '到店后确认宠物是否仍可进入室内区域'
+  if (p.rule.hasOutdoorSeat) return '到店后确认户外座位是否开放且是否需要预约'
+  return '到达后确认牵引要求、体型限制和现场告示'
+}
+
+function alternativesFor(places: Place[], current: Place) {
+  return places
+    .filter((p) => p.id !== current.id && p.category === current.category)
+    .slice(0, 2)
+    .map((p) => ({ placeId: p.id, reason: p.rule.allowIndoor ? '同类型室内可进备选' : '同类型宠物友好备选' }))
+}
+
 function pickByCategory(places: Place[], cats: Array<Place['category']>): Place[] {
   const seen = new Set<string>()
   const out: Place[] = []
@@ -92,40 +144,43 @@ function briefOf(p: Place): string {
 function makeItineraryForDay(
   dayIdx: number,
   dayPlaces: Place[],
+  intent: TripIntent,
 ): AiItineraryStep[] {
-  const out: AiItineraryStep[] = []
-  const cats = [
-    'park',
-    'pet_park',
-    'restaurant',
-    'cafe',
-    'mall',
-    'scenic_spot',
-  ] as const
-  const picked = pickByCategory(dayPlaces, cats as unknown as Array<Place['category']>)
+  const categories: Array<Place['category']> = intent.wantsHotel && dayIdx > 0
+    ? ['hotel', 'park', 'restaurant', 'pet_park', 'cafe']
+    : ['park', 'scenic_spot', 'restaurant', 'pet_park', 'cafe']
+  const pickedForIntent = pickByCategory(dayPlaces, categories)
+  const indoorRestaurant = dayPlaces.find((p) => p.category === 'restaurant' && p.rule.allowIndoor)
+  const petPark = dayPlaces.find((p) => p.category === 'pet_park')
 
-  const startHour = 8 + dayIdx * 24
-  const slots = [
-    { time: `${String(startHour).padStart(2, '0')}:00`, label: '上午遛宠', idx: 1 },
-    { time: `${String(startHour + 2).padStart(2, '0')}:30`, label: '特色景点', idx: 0 },
-    { time: `${String(startHour + 5).padStart(2, '0')}:00`, label: '午餐', idx: 2 },
-    { time: `${String(startHour + 7).padStart(2, '0')}:30`, label: '宠物公园', idx: 1 },
-    { time: `${String(startHour + 11).padStart(2, '0')}:00`, label: '晚餐', idx: 3 },
+  const intentSlots = [
+    { time: '09:00', label: dayIdx === 0 ? '上午释放精力' : '第二天轻量散步', index: 0 },
+    { time: '11:30', label: '规则确认', index: 1 },
+    { time: '12:30', label: '午餐补给', index: 2 },
+    { time: '15:30', label: intent.avoidHeat ? '低强度避暑' : '宠物公园', index: 3 },
+    { time: '18:00', label: '晚餐与验证', index: 4 },
   ]
 
-  for (let i = 0; i < slots.length; i++) {
-    const slot = slots[i]
-    const p = picked[i % Math.max(1, picked.length)]
-    if (!p) continue
-    out.push({
+  return intentSlots.flatMap((slot) => {
+    const preferred = slot.label.includes('午餐') || slot.label.includes('晚餐')
+      ? indoorRestaurant ?? pickedForIntent[slot.index % Math.max(1, pickedForIntent.length)]
+      : slot.label.includes('宠物公园') || slot.label.includes('避暑')
+        ? petPark ?? pickedForIntent[slot.index % Math.max(1, pickedForIntent.length)]
+        : pickedForIntent[slot.index % Math.max(1, pickedForIntent.length)]
+    if (!preferred) return []
+    return [{
       time: slot.time,
-      placeId: p.id,
+      placeId: preferred.id,
       label: slot.label,
-      ruleBrief: briefOf(p),
-      action: i === slots.length - 1 ? (p.rule.allowIndoor ? '室内用餐' : '户外用餐') : '打车前往',
-    })
-  }
-  return out
+      ruleBrief: briefOf(preferred),
+      action: slot.label.includes('晚餐') || slot.label.includes('午餐')
+        ? (preferred.rule.allowIndoor ? '室内用餐' : '户外用餐')
+        : '查看地图后前往',
+      reason: placeReason(preferred, slot.label, intent),
+      verifyHint: verifyHintOf(preferred),
+      alternatives: alternativesFor(dayPlaces, preferred),
+    }]
+  })
 }
 
 function risksOf(places: Place[]): string[] {
@@ -140,6 +195,35 @@ function risksOf(places: Place[]): string[] {
   if (leashNeeded) risks.push('几乎所有地点都要求牵绳，请务必携带 1.5m 以内的胸背式牵引')
   risks.push('周末热门景点人流大，建议 09:00 前抵达')
   return risks
+}
+
+function riskSectionsOf(places: Place[], intent: TripIntent, petContext?: PetContext) {
+  const ruleItems: string[] = []
+  const environmentItems: string[] = []
+  const executionItems: string[] = []
+
+  if (intent.largeDog || petContext?.size === 'large') {
+    const limited = places.filter((p) => !canFitLargeDog(p)).slice(0, 2)
+    if (limited.length) ruleItems.push(`大型犬需避开 ${limited.map((p) => p.name).join('、')} 等体型限制地点`)
+  }
+  if (places.some((p) => !p.rule.allowIndoor)) ruleItems.push('部分地点仅限室外，需准备室内备选')
+  const feePlace = places.find((p) => p.rule.fee > 0)
+  if (feePlace) ruleItems.push(`${feePlace.name} 等地点可能收取宠物服务费`)
+
+  if (intent.rainy) environmentItems.push('雨天优先选择室内可进或有遮挡的地点')
+  if (intent.avoidHeat) environmentItems.push('户外活动安排在上午，下午减少暴晒和长距离步行')
+  if (intent.weekend) environmentItems.push('周末热门地点人流较高，建议提前 30 分钟抵达')
+  if (!environmentItems.length) environmentItems.push('夏季中午注意补水，户外活动避开 11:00-15:00')
+
+  executionItems.push('所有公共区域默认牵引，准备 1.5m 内胸背式牵引')
+  executionItems.push('到店后先确认现场告示，社区验证可能滞后')
+  if (intent.wantsHotel) executionItems.push('住宿类地点需提前确认宠物房和清洁费')
+
+  return [
+    { type: 'rule' as const, title: '规则风险', items: ruleItems },
+    { type: 'environment' as const, title: '环境风险', items: environmentItems },
+    { type: 'execution' as const, title: '执行提醒', items: executionItems },
+  ].filter((section) => section.items.length > 0)
 }
 
 const BASE_CHECKLIST = [
@@ -184,21 +268,30 @@ export interface MockAiOptions {
 export function mockAiEngine(opts: MockAiOptions): AiReply {
   const fallbackCity: CityId = opts.city ?? 'shanghai'
   const city = detectCity(opts.message, fallbackCity)
-  const days = detectDays(opts.message, 1)
+  const intent = detectIntent(opts.message, opts.petContext)
+  const days = intent.days
   const places = PLACES[city]
   const focus = detectFocus(opts.message)
 
   let itinerary: AiItineraryStep[] = []
   for (let d = 0; d < days; d++) {
-    itinerary.push(...makeItineraryForDay(d, places))
+    itinerary.push(...makeItineraryForDay(d, places, intent))
   }
 
   if (focus.food) {
     const restaurant = places.find((p) => p.category === 'restaurant')
     if (restaurant) {
       itinerary = itinerary.map((step) =>
-        step.label === '午餐' || step.label === '晚餐'
-          ? { ...step, placeId: restaurant.id, ruleBrief: briefOf(restaurant), action: '户外用餐' }
+        step.label.includes('午餐') || step.label.includes('晚餐')
+          ? {
+              ...step,
+              placeId: restaurant.id,
+              ruleBrief: briefOf(restaurant),
+              action: restaurant.rule.allowIndoor ? '室内用餐' : '户外用餐',
+              reason: placeReason(restaurant, step.label, intent),
+              verifyHint: verifyHintOf(restaurant),
+              alternatives: alternativesFor(places, restaurant),
+            }
           : step,
       )
     }
@@ -210,8 +303,16 @@ export function mockAiEngine(opts: MockAiOptions): AiReply {
     )
     if (indoorRestaurant) {
       itinerary = itinerary.map((step) =>
-        step.label === '晚餐'
-          ? { ...step, placeId: indoorRestaurant.id, ruleBrief: briefOf(indoorRestaurant), action: '室内用餐' }
+        step.label.includes('晚餐')
+          ? {
+              ...step,
+              placeId: indoorRestaurant.id,
+              ruleBrief: briefOf(indoorRestaurant),
+              action: '室内用餐',
+              reason: placeReason(indoorRestaurant, step.label, intent),
+              verifyHint: verifyHintOf(indoorRestaurant),
+              alternatives: alternativesFor(places, indoorRestaurant),
+            }
           : step,
       )
     }
@@ -224,28 +325,54 @@ export function mockAiEngine(opts: MockAiOptions): AiReply {
     const petPark = places.find((p) => p.category === 'pet_park')
     if (indoorRestaurant) {
       itinerary = itinerary.map((step) =>
-        step.label === '晚餐'
-          ? { ...step, placeId: indoorRestaurant.id, ruleBrief: briefOf(indoorRestaurant), action: '室内用餐' }
+        step.label.includes('晚餐')
+          ? {
+              ...step,
+              placeId: indoorRestaurant.id,
+              ruleBrief: briefOf(indoorRestaurant),
+              action: '室内用餐',
+              reason: placeReason(indoorRestaurant, step.label, intent),
+              verifyHint: verifyHintOf(indoorRestaurant),
+              alternatives: alternativesFor(places, indoorRestaurant),
+            }
           : step,
       )
     }
     if (petPark && itinerary.length < 6) {
       itinerary = [
         ...itinerary.slice(0, 3),
-        { time: '16:30', placeId: petPark.id, label: '补充撒欢', ruleBrief: briefOf(petPark), action: '牵绳进出' },
+        {
+          time: '16:30',
+          placeId: petPark.id,
+          label: '补充撒欢',
+          ruleBrief: briefOf(petPark),
+          action: '牵绳进出',
+          reason: placeReason(petPark, '补充撒欢', intent),
+          verifyHint: verifyHintOf(petPark),
+          alternatives: alternativesFor(places, petPark),
+        },
         ...itinerary.slice(3),
       ]
     }
   }
 
   if (itinerary.length === 0) {
-    itinerary = makeItineraryForDay(0, places)
+    itinerary = makeItineraryForDay(0, places, intent)
   }
 
   const risks = risksOf(places)
   const checklist = BASE_CHECKLIST.slice(0, 6 + (days > 1 ? 2 : 0))
   const cityName = CITIES[city]?.name ?? city
   const prose = proseFor(city, days, opts.petContext, cityName)
+  const riskSections = riskSectionsOf(places, intent, opts.petContext)
+  const summary = {
+    title: `${cityName}${days === 1 ? '一日' : `${days}天`}携宠任务台计划`,
+    city: cityName,
+    days,
+    confidenceLabel: '基于地点规则与社区验证',
+    source: 'mock' as const,
+    petProfileUsed: !!opts.petContext,
+  }
 
-  return { prose, itinerary, risks, checklist }
+  return { prose, itinerary, risks, checklist, summary, riskSections }
 }
