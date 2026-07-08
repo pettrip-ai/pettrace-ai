@@ -14,16 +14,16 @@ async function expectStoredSetting(page: Page, key: 'apiKey' | 'model', value: s
   }, key)).toBe(value)
 }
 
-test('AI 规划可以跳转到地图地点', async ({ page }) => {
-  await expect(page.getByText(/今天想带/)).toBeVisible()
+test('AI 任务台示例可以生成计划并跳转到地图地点', async ({ page }) => {
+  await expect(page.getByText(/Mission Control/)).toBeVisible()
+  await expect(page.getByText(/让 AI 把宠物档案/)).toBeVisible()
+  await expect(page.getByText('地点规则', { exact: true })).toBeVisible()
+  await expect(page.getByText('社区验证', { exact: true })).toBeVisible()
 
-  await page.getByPlaceholder('告诉AI你想去哪里...').click()
+  await page.getByRole('button', { name: /大型犬友好一日游/ }).click()
   await expect(page.getByRole('heading', { name: 'PetTrace AI' })).toBeVisible()
 
-  await page.getByPlaceholder('告诉我你的目的地').fill('带金毛去上海玩一天，晚餐要室内可进')
-  await page.getByRole('button', { name: '发送' }).click()
-
-  const routeButton = page.getByRole('button', { name: /查看路线/ }).first()
+  const routeButton = page.getByRole('button', { name: /查看地图/ }).first()
   await expect(routeButton).toBeVisible()
   await routeButton.click()
 
@@ -32,6 +32,24 @@ test('AI 规划可以跳转到地图地点', async ({ page }) => {
   expect(placeId).toMatch(/^(shanghai|beijing|guangzhou|chengdu)-\d+$/)
   await expect(page.locator('[data-map-search]')).toBeVisible()
   await expect(page.getByPlaceholder('搜索宠物友好地点...')).toBeVisible()
+})
+
+test('AI 计划可以写入本地社区验证', async ({ page }) => {
+  await expect(page.getByText(/Mission Control/)).toBeVisible()
+
+  await page.getByRole('button', { name: /大型犬友好一日游/ }).click()
+  await expect(page.getByText('风险提示')).toBeVisible()
+
+  await page.getByRole('button', { name: /标记已验证/ }).first().click()
+  await expect(page.getByText('已写入社区验证')).toBeVisible()
+  await expect.poll(async () => page.evaluate(() => {
+    const raw = window.localStorage.getItem('pettrace:feeds')
+    if (!raw) return false
+    return raw.includes('现场规则一致') || raw.includes('真实验证')
+  })).toBe(true)
+
+  await page.goto('/pettrace-ai/community')
+  await expect(page.getByText(/真实验证|现场规则一致/)).toBeVisible()
 })
 
 test('可以基于本地数据发布社区验证', async ({ page }) => {
