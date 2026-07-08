@@ -315,7 +315,10 @@ test('AI generated plan workspace exposes timeline, risk, checklist, and verific
   const chatView = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
 
   assert.match(workspace, /export function PlanWorkspace/)
+  assert.match(workspace, /export function PlanSummaryCard/)
   assert.match(workspace, /export function ItineraryTimeline/)
+  assert.match(workspace, /export function RiskPanel/)
+  assert.match(workspace, /export function ChecklistPanel/)
   assert.match(workspace, /查看地图/)
   assert.match(workspace, /标记已验证/)
   assert.match(workspace, /风险提示/)

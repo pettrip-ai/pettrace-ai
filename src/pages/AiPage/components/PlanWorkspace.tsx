@@ -61,7 +61,7 @@ export function PlanWorkspace({ reply, city, findPlace, onOpenMap, onVerifyPlace
   )
 }
 
-function PlanSummaryCard({ reply }: { reply: AiReply }) {
+export function PlanSummaryCard({ reply }: { reply: AiReply }) {
   const title = reply.summary?.title?.trim() || `为你规划了 ${reply.itinerary.length} 步行程`
   const confidence = reply.summary?.confidenceLabel?.trim() || '规则已标注'
   const petProfileText = reply.summary?.petProfileUsed ? '已使用宠物档案' : '未使用宠物档案'
@@ -172,7 +172,7 @@ export function ItineraryTimeline({
   )
 }
 
-function RiskPanel({ sections }: { sections: AiRiskSection[] }) {
+export function RiskPanel({ sections }: { sections: AiRiskSection[] }) {
   if (!sections.length) return null
 
   return (
@@ -202,7 +202,7 @@ function RiskPanel({ sections }: { sections: AiRiskSection[] }) {
   )
 }
 
-function ChecklistPanel({ items }: { items: string[] }) {
+export function ChecklistPanel({ items }: { items: string[] }) {
   if (!items.length) return null
 
   return (
