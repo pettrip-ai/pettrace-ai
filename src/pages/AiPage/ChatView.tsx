@@ -14,6 +14,7 @@ import {
   placeNameOf,
 } from './constants'
 import { useAutoGrow, useScrollToBottom, useTypewriter } from './hooks'
+import { PlanWorkspace } from './components/PlanWorkspace'
 
 interface RenderMessage {
   role: 'user' | 'assistant'
@@ -36,6 +37,10 @@ function findPlaceById(city: CityId, placeId?: string) {
   return (Object.keys(PLACES) as CityId[])
     .flatMap((key) => PLACES[key])
     .find((place) => place.id === placeId)
+}
+
+function legacyPlaceCardName(city: CityId, p: { placeId?: string; name?: string; place?: string }) {
+  return p.name ?? p.place ?? (p.placeId ? placeNameOf(city, p.placeId) : '推荐地点')
 }
 
 function TypingIndicator() {
@@ -169,6 +174,7 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
     addMessage,
     settings,
     showPetInChat,
+    verifyPlace,
   } = useStore()
 
   const pet = pets[0]
@@ -251,9 +257,35 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
     show('附件功能暂未开放', { kind: 'info' })
   }
 
+  function openMapPlace(placeId?: string) {
+    if (!placeId) {
+      show('这个地点暂时无法跳转地图', { kind: 'warn' })
+      return
+    }
+    navigate(`/map?place=${placeId}`)
+  }
+
+  function markVerified(placeId?: string) {
+    if (!placeId) {
+      show('这个地点暂时无法验证', { kind: 'warn' })
+      return
+    }
+    verifyPlace(placeId, 'good')
+    show('已写入社区验证', { kind: 'ok' })
+  }
+
+  function fillRefinePrompt(text: string) {
+    setValue(text)
+    textareaRef.current?.focus()
+  }
+
   const lastAssistantKey = renderedMessages.map((m) => m.key).at(-1)
   const lastAssistantProse = lastAssistantKey ? proseByKey[lastAssistantKey] ?? '' : ''
   const typewrittenLast = useTypewriter(lastAssistantProse, 12, !!lastAssistantProse && !isTyping)
+
+  // Keep legacy PlaceCard reachable until Task 7 removes the old rendering path.
+  void PlaceCard
+  void legacyPlaceCardName
 
   useEffect(() => {
     if (pendingText) {
@@ -379,22 +411,16 @@ export default forwardRef(function AiChatPage({ pendingText }: Props, ref) {
                         wordBreak: 'break-word', overflowWrap: 'break-word',
                       }}
                     >{bubbleContent}</div>
-                    {msg.structured && Array.isArray(msg.structured.itinerary) && msg.structured.itinerary.map((p, pi) => {
-                      const place = findPlaceById(city, p.placeId)
-                      return (
-                        <PlaceCard
-                          key={pi}
-                          placeId={p.placeId}
-                          data={{
-                            name: p.name ?? p.place ?? (p.placeId ? placeNameOf(city, p.placeId) : '推荐地点'),
-                            tagline: p.tagline ?? p.type ?? p.label ?? place?.category,
-                            rating: p.rating ?? place?.rating,
-                            address: p.address ?? p.area ?? place?.address,
-                            distanceKm: p.distanceKm,
-                          }}
-                        />
-                      )
-                    })}
+                    {msg.structured && Array.isArray(msg.structured.itinerary) && (
+                      <PlanWorkspace
+                        reply={msg.structured}
+                        city={city}
+                        findPlace={(placeId) => findPlaceById(city, placeId)}
+                        onOpenMap={openMapPlace}
+                        onVerifyPlace={markVerified}
+                        onRefine={fillRefinePrompt}
+                      />
+                    )}
                   </div>
                 </div>
               )}

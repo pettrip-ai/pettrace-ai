@@ -310,6 +310,20 @@ test('AI planner exposes an explicit pet profile authorization control', async (
   assert.match(noPetHtml, /先添加宠物档案/)
 })
 
+test('AI generated plan workspace exposes timeline, risk, checklist, and verification actions', async () => {
+  const workspace = await readFile(new URL('../src/pages/AiPage/components/PlanWorkspace.tsx', import.meta.url), 'utf8')
+  const chatView = await readFile(new URL('../src/pages/AiPage/ChatView.tsx', import.meta.url), 'utf8')
+
+  assert.match(workspace, /export function PlanWorkspace/)
+  assert.match(workspace, /export function ItineraryTimeline/)
+  assert.match(workspace, /查看地图/)
+  assert.match(workspace, /标记已验证/)
+  assert.match(workspace, /风险提示/)
+  assert.match(workspace, /行前清单/)
+  assert.match(chatView, /<PlanWorkspace/)
+  assert.doesNotMatch(chatView, /msg\.structured\.itinerary\.map/)
+})
+
 test('sheet components render dialog semantics when open', async () => {
   const { Sheet } = await server.ssrLoadModule('/src/components/ui/Sheet.tsx')
   const sheetHtml = renderToStaticMarkup(
