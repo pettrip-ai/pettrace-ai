@@ -133,6 +133,36 @@ function buildSystemPrompt(opts: SendAiTurnOptions): string {
   return parts.join('\n')
 }
 
+function stringListOf(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return []
+  return raw.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+}
+
+function normalizeRiskType(raw: unknown): AiRiskType {
+  return raw === 'rule' || raw === 'environment' || raw === 'execution' ? raw : 'execution'
+}
+
+function normalizeRiskSections(raw: unknown): AiRiskSection[] | undefined {
+  if (!Array.isArray(raw)) return undefined
+
+  const sections = raw.flatMap((section): AiRiskSection[] => {
+    if (!section || typeof section !== 'object') return []
+    const obj = section as Record<string, unknown>
+    const items = stringListOf(obj.items)
+    if (items.length === 0) return []
+    const title = typeof obj.title === 'string' && obj.title.trim().length > 0
+      ? obj.title
+      : '风险提示'
+    return [{
+      type: normalizeRiskType(obj.type),
+      title,
+      items,
+    }]
+  })
+
+  return sections.length > 0 ? sections : undefined
+}
+
 function normalizeReplyJson(raw: unknown): AiReply {
   if (typeof raw === 'string') {
     try {
@@ -146,15 +176,13 @@ function normalizeReplyJson(raw: unknown): AiReply {
   if (!raw || typeof raw !== 'object') throw new AiFetchError('AI 响应为空')
   const obj = raw as Record<string, unknown>
   const itinerary = Array.isArray(obj.itinerary) ? (obj.itinerary as AiItineraryStep[]) : []
-  const risks = Array.isArray(obj.risks) ? (obj.risks as string[]) : []
-  const checklist = Array.isArray(obj.checklist) ? (obj.checklist as string[]) : []
+  const risks = stringListOf(obj.risks)
+  const checklist = stringListOf(obj.checklist)
   const prose = typeof obj.prose === 'string' ? obj.prose : ''
   const summary = obj.summary && typeof obj.summary === 'object'
     ? (obj.summary as AiPlanSummary)
     : undefined
-  const riskSections = Array.isArray(obj.riskSections)
-    ? (obj.riskSections as AiRiskSection[])
-    : undefined
+  const riskSections = normalizeRiskSections(obj.riskSections)
   return { prose, itinerary, risks, checklist, summary, riskSections }
 }
 

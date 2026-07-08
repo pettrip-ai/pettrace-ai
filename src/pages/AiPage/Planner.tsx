@@ -9,18 +9,19 @@ export default function PlannerPage() {
   const { city, pets, places, feeds, clearChat, showPetInChat, setShowPetInChat } = useStore()
   const navigate = useNavigate()
   const pet = pets[0]
-  const petNameForDemo = pet?.name ?? '豆豆'
+  const canUsePetNameForDemo = showPetInChat && !!pet
+  const petLabelForPrompt = canUsePetNameForDemo ? pet.name : '宠物'
   const petLabelForUi = pet ? pet.name : '未添加宠物'
   const petDetail = petDisplayName(pet)
   const cityName = CITIES[city]?.name ?? '当前城市'
   const signals = buildPlanningSignals({ city, pet, showPetInChat, places, feeds })
   const primaryScenario = {
     ...DEMO_SCENARIOS[0],
-    prompt: scenarioPromptForPet(DEMO_SCENARIOS[0].prompt, petNameForDemo),
+    prompt: scenarioPromptForPet(DEMO_SCENARIOS[0].prompt, petLabelForPrompt, canUsePetNameForDemo),
   }
   const secondaryScenarios = DEMO_SCENARIOS.slice(1).map((scenario) => ({
     ...scenario,
-    prompt: scenarioPromptForPet(scenario.prompt, petNameForDemo),
+    prompt: scenarioPromptForPet(scenario.prompt, petLabelForPrompt, canUsePetNameForDemo),
   }))
 
   function runScenario(prompt: string) {

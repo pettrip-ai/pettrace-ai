@@ -223,6 +223,64 @@ test('AI response types include optional mission-control fields', async () => {
   assert.match(source, /alternatives\?: Array<\{ placeId: string; reason: string \}>/)
 })
 
+test('AI response normalization drops malformed risk sections', async () => {
+  const { sendAiTurn } = await server.ssrLoadModule('/src/lib/ai.ts')
+  const originalFetch = globalThis.fetch
+  const options = {
+    apiKey: 'test-key',
+    baseUrl: 'https://example.test/v1',
+    model: 'test-model',
+    timeoutMs: 1000,
+  }
+  const responseFor = (content) => ({
+    status: 200,
+    async json() {
+      return { choices: [{ message: { content: JSON.stringify(content) } }] }
+    },
+  })
+
+  try {
+    globalThis.fetch = async () => responseFor({
+      prose: 'ok',
+      itinerary: [],
+      risks: ['legacy risk', 42, 'keep risk'],
+      checklist: ['lead', null, 'water'],
+      riskSections: [
+        { type: 'rule', title: 'missing items' },
+        { type: 'unknown', title: 'custom title', items: ['valid item', 9, ''] },
+        { type: 'environment', items: ['rain cover'] },
+      ],
+    })
+
+    const mixed = await sendAiTurn([{ role: 'user', content: 'plan' }], options)
+    assert.deepEqual(mixed.risks, ['legacy risk', 'keep risk'])
+    assert.deepEqual(mixed.checklist, ['lead', 'water'])
+    assert.deepEqual(mixed.riskSections, [
+      { type: 'execution', title: 'custom title', items: ['valid item'] },
+      { type: 'environment', title: '风险提示', items: ['rain cover'] },
+    ])
+
+    globalThis.fetch = async () => responseFor({
+      prose: 'fallback',
+      itinerary: [],
+      risks: ['legacy only'],
+      checklist: ['call first'],
+      riskSections: [
+        { type: 'rule', title: 'empty', items: [] },
+        { type: 'environment', title: 'not strings', items: [1, null] },
+        { title: 'missing items' },
+      ],
+    })
+
+    const malformed = await sendAiTurn([{ role: 'user', content: 'plan' }], options)
+    assert.equal(malformed.riskSections, undefined)
+    assert.deepEqual(malformed.risks, ['legacy only'])
+    assert.deepEqual(malformed.checklist, ['call first'])
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+})
+
 test('mock ai returns mission-control itinerary metadata', async () => {
   const { mockAiEngine } = await server.ssrLoadModule('/src/lib/mockAiEngine.ts')
   const reply = mockAiEngine({
@@ -278,9 +336,10 @@ test('AI planner mission-control files expose core landing sections', async () =
   assert.match(planner, /MissionControlHero/)
   assert.match(planner, /PlanningSignals/)
   assert.match(planner, /DemoScenarioCard/)
-  assert.match(planner, /petNameForDemo = pet\?\.name \?\? '豆豆'/)
+  assert.match(planner, /canUsePetNameForDemo = showPetInChat && !!pet/)
+  assert.match(planner, /scenarioPromptForPet\(DEMO_SCENARIOS\[0\]\.prompt, petLabelForPrompt, canUsePetNameForDemo\)/)
   assert.match(planner, /petLabelForUi = pet \? pet\.name : '未添加宠物'/)
-  assert.doesNotMatch(planner, /const petLabel = pet\?\.name \?\? '豆豆'/)
+  assert.doesNotMatch(planner, /petNameForDemo = pet\?\.name/)
 
   const prompts = DEMO_SCENARIOS.map((scenario) => scenarioPromptForPet(scenario.prompt, '可乐'))
   assert.equal(prompts.length, 3)
@@ -288,6 +347,13 @@ test('AI planner mission-control files expose core landing sections', async () =
   assert.doesNotMatch(prompts[0], /豆豆/)
   assert.doesNotMatch(prompts[1], /带狗/)
   assert.doesNotMatch(prompts[2], /金毛/)
+
+  const privatePrompts = DEMO_SCENARIOS.map((scenario) => scenarioPromptForPet(scenario.prompt, '可乐', false))
+  assert.equal(privatePrompts.length, 3)
+  for (const prompt of privatePrompts) {
+    assert.doesNotMatch(prompt, /可乐|豆豆|金毛|带狗/)
+    assert.match(prompt, /宠物/)
+  }
 })
 
 test('AI planner exposes an explicit pet profile authorization control', async () => {

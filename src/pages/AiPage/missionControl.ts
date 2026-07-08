@@ -52,7 +52,14 @@ export function petDisplayName(pet?: Pet): string {
   return `${pet.name} · ${pet.breed ?? pet.kind} · ${size}`
 }
 
-export function scenarioPromptForPet(prompt: string, petLabel: string): string {
+export function scenarioPromptForPet(prompt: string, petLabel: string, allowPetName = true): string {
+  if (!allowPetName) {
+    return prompt
+      .replace(/豆豆/g, '宠物')
+      .replace(/金毛/g, '宠物')
+      .replace(/带狗/g, '带宠物')
+  }
+
   const trimmedPetLabel = petLabel.trim()
   if (!trimmedPetLabel) return prompt
 
