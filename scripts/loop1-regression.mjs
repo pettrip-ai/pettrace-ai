@@ -255,13 +255,30 @@ test('AI chat only passes pet context when profile authorization is enabled', as
   assert.doesNotMatch(chatView, /const petCtx = pet \? petToContext\(pet\) : undefined/)
 })
 
+test('AI planner mission-control files expose core landing sections', async () => {
+  const helper = await readFile(new URL('../src/pages/AiPage/missionControl.ts', import.meta.url), 'utf8')
+  const components = await readFile(new URL('../src/pages/AiPage/components/MissionControl.tsx', import.meta.url), 'utf8')
+  const planner = await readFile(new URL('../src/pages/AiPage/Planner.tsx', import.meta.url), 'utf8')
+
+  assert.match(helper, /export function buildPlanningSignals/)
+  assert.match(helper, /export const DEMO_SCENARIOS/)
+  assert.match(components, /export function MissionControlHero/)
+  assert.match(components, /export function PlanningSignals/)
+  assert.match(components, /export function DemoScenarioCard/)
+  assert.match(components, /让 AI 把宠物档案、地点规则和社区验证变成一份可执行行程/)
+  assert.match(planner, /MissionControlHero/)
+  assert.match(planner, /PlanningSignals/)
+  assert.match(planner, /DemoScenarioCard/)
+})
+
 test('AI planner exposes an explicit pet profile authorization control', async () => {
   const planner = await readFile(new URL('../src/pages/AiPage/Planner.tsx', import.meta.url), 'utf8')
+  const missionControl = await readFile(new URL('../src/pages/AiPage/components/MissionControl.tsx', import.meta.url), 'utf8')
 
   assert.match(planner, /showPetInChat/)
   assert.match(planner, /setShowPetInChat/)
-  assert.match(planner, /授权档案/)
-  assert.match(planner, /aria-pressed=\{showPetInChat\}/)
+  assert.match(missionControl, /授权档案/)
+  assert.match(missionControl, /aria-pressed=\{showPetInChat\}/)
 })
 
 test('sheet components render dialog semantics when open', async () => {
@@ -604,7 +621,9 @@ test('primary tab pages share background rhythm and ai planner remains scrollabl
   assert.match(planner, /className="h-full min-h-0 overflow-y-auto bg-bg"/)
   assert.match(planner, /paddingBottom: 'calc\(150px \+ var\(--sab, 0px\)\)'/)
   assert.match(planner, /className="flex flex-col px-4 pt-3"/)
-  assert.match(planner, /className="flex items-center justify-between pb-3"/)
+  assert.match(planner, /MissionControlHero/)
+  assert.match(planner, /PlanningSignals/)
+  assert.match(planner, /placeholder="描述宠物、城市和出行限制\.\.\."/)
   assert.doesNotMatch(planner, /paddingBottom: 170/)
   assert.doesNotMatch(planner, /pt-6/)
   assert.doesNotMatch(planner, /py-3/)
