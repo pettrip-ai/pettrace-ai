@@ -15,7 +15,7 @@ async function expectStoredSetting(page: Page, key: 'apiKey' | 'model', value: s
 }
 
 test('AI 任务台示例可以生成计划并跳转到地图地点', async ({ page }) => {
-  await expect(page.getByText(/Mission Control/)).toBeVisible()
+  await expect(page.getByText(/AI 行程任务台/)).toBeVisible()
   await expect(page.getByText(/让 AI 把宠物档案/)).toBeVisible()
   await expect(page.getByText('地点规则', { exact: true })).toBeVisible()
   await expect(page.getByText('社区验证', { exact: true })).toBeVisible()
@@ -35,7 +35,7 @@ test('AI 任务台示例可以生成计划并跳转到地图地点', async ({ pa
 })
 
 test('AI 计划可以写入本地社区验证', async ({ page }) => {
-  await expect(page.getByText(/Mission Control/)).toBeVisible()
+  await expect(page.getByText(/AI 行程任务台/)).toBeVisible()
 
   await page.getByRole('button', { name: /大型犬友好一日游/ }).click()
   await expect(page.getByText('风险提示')).toBeVisible()

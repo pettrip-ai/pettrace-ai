@@ -39,7 +39,7 @@ export function MissionControlHero({
         <div className="min-w-0 flex-1">
           <div className="mb-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold" style={{ background: 'var(--pettrace-info-50)', color: 'var(--pettrace-info-600)' }}>
             <Sparkles size={12} />
-            {cityName} Mission Control
+            AI 行程任务台 · {cityName}
           </div>
           <h1 className="pettrace-h3" style={{ margin: 0, color: 'var(--color-on-surface)' }}>
             让 AI 把宠物档案、地点规则和社区验证变成一份可执行行程

@@ -270,6 +270,8 @@ test('AI planner mission-control files expose core landing sections', async () =
   assert.match(components, /export function MissionControlHero/)
   assert.match(components, /export function PlanningSignals/)
   assert.match(components, /export function DemoScenarioCard/)
+  assert.match(components, /AI 行程任务台/)
+  assert.doesNotMatch(components, /Mission Control/)
   assert.match(components, /让 AI 把宠物档案、地点规则和社区验证变成一份可执行行程/)
   assert.match(components, /hasPet/)
   assert.match(components, /disabled=\{!hasPet\}/)
